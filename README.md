@@ -1,1 +1,1 @@
-# daily-expense-tracker
+# Daily Expense Tracker
