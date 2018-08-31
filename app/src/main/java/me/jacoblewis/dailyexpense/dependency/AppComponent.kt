@@ -2,7 +2,7 @@ package me.jacoblewis.dailyexpense.dependency
 
 import dagger.Component
 import me.jacoblewis.dailyexpense.dependency.modules.ViewModelModule
-import me.jacoblewis.dailyexpense.MainActivity
+import me.jacoblewis.dailyexpense.mainActivity.MainActivity
 import me.jacoblewis.dailyexpense.dependency.modules.AppModule
 import me.jacoblewis.dailyexpense.dependency.utils.MyApp
 import javax.inject.Singleton
