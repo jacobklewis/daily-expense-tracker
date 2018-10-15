@@ -1,8 +1,9 @@
 package me.jacoblewis.dailyexpense.fragments
 
-import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.RootScreenFragment
+import android.support.v4.app.Fragment
+import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.RootFragment
 
-class MainFragment : RootScreenFragment() {
+class MainFragment : Fragment(), RootFragment {
 
     /**
      * Navigate Back

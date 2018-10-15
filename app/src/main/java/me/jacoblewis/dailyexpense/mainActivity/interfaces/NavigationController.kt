@@ -1,11 +1,11 @@
 package me.jacoblewis.dailyexpense.mainActivity.interfaces
 
-import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.RootScreenFragment
 import me.jacoblewis.dailyexpense.commons.openURI
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
+import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.RootFragment
 
 interface NavigationController : ActivityController {
-    var currentRootFragment: RootScreenFragment
+    var currentRootFragment: RootFragment
     fun navigateTo(navScreen: NavScreen) {
         when (navScreen) {
             is NavScreen.Feedback -> openFeedback()
