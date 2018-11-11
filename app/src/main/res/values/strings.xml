@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Daily Expense</string>
+
+    <string name="title_open_nav">Open Nav</string>
+    <string name="title_close_nav">Close Nav</string>
+
+    <!-- Filler Text -->
+    <string name="filler_label">Lorem ipsum</string>
+    <string name="filler_text_short">Lorem ipsum dolor amet live-edge try-hard fingerstache ugh quinoa lomo. </string>
+    <string name="filler_text_long">Lorem ipsum dolor amet live-edge try-hard fingerstache ugh quinoa lomo. Lumbersexual chia before they sold out, butcher cred tumeric twee. Hell of kickstarter mixtape, ennui jianbing wayfarers chicharrones try-hard sartorial. Hashtag butcher four loko XOXO pork belly. Cred artisan try-hard put a bird on it.\n\nEthical sartorial gentrify cardigan pork belly, pok pok flexitarian keffiyeh migas squid kinfolk shaman. 8-bit kickstarter meh, letterpress cold-pressed af pinterest hoodie palo santo pour-over. Tousled four loko fashion axe viral keffiyeh, pop-up four dollar toast meditation. Asymmetrical kombucha salvia poke banh mi shaman hashtag craft beer artisan shabby chic.\n\nSwag jean shorts neutra kinfolk helvetica franzen etsy succulents kogi palo santo vaporware. Cred tilde paleo iPhone +1 polaroid. Everyday carry chartreuse cardigan beard retro hella neutra brunch tattooed keffiyeh lomo helvetica. Single-origin coffee bushwick keffiyeh godard DIY XOXO organic iPhone. Keffiyeh ennui keytar hoodie gochujang tacos mixtape wolf small batch schlitz ugh. Actually poutine hashtag kickstarter tumblr hoodie sartorial selfies edison bulb.\n\nStreet art lo-fi chartreuse man braid echo park meditation meggings art party banjo try-hard swag hashtag etsy lumbersexual. Af you probably haven\'t heard of them schlitz vinyl next level iPhone try-hard tousled squid art party paleo listicle taxidermy. Gastropub cornhole cardigan, readymade put a bird on it vegan banh mi sartorial. Waistcoat ramps mlkshk, truffaut vice brooklyn poke enamel pin cliche. Raclette meggings viral coloring book wayfarers waistcoat typewriter vape pickled meh. Schlitz helvetica yuccie, umami forage meditation la croix godard drinking vinegar cred tbh af bushwick craft beer. Chartreuse squid iceland asymmetrical, chicharrones vaporware cred jianbing art party deep v hammock hashtag.</string>
 </resources>
