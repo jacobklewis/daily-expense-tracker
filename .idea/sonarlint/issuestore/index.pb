@@ -41,9 +41,13 @@ Xapp/src/main/java/me/jacoblewis/dailyexpense/mainActivity/interfaces/nav/NavExc
 [app/src/main/java/me/jacoblewis/dailyexpense/mainActivity/interfaces/ExceptionController.kt,5\4\54ee57388f90d474804fdffa94915975f9d523fa
 Y
 )app/src/main/res/layout/activity_main.xml,7\6\76b07e40f24cce093536731477540f12e7da3cb6
-é
-^app/src/main/java/me/jacoblewis/dailyexpense/mainActivity/interfaces/nav/RootScreenFragment.kt,c\d\cd774dde5fb8a05b27c7cde633edcb9bbc4ac541
 v
 Fapp/src/main/java/me/jacoblewis/dailyexpense/fragments/MainFragment.kt,f\3\f3327926a0ede161276f85743b7f94739f85e9db
 y
 Iapp/src/main/java/me/jacoblewis/dailyexpense/mainActivity/MainActivity.kt,7\2\72c8e73f4c65345c6f23f04c498fb238e5699f22
+ç
+]app/src/main/java/me/jacoblewis/dailyexpense/mainActivity/interfaces/nav/RootScreenElement.kt,4\4\4443b750b5890b3f46432c18cbbf6b5d06e0b273
+<
+build.gradle,f\0\f07866736216be0ee2aba49e392191aeae700a35
+à
+Xapp/src/main/java/me/jacoblewis/dailyexpense/mainActivity/interfaces/nav/RootFragment.kt,1\6\16fc8728b83d84bacfe758457c88b498e90089dd
