@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import dagger.Module
 import dagger.Provides
 import me.jacoblewis.dailyexpense.commons.PREFS_SETTINGS
+import me.jacoblewis.dailyexpense.data.BalancesDB
 import me.jacoblewis.jklcore.Tools
 import javax.inject.Singleton
 
@@ -31,6 +32,12 @@ class AppModule(private val application: Application) {
     @Singleton
     internal fun providesSettingsPrefs(): SharedPreferences {
         return application.getSharedPreferences(PREFS_SETTINGS, Context.MODE_PRIVATE)!!
+    }
+
+    @Provides
+    @Singleton
+    internal fun providesDB(context: Context): BalancesDB {
+        return BalancesDB.getInstance(context)
     }
 
 }

@@ -41,8 +41,6 @@ Xapp/src/main/java/me/jacoblewis/dailyexpense/mainActivity/interfaces/nav/NavExc
 [app/src/main/java/me/jacoblewis/dailyexpense/mainActivity/interfaces/ExceptionController.kt,5\4\54ee57388f90d474804fdffa94915975f9d523fa
 Y
 )app/src/main/res/layout/activity_main.xml,7\6\76b07e40f24cce093536731477540f12e7da3cb6
-v
-Fapp/src/main/java/me/jacoblewis/dailyexpense/fragments/MainFragment.kt,f\3\f3327926a0ede161276f85743b7f94739f85e9db
 y
 Iapp/src/main/java/me/jacoblewis/dailyexpense/mainActivity/MainActivity.kt,7\2\72c8e73f4c65345c6f23f04c498fb238e5699f22
 ç
@@ -51,3 +49,23 @@ Iapp/src/main/java/me/jacoblewis/dailyexpense/mainActivity/MainActivity.kt,7\2\
 build.gradle,f\0\f07866736216be0ee2aba49e392191aeae700a35
 à
 Xapp/src/main/java/me/jacoblewis/dailyexpense/mainActivity/interfaces/nav/RootFragment.kt,1\6\16fc8728b83d84bacfe758457c88b498e90089dd
+Å
+Qapp/src/main/java/me/jacoblewis/dailyexpense/commons/AppBarStateChangeListener.kt,c\5\c5f7b208c021c624aa354ca58cdb23f2c46bf362
+{
+Kapp/src/main/java/me/jacoblewis/dailyexpense/data/models/PaymentCategory.kt,7\b\7b2425ac77199f4158d525017e4a7980308d25c8
+s
+Capp/src/main/java/me/jacoblewis/dailyexpense/data/models/Payment.kt,5\6\568a14c3d3af8e29dbf2b5ed63fa55c23b0acb0c
+t
+Dapp/src/main/java/me/jacoblewis/dailyexpense/data/models/Category.kt,5\a\5a95f2cb4756645e2d86587668b946afdd598a35
+o
+?app/src/main/java/me/jacoblewis/dailyexpense/data/BalancesDB.kt,9\e\9e8635fa6e8e48170cb31b7735dd26f409f45c19
+p
+@app/src/main/java/me/jacoblewis/dailyexpense/data/PaymentsDao.kt,1\b\1b03e3db2d6eec73e6fd935feda6f36b58404a54
+|
+Lapp/src/main/java/me/jacoblewis/dailyexpense/fragments/main/MainViewModel.kt,8\b\8b4ac3edaa2da205dc784f1ae32d9abc69fdfb4e
+{
+Kapp/src/main/java/me/jacoblewis/dailyexpense/fragments/main/MainFragment.kt,0\9\09f0a2320f3fba57af527886f5b7388ce65ea15e
+u
+Eapp/src/main/java/me/jacoblewis/dailyexpense/adapters/ItemDelegate.kt,4\1\41977b4ea63f95d1d0edf130b027cf39ea438284
+{
+Kapp/src/main/java/me/jacoblewis/dailyexpense/adapters/PaymentsController.kt,c\a\caa0998802eb7c47e5b81e7528e083a7556abb74

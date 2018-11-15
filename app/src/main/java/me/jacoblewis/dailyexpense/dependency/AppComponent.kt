@@ -1,10 +1,11 @@
 package me.jacoblewis.dailyexpense.dependency
 
 import dagger.Component
-import me.jacoblewis.dailyexpense.dependency.modules.ViewModelModule
-import me.jacoblewis.dailyexpense.mainActivity.MainActivity
 import me.jacoblewis.dailyexpense.dependency.modules.AppModule
+import me.jacoblewis.dailyexpense.dependency.modules.ViewModelModule
 import me.jacoblewis.dailyexpense.dependency.utils.MyApp
+import me.jacoblewis.dailyexpense.fragments.main.MainFragment
+import me.jacoblewis.dailyexpense.mainActivity.MainActivity
 import javax.inject.Singleton
 
 /**
@@ -15,4 +16,5 @@ import javax.inject.Singleton
 interface AppComponent {
     fun inject(app: MyApp)
     fun inject(obj: MainActivity)
+    fun inject(obj: MainFragment)
 }
