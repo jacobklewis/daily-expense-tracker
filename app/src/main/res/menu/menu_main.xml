@@ -3,19 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/menu_item_overview"
-            android:icon="@drawable/ic_baseline_donut_small_24px"
-            android:title="Overview" />
-        <item
-            android:id="@+id/menu_item_categories"
-            android:icon="@drawable/ic_baseline_category_24px"
-            android:title="Categories" />
-        <item
-            android:id="@+id/menu_item_settings"
-            android:icon="@drawable/ic_baseline_settings_20px"
-            android:title="Settings" />
-    </group>
+    <item android:title="Daily Expense">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/menu_item_overview"
+                    android:icon="@drawable/ic_baseline_donut_small_24px"
+                    android:title="Overview" />
+                <item
+                    android:id="@+id/menu_item_categories"
+                    android:icon="@drawable/ic_baseline_category_24px"
+                    android:title="Categories" />
+                <item
+                    android:id="@+id/menu_item_settings"
+                    android:icon="@drawable/ic_baseline_settings_20px"
+                    android:title="Settings" />
+            </group>
+        </menu>
+    </item>
+
 
 </menu>

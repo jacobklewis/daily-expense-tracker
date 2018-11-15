@@ -7,7 +7,7 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import me.jacoblewis.dailyexpense.R
 import me.jacoblewis.dailyexpense.dependency.utils.MyApp
-import me.jacoblewis.dailyexpense.fragments.MainFragment
+import me.jacoblewis.dailyexpense.fragments.main.MainFragment
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.ExceptionController
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.NavigationController
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.PermissionController
