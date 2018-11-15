@@ -12,7 +12,7 @@ import me.jacoblewis.dailyexpense.data.models.PaymentCategory
 interface PaymentsDao {
 
     @Transaction
-    @Query("SELECT * FROM payments")
+    @Query("SELECT * FROM payments ORDER BY creation_date DESC")
     fun getAllPayments(): LiveData<List<PaymentCategory>>
 
     @Insert

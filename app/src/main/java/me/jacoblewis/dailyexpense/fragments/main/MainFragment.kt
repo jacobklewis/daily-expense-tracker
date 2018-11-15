@@ -27,6 +27,8 @@ import me.jacoblewis.dailyexpense.commons.State
 import me.jacoblewis.dailyexpense.commons.addStateChangeListener
 import me.jacoblewis.dailyexpense.data.models.PaymentCategory
 import me.jacoblewis.dailyexpense.dependency.utils.MyApp
+import me.jacoblewis.dailyexpense.mainActivity.interfaces.NavigationController
+import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.RootFragment
 import javax.inject.Inject
 
@@ -56,10 +58,13 @@ class MainFragment : Fragment(), RootFragment, ItemDelegate<PaymentCategory> {
 
     private val paymentAdapter: PaymentsController.PaymentItemAdapter by lazy { PaymentsController.createAdapter(context, this) as PaymentsController.PaymentItemAdapter }
 
+    private lateinit var navigationController: NavigationController
+
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         MyApp.graph.inject(this)
 
+        navigationController = context as NavigationController
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -106,7 +111,8 @@ class MainFragment : Fragment(), RootFragment, ItemDelegate<PaymentCategory> {
 
     @OnClick(R.id.fab_add_new)
     fun addNewFabClicked(v: View) {
-        viewModel.addMockPayment()
+//        viewModel.addMockPayment()
+        navigationController.navigateTo(NavScreen.EnterPayment)
     }
 
     /**

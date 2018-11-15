@@ -1,6 +1,9 @@
 package me.jacoblewis.dailyexpense.mainActivity.interfaces
 
+import android.support.v4.app.Fragment
+import me.jacoblewis.dailyexpense.R
 import me.jacoblewis.dailyexpense.commons.openURI
+import me.jacoblewis.dailyexpense.fragments.enterPayment.EnterPaymentFragment
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.RootFragment
 
@@ -10,7 +13,13 @@ interface NavigationController : ActivityController {
         when (navScreen) {
             is NavScreen.Feedback -> openFeedback()
             is NavScreen.Settings -> openSettings()
+            is NavScreen.EnterPayment -> enterPayment()
         }
+    }
+
+    fun enterPayment() {
+        currentRootFragment = EnterPaymentFragment()
+        currentActivity.supportFragmentManager.beginTransaction().replace(R.id.frame_root, currentRootFragment as Fragment).addToBackStack(null).commit()
     }
 
     private fun openFeedback() {
