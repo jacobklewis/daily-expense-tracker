@@ -105,6 +105,11 @@ class MainFragment : Fragment(), RootFragment, ItemDelegate<PaymentCategory> {
         return rootView
     }
 
+    override fun onStart() {
+        super.onStart()
+        collapsingToolbarLayout.post { collapsingToolbarLayout.requestLayout() }
+    }
+
     override fun onItemClicked(item: PaymentCategory) {
         Snackbar.make(view!!, "${item.transaction?.cost ?: "N/A"}", Snackbar.LENGTH_SHORT).show()
     }
