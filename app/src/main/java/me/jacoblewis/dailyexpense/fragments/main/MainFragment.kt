@@ -25,6 +25,7 @@ import me.jacoblewis.dailyexpense.adapters.ItemDelegate
 import me.jacoblewis.dailyexpense.adapters.PaymentsController
 import me.jacoblewis.dailyexpense.commons.State
 import me.jacoblewis.dailyexpense.commons.addStateChangeListener
+import me.jacoblewis.dailyexpense.commons.revealSettingsTo
 import me.jacoblewis.dailyexpense.data.models.PaymentCategory
 import me.jacoblewis.dailyexpense.dependency.utils.MyApp
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.NavigationController
@@ -33,7 +34,9 @@ import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.RootFragment
 import javax.inject.Inject
 
 class MainFragment : Fragment(), RootFragment, ItemDelegate<PaymentCategory> {
-
+    override val screenTag: String = MainFragment::class.java.name
+    override val transitionIn: Int = R.anim.nothing // No Transition
+    override val transitionOut: Int = R.anim.nothing // No Transition
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -47,7 +50,7 @@ class MainFragment : Fragment(), RootFragment, ItemDelegate<PaymentCategory> {
     lateinit var appBarLayout: AppBarLayout
     @BindView(R.id.main_collapsing)
     lateinit var collapsingToolbarLayout: CollapsingToolbarLayout
-    @BindView(R.id.main_recycler_view)
+    @BindView(R.id.recycler_view_main)
     lateinit var recyclerView: RecyclerView
     @BindView(R.id.fab_add_new)
     lateinit var addNewFab: FloatingActionButton
@@ -59,6 +62,10 @@ class MainFragment : Fragment(), RootFragment, ItemDelegate<PaymentCategory> {
     private val paymentAdapter: PaymentsController.PaymentItemAdapter by lazy { PaymentsController.createAdapter(context, this) as PaymentsController.PaymentItemAdapter }
 
     private lateinit var navigationController: NavigationController
+
+    override fun setRootElevation(el: Float) {
+        view?.elevation = el
+    }
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -117,7 +124,8 @@ class MainFragment : Fragment(), RootFragment, ItemDelegate<PaymentCategory> {
     @OnClick(R.id.fab_add_new)
     fun addNewFabClicked(v: View) {
 //        viewModel.addMockPayment()
-        navigationController.navigateTo(NavScreen.EnterPayment)
+        val v2 = view ?: return
+        navigationController.navigateTo(NavScreen.EnterPayment( v revealSettingsTo v2))
     }
 
     /**

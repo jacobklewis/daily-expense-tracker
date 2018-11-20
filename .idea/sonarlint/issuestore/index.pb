@@ -69,3 +69,9 @@ u
 Eapp/src/main/java/me/jacoblewis/dailyexpense/adapters/ItemDelegate.kt,4\1\41977b4ea63f95d1d0edf130b027cf39ea438284
 {
 Kapp/src/main/java/me/jacoblewis/dailyexpense/adapters/PaymentsController.kt,c\a\caa0998802eb7c47e5b81e7528e083a7556abb74
+r
+Bapp/src/main/java/me/jacoblewis/dailyexpense/data/CategoriesDao.kt,b\0\b0dd98c2b627518dd951c65cc37c3bc154a4141b
+‹
+[app/src/main/java/me/jacoblewis/dailyexpense/fragments/enterPayment/EnterPaymentFragment.kt,e\5\e577abcacf848c4be9c14f59d73d11f63a05c072
+v
+Fapp/src/main/java/me/jacoblewis/dailyexpense/commons/RevealSettings.kt,5\9\59ccc5e14fc704380192a405eaeff79214d4adae
