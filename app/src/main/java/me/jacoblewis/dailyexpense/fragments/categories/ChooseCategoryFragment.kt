@@ -20,10 +20,14 @@ import butterknife.ButterKnife
 import me.jacoblewis.dailyexpense.R
 import me.jacoblewis.dailyexpense.adapters.CategoryController
 import me.jacoblewis.dailyexpense.adapters.ItemDelegate
+import me.jacoblewis.dailyexpense.commons.ARG_PAYMENT
 import me.jacoblewis.dailyexpense.commons.AnimationUtils
 import me.jacoblewis.dailyexpense.commons.RevealAnimationSetting
 import me.jacoblewis.dailyexpense.data.models.Category
+import me.jacoblewis.dailyexpense.data.models.Payment
 import me.jacoblewis.dailyexpense.dependency.utils.MyApp
+import me.jacoblewis.dailyexpense.mainActivity.interfaces.NavigationController
+import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.RootFragment
 import javax.inject.Inject
 
@@ -39,6 +43,7 @@ class ChooseCategoryFragment : Fragment(), RootFragment, ItemDelegate<Category> 
     lateinit var toolbar: Toolbar
     @BindView(R.id.recycler_view_category)
     lateinit var recyclerView: RecyclerView
+    private lateinit var navigationController: NavigationController
 
 
     private val viewModel: CategoryViewModel by lazy {
@@ -55,6 +60,7 @@ class ChooseCategoryFragment : Fragment(), RootFragment, ItemDelegate<Category> 
         super.onAttach(context)
         MyApp.graph.inject(this)
 
+        navigationController = context as NavigationController
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,7 +97,11 @@ class ChooseCategoryFragment : Fragment(), RootFragment, ItemDelegate<Category> 
     }
 
     override fun onItemClicked(item: Category) {
-        // TODO: Save
+        val payment: Payment = arguments?.get(ARG_PAYMENT) as? Payment ?: Payment(0f)
+        payment.categoryId = item.categoryId
+        viewModel.savePayment(payment)
+
+        navigationController.navigateTo(NavScreen.Main, navBack = true)
     }
 
     /**

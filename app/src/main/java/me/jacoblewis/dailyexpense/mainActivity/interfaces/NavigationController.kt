@@ -2,7 +2,7 @@ package me.jacoblewis.dailyexpense.mainActivity.interfaces
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import me.jacoblewis.dailyexpense.commons.RevealAnimationSetting
+import me.jacoblewis.dailyexpense.commons.ARG_PAYMENT
 import me.jacoblewis.dailyexpense.commons.openURI
 import me.jacoblewis.dailyexpense.fragments.categories.ChooseCategoryFragment
 import me.jacoblewis.dailyexpense.fragments.enterPayment.EnterPaymentFragment
@@ -18,8 +18,9 @@ interface NavigationController : ActivityController {
         val rootFragmentStack: Stack<RootFragment> by lazy { Stack<RootFragment>() }
     }
 
-    fun navigateTo(navScreen: NavScreen) {
+    fun navigateTo(navScreen: NavScreen, navBack: Boolean = false) {
         when (navScreen) {
+            is NavScreen.Main -> openMain(navBack)
             is NavScreen.Feedback -> openFeedback()
             is NavScreen.Settings -> openSettings()
             is NavScreen.EnterPayment -> enterPayment(navScreen)
@@ -27,12 +28,26 @@ interface NavigationController : ActivityController {
         }
     }
 
-    fun enterPayment(enterPayment: NavScreen.EnterPayment) {
+    private fun openMain(navBack: Boolean = false) {
+        if (navBack) {
+            while (rootFragmentStack.isNotEmpty() && rootFragmentStack.peek().screenTag != MainFragment::class.java.name) {
+                rootFragmentStack.pop()
+            }
+            navRootUp(rootFragmentStack.peek(), addToBackStack = false)
+        } else {
+            navRootUp(MainFragment())
+        }
+
+    }
+
+    private fun enterPayment(enterPayment: NavScreen.EnterPayment) {
         navRootUp(EnterPaymentFragment.createWithRevealAnimation(enterPayment.revealAnimationSetting))
     }
 
-    fun chooseCategory(chooseCategory: NavScreen.ChooseCategory) {
-        navRootUp(ChooseCategoryFragment())
+    private fun chooseCategory(chooseCategory: NavScreen.ChooseCategory) {
+        val chooseFrag = ChooseCategoryFragment()
+        chooseFrag.arguments = Bundle().also { it.putParcelable(ARG_PAYMENT, chooseCategory.payment) }
+        navRootUp(chooseFrag)
     }
 
     private fun openFeedback() {
@@ -70,11 +85,9 @@ interface NavigationController : ActivityController {
             rootFragmentStack.push(fragment)
         }
 //        (currentRoot as Fragment).
-        currentActivity.supportFragmentManager.
-                beginTransaction().
+        currentActivity.supportFragmentManager.beginTransaction().
 //                setCustomAnimations(rootFragmentStack.peek().transitionIn, currentRoot.transitionOut).
-                replace(fragmentFrame, rootFragmentStack.peek() as Fragment).
-                commitNow()
+                replace(fragmentFrame, rootFragmentStack.peek() as Fragment).commitNow()
     }
 
     fun handleOnBack(pressBack: () -> Unit) {
@@ -83,11 +96,9 @@ interface NavigationController : ActivityController {
             if (rootFragmentStack.empty()) {
                 pressBack()
             } else {
-                currentActivity.supportFragmentManager.
-                        beginTransaction().
+                currentActivity.supportFragmentManager.beginTransaction().
 //                        setCustomAnimations(rootFragmentStack.peek().transitionIn, currentRoot.transitionOut).
-                        replace(fragmentFrame, rootFragmentStack.peek() as Fragment).
-                        commitNow()
+                        replace(fragmentFrame, rootFragmentStack.peek() as Fragment).commitNow()
             }
         } else {
             // If an action was taken within the fragment, keep it on the stack
