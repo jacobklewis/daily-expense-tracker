@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.AppCompatEditText
 import android.support.v7.widget.Toolbar
 import android.view.*
 import butterknife.BindView
@@ -24,6 +25,8 @@ class EnterPaymentFragment : Fragment(), RootFragment {
     override val transitionOut: Int = R.anim.nothing
     @BindView(R.id.toolbar)
     lateinit var toolbar: Toolbar
+    @BindView(R.id.edittext_enter_price)
+    lateinit var enterPriceEditText: AppCompatEditText
     private lateinit var navigationController: NavigationController
 
     override fun setRootElevation(el: Float) {
@@ -64,8 +67,11 @@ class EnterPaymentFragment : Fragment(), RootFragment {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
-            // TODO: add real payment
-            R.id.action_continue -> navigationController.navigateTo(NavScreen.ChooseCategory(Payment(cost = 3f, notes = "")))
+            R.id.action_continue -> {
+                val price: Float = enterPriceEditText.text.toString().toFloat()
+                navigationController.navigateTo(NavScreen.ChooseCategory(Payment(cost = price)))
+
+            }
             android.R.id.home -> activity?.onBackPressed()
         }
         return true

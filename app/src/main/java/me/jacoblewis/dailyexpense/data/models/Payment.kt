@@ -10,14 +10,14 @@ import java.util.*
         indices = [Index("category_id")])
 @Parcelize
 data class Payment(
-        @ColumnInfo(name = "creation_date")
-        val creationDate: Calendar = Calendar.getInstance(),
-
         @ColumnInfo(name = "cost")
         val cost: Float,
 
+        @ColumnInfo(name = "creation_date")
+        val creationDate: Calendar = Calendar.getInstance(),
+
         @ColumnInfo(name = "notes")
-        val notes: String
+        val notes: String = ""
 ): Parcelable {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
