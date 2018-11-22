@@ -34,7 +34,7 @@ constructor(val db: BalancesDB) : ViewModel() {
 
     // TODO: remove and add to add payment screen
     fun addMockPayment() {
-        val mockedPayment = Payment(1, cost = (Math.random()*15000/100).toFloat(), notes = "")
+        val mockedPayment = Payment(cost = (Math.random() * 15000 / 100).toFloat(), notes = "")
         GlobalScope.launch {
             db.paymentsDao().insertPayment(mockedPayment)
         }

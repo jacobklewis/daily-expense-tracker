@@ -4,6 +4,10 @@
     <string name="title_open_nav">Open Nav</string>
     <string name="title_close_nav">Close Nav</string>
 
+    <string name="title_create_category">Create Category</string>
+    <string name="label_save">Save</string>
+    <string name="label_cancel">Cancel</string>
+
     <!-- Filler Text -->
     <string name="filler_label">Lorem ipsum</string>
     <string name="filler_text_short">Lorem ipsum dolor amet live-edge try-hard fingerstache ugh quinoa lomo. </string>

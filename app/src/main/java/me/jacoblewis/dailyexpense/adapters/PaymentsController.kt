@@ -11,7 +11,6 @@ import me.jacoblewis.dailyexpense.R
 import me.jacoblewis.dailyexpense.data.models.PaymentCategory
 import me.jacoblewis.jklcore.components.recyclerview.RBRecyclerAdapter
 import me.jacoblewis.jklcore.components.recyclerview.RBRecyclerViewHolder
-import java.text.DateFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
