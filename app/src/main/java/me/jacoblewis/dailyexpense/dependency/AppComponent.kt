@@ -5,6 +5,7 @@ import me.jacoblewis.dailyexpense.dependency.modules.AppModule
 import me.jacoblewis.dailyexpense.dependency.modules.ViewModelModule
 import me.jacoblewis.dailyexpense.dependency.utils.MyApp
 import me.jacoblewis.dailyexpense.fragments.categories.ChooseCategoryFragment
+import me.jacoblewis.dailyexpense.fragments.enterCategory.EnterCategoryDialogFragment
 import me.jacoblewis.dailyexpense.fragments.enterPayment.EnterPaymentFragment
 import me.jacoblewis.dailyexpense.fragments.main.MainFragment
 import me.jacoblewis.dailyexpense.mainActivity.MainActivity
@@ -21,4 +22,5 @@ interface AppComponent {
     fun inject(obj: MainFragment)
     fun inject(obj: EnterPaymentFragment)
     fun inject(obj: ChooseCategoryFragment)
+    fun inject(obj: EnterCategoryDialogFragment)
 }
