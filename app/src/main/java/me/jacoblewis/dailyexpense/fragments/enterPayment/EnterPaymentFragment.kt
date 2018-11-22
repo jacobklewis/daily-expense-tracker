@@ -68,7 +68,7 @@ class EnterPaymentFragment : Fragment(), RootFragment {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_continue -> {
-                val price: Float = enterPriceEditText.text.toString().toFloat()
+                val price: Float = enterPriceEditText.text.toString().replace("$", "").toFloat()
                 navigationController.navigateTo(NavScreen.ChooseCategory(Payment(cost = price)))
 
             }

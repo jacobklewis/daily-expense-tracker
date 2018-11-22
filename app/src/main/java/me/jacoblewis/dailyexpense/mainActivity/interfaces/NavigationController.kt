@@ -3,8 +3,8 @@ package me.jacoblewis.dailyexpense.mainActivity.interfaces
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import me.jacoblewis.dailyexpense.commons.ARG_PAYMENT
-import me.jacoblewis.dailyexpense.commons.openURI
 import me.jacoblewis.dailyexpense.fragments.categories.ChooseCategoryFragment
+import me.jacoblewis.dailyexpense.fragments.enterCategory.EnterCategoryDialogFragment
 import me.jacoblewis.dailyexpense.fragments.enterPayment.EnterPaymentFragment
 import me.jacoblewis.dailyexpense.fragments.main.MainFragment
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
@@ -21,8 +21,8 @@ interface NavigationController : ActivityController {
     fun navigateTo(navScreen: NavScreen, navBack: Boolean = false) {
         when (navScreen) {
             is NavScreen.Main -> openMain(navBack)
-            is NavScreen.Feedback -> openFeedback()
             is NavScreen.Settings -> openSettings()
+            is NavScreen.EnterCategory -> enterCategory()
             is NavScreen.EnterPayment -> enterPayment(navScreen)
             is NavScreen.ChooseCategory -> chooseCategory(navScreen)
         }
@@ -44,18 +44,24 @@ interface NavigationController : ActivityController {
         navRootUp(EnterPaymentFragment.createWithRevealAnimation(enterPayment.revealAnimationSetting))
     }
 
+
+    private fun enterCategory() {
+        val enterCategoryFrag = EnterCategoryDialogFragment()
+        enterCategoryFrag.show(currentActivity.supportFragmentManager, EnterCategoryDialogFragment::class.java.name)
+    }
+
     private fun chooseCategory(chooseCategory: NavScreen.ChooseCategory) {
         val chooseFrag = ChooseCategoryFragment()
         chooseFrag.arguments = Bundle().also { it.putParcelable(ARG_PAYMENT, chooseCategory.payment) }
         navRootUp(chooseFrag)
     }
 
-    private fun openFeedback() {
-        openURI(currentActivity, listOf(
-                "market://details?id=me.jacoblewis.bowlingscorekeeper",
-                "https://play.google.com/store/apps/details?me.jacoblewis.bowlingscorekeeper"
-        ))
-    }
+//    private fun openFeedback() {
+//        openURI(currentActivity, listOf(
+//                "market://details?id=me.jacoblewis.bowlingscorekeeper",
+//                "https://play.google.com/store/apps/details?me.jacoblewis.bowlingscorekeeper"
+//        ))
+//    }
 
     private fun openSettings() {
         TODO("Open Settings")

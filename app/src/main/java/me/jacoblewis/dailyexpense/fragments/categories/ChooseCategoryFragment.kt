@@ -17,6 +17,7 @@ import android.view.View
 import android.view.ViewGroup
 import butterknife.BindView
 import butterknife.ButterKnife
+import butterknife.OnClick
 import me.jacoblewis.dailyexpense.R
 import me.jacoblewis.dailyexpense.adapters.CategoryController
 import me.jacoblewis.dailyexpense.adapters.ItemDelegate
@@ -102,6 +103,11 @@ class ChooseCategoryFragment : Fragment(), RootFragment, ItemDelegate<Category> 
         viewModel.savePayment(payment)
 
         navigationController.navigateTo(NavScreen.Main, navBack = true)
+    }
+
+    @OnClick(R.id.fab_add_new)
+    fun addNewCategory(v: View) {
+        navigationController.navigateTo(NavScreen.EnterCategory)
     }
 
     /**
