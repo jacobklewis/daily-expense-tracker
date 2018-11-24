@@ -84,7 +84,7 @@ class ChooseCategoryFragment : RootFragment(R.layout.fragment_category_content),
         payment.categoryId = item.categoryId
         viewModel.savePayment(payment)
 
-        navigationController.navigateTo(NavScreen.Main, navBack = true)
+        navigationController.navigateTo(NavScreen.Main)
     }
 
     @OnClick(R.id.fab_add_new)

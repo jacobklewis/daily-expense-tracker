@@ -12,10 +12,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import me.jacoblewis.dailyexpense.R
 import me.jacoblewis.dailyexpense.dependency.utils.MyApp
-import me.jacoblewis.dailyexpense.mainActivity.interfaces.ExceptionController
-import me.jacoblewis.dailyexpense.mainActivity.interfaces.NavigationController
-import me.jacoblewis.dailyexpense.mainActivity.interfaces.PermissionController
-import me.jacoblewis.dailyexpense.mainActivity.interfaces.UpdateController
+import me.jacoblewis.dailyexpense.mainActivity.interfaces.*
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavUIUpdate
 
@@ -55,7 +52,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun linkToolBarToDrawer(toolbar: Toolbar) {
-        val navId = NavigationController.rootFragmentStack.peek().options.drawerNavId
+        val navId = NavigationHandler.rootFragmentStack.peek().options.drawerNavId
         if (navId != 0) {
             navView.setCheckedItem(navId)
         }
