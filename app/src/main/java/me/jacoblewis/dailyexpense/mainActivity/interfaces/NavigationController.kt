@@ -2,7 +2,9 @@ package me.jacoblewis.dailyexpense.mainActivity.interfaces
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.Toolbar
 import me.jacoblewis.dailyexpense.commons.ARG_PAYMENT
+import me.jacoblewis.dailyexpense.fragments.categories.CategoryFragment
 import me.jacoblewis.dailyexpense.fragments.categories.ChooseCategoryFragment
 import me.jacoblewis.dailyexpense.fragments.enterCategory.EnterCategoryDialogFragment
 import me.jacoblewis.dailyexpense.fragments.enterPayment.EnterPaymentFragment
@@ -13,6 +15,7 @@ import java.util.*
 
 interface NavigationController : ActivityController {
     val fragmentFrame: Int
+    fun linkToolBarToDrawer(toolbar: Toolbar)
 
     companion object {
         val rootFragmentStack: Stack<RootFragment> by lazy { Stack<RootFragment>() }
@@ -24,6 +27,7 @@ interface NavigationController : ActivityController {
             is NavScreen.Settings -> openSettings()
             is NavScreen.EnterCategory -> enterCategory()
             is NavScreen.EnterPayment -> enterPayment(navScreen)
+            is NavScreen.Categories -> openCategories()
             is NavScreen.ChooseCategory -> chooseCategory(navScreen)
         }
     }
@@ -37,7 +41,10 @@ interface NavigationController : ActivityController {
         } else {
             navRootUp(MainFragment())
         }
+    }
 
+    private fun openCategories() {
+        navRootUp(CategoryFragment(), addToBackStack = false)
     }
 
     private fun enterPayment(enterPayment: NavScreen.EnterPayment) {
