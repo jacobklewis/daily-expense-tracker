@@ -1,54 +1,42 @@
 package me.jacoblewis.dailyexpense.fragments.enterPayment
 
-import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.AppCompatEditText
 import android.support.v7.widget.Toolbar
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import butterknife.BindView
-import butterknife.ButterKnife
 import me.jacoblewis.dailyexpense.R
 import me.jacoblewis.dailyexpense.commons.AnimationUtils
 import me.jacoblewis.dailyexpense.commons.RevealAnimationSetting
+import me.jacoblewis.dailyexpense.commons.RootFragmentOptions
 import me.jacoblewis.dailyexpense.data.models.Payment
 import me.jacoblewis.dailyexpense.dependency.utils.MyApp
-import me.jacoblewis.dailyexpense.mainActivity.interfaces.NavigationController
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.RootFragment
 
-class EnterPaymentFragment : Fragment(), RootFragment {
-    override val screenTag: String = EnterPaymentFragment::class.java.name
-    override val transitionIn: Int = R.anim.nothing
-    override val transitionOut: Int = R.anim.nothing
+class EnterPaymentFragment : RootFragment(R.layout.fragment_enter_payment) {
+    override val options: RootFragmentOptions = RootFragmentOptions(EnterPaymentFragment::class.java)
+
+    init {
+        MyApp.graph.inject(this)
+    }
+
     @BindView(R.id.toolbar)
     lateinit var toolbar: Toolbar
     @BindView(R.id.edittext_enter_price)
     lateinit var enterPriceEditText: AppCompatEditText
-    private lateinit var navigationController: NavigationController
-
-    override fun setRootElevation(el: Float) {
-        view?.elevation = el
-    }
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        MyApp.graph.inject(this)
-
-        navigationController = context as NavigationController
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val rootView = inflater.inflate(R.layout.fragment_enter_payment, container, false)
-        ButterKnife.bind(this, rootView)
-
+    override fun onViewBound(view: View) {
         toolbar.title = "Enter Payment"
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -57,7 +45,6 @@ class EnterPaymentFragment : Fragment(), RootFragment {
 //                ?: return rootView
 //
 //        AnimationUtils.registerCircularRevealAnimation(context!!, rootView, revealSetting, ContextCompat.getColor(context!!, R.color.colorAccent), ContextCompat.getColor(context!!, R.color.white))
-        return rootView
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
