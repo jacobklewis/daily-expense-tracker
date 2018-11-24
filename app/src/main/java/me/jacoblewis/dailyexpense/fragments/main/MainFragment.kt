@@ -1,59 +1,44 @@
 package me.jacoblewis.dailyexpense.fragments.main
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Context
-import android.os.Bundle
-import android.support.design.widget.*
-import android.support.v4.app.Fragment
-import android.support.v4.view.GravityCompat
-import android.support.v4.widget.DrawerLayout
-import android.support.v7.app.ActionBarDrawerToggle
+import android.support.design.widget.AppBarLayout
+import android.support.design.widget.CollapsingToolbarLayout
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import butterknife.BindView
-import butterknife.ButterKnife
 import butterknife.OnClick
 import me.jacoblewis.dailyexpense.R
 import me.jacoblewis.dailyexpense.adapters.ItemDelegate
 import me.jacoblewis.dailyexpense.adapters.PaymentsController
+import me.jacoblewis.dailyexpense.commons.RootFragmentOptions
 import me.jacoblewis.dailyexpense.commons.State
 import me.jacoblewis.dailyexpense.commons.addStateChangeListener
 import me.jacoblewis.dailyexpense.commons.revealSettingsTo
 import me.jacoblewis.dailyexpense.data.models.PaymentCategory
 import me.jacoblewis.dailyexpense.dependency.utils.MyApp
-import me.jacoblewis.dailyexpense.mainActivity.interfaces.NavigationController
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.RootFragment
-import javax.inject.Inject
 
-class MainFragment : Fragment(), RootFragment, ItemDelegate<PaymentCategory> {
-    override val screenTag: String = MainFragment::class.java.name
-    override val transitionIn: Int = R.anim.nothing // No Transition
-    override val transitionOut: Int = R.anim.nothing // No Transition
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+class MainFragment : RootFragment(R.layout.fragment_main_content), ItemDelegate<PaymentCategory> {
+    override val options: RootFragmentOptions = RootFragmentOptions(MainFragment::class.java, drawerNavId = R.id.menu_item_overview)
+
+    init {
+        MyApp.graph.inject(this)
+    }
 
     @BindView(R.id.toolbar)
     lateinit var toolbar: Toolbar
-    @BindView(R.id.drawer_layout)
-    lateinit var drawerLayout: DrawerLayout
-    @BindView(R.id.navigation_view)
-    lateinit var navView: NavigationView
     @BindView(R.id.main_appbar)
     lateinit var appBarLayout: AppBarLayout
     @BindView(R.id.main_collapsing)
     lateinit var collapsingToolbarLayout: CollapsingToolbarLayout
     @BindView(R.id.recycler_view_main)
     lateinit var recyclerView: RecyclerView
-    @BindView(R.id.fab_add_new)
-    lateinit var addNewFab: FloatingActionButton
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
@@ -61,35 +46,10 @@ class MainFragment : Fragment(), RootFragment, ItemDelegate<PaymentCategory> {
 
     private val paymentAdapter: PaymentsController.PaymentItemAdapter by lazy { PaymentsController.createAdapter(context, this) as PaymentsController.PaymentItemAdapter }
 
-    private lateinit var navigationController: NavigationController
-
-    override fun setRootElevation(el: Float) {
-        view?.elevation = el
-    }
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        MyApp.graph.inject(this)
-
-        navigationController = context as NavigationController
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val rootView = inflater.inflate(R.layout.fragment_main, container, false)
-        ButterKnife.bind(this, rootView)
-
+    override fun onViewBound(view: View) {
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
 
-        val toggle = ActionBarDrawerToggle(
-                activity, drawerLayout, toolbar, R.string.title_open_nav, R.string.title_close_nav
-        )
-        drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
 
-        navView.setCheckedItem(R.id.menu_item_overview)
-        navView.setNavigationItemSelectedListener {
-            return@setNavigationItemSelectedListener true
-        }
         val money = "$203.50"
 
         appBarLayout.addStateChangeListener { _, state ->
@@ -102,19 +62,19 @@ class MainFragment : Fragment(), RootFragment, ItemDelegate<PaymentCategory> {
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = paymentAdapter
 
+        navigationController.linkToolBarToDrawer(toolbar)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        collapsingToolbarLayout.post { collapsingToolbarLayout.requestLayout() }
+
         viewModel.payments.observe(this, Observer {
             if (it != null) {
                 paymentAdapter.removeAllItems()
                 paymentAdapter.addItems(it)
             }
         })
-
-        return rootView
-    }
-
-    override fun onStart() {
-        super.onStart()
-        collapsingToolbarLayout.post { collapsingToolbarLayout.requestLayout() }
     }
 
     override fun onItemClicked(item: PaymentCategory) {
@@ -125,7 +85,7 @@ class MainFragment : Fragment(), RootFragment, ItemDelegate<PaymentCategory> {
     fun addNewFabClicked(v: View) {
 //        viewModel.addMockPayment()
         val v2 = view ?: return
-        navigationController.navigateTo(NavScreen.EnterPayment( v revealSettingsTo v2))
+        navigationController.navigateTo(NavScreen.EnterPayment(v revealSettingsTo v2))
     }
 
     /**
@@ -133,10 +93,6 @@ class MainFragment : Fragment(), RootFragment, ItemDelegate<PaymentCategory> {
      * @return true iff the screen performed navigation
      */
     override fun navigateBack(): Boolean {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START)
-            return true
-        }
         return false
     }
 }
