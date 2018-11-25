@@ -12,8 +12,9 @@ data class Category(
         @ColumnInfo(name = "color")
         val color: String,
 
+        // Float 0-1 based on relative ratio
         @ColumnInfo(name = "category_budget")
-        val budget: Float
+        var budget: Float = 0.5f
 ) {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
