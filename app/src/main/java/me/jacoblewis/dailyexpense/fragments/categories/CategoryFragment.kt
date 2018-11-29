@@ -34,7 +34,9 @@ class CategoryFragment : RootFragment(R.layout.fragment_category_content), ItemD
         ViewModelProviders.of(this, viewModelFactory).get(CategoryViewModel::class.java)
     }
 
-    private val categoryAdapter: CategoryController.CategoryItemAdapter by lazy { CategoryController.createAdapter(context, this) as CategoryController.CategoryItemAdapter }
+    private val categoryAdapter: CategoryController.CategoryItemAdapter by lazy { CategoryController.createAdapter(context, this) {
+        viewModel.updateCategories(categoryAdapter.itemList)
+    } as CategoryController.CategoryItemAdapter }
 
     override fun onViewBound(view: View) {
         toolbar.title = "Payment Category"

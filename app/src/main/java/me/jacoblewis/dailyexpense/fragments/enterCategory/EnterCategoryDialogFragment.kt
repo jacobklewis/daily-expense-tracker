@@ -41,7 +41,7 @@ class EnterCategoryDialogFragment : DialogFragment() {
 
     val onSave = DialogInterface.OnClickListener { dialog, which ->
         val newCategoryTitle = categoryText.text.toString()
-        val categoryToSave = Category(newCategoryTitle, "#333333")
+        val categoryToSave = Category(newCategoryTitle, "#333333", 0f)
         GlobalScope.launch {
             db.categoriesDao().insertCategory(categoryToSave)
         }

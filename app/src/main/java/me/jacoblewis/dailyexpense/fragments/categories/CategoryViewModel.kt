@@ -19,6 +19,12 @@ constructor(val db: BalancesDB) : ViewModel() {
         categories.addSource(db.categoriesDao().getAllCategories(), categories::setValue)
     }
 
+    fun updateCategories(categories: List<Category>) {
+        GlobalScope.launch {
+            db.categoriesDao().updateCategories(categories)
+        }
+    }
+
     fun savePayment(payment: Payment) {
         GlobalScope.launch {
             db.paymentsDao().insertPayment(payment)
