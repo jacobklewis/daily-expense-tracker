@@ -14,9 +14,11 @@ data class Category(
 
         // Float 0-1 based on relative ratio
         @ColumnInfo(name = "category_budget")
-        var budget: Float = 0.5f
+        var budget: Float = 0f
 ) {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     var categoryId: Long = 0
+
+    var locked: Boolean = false
 }
