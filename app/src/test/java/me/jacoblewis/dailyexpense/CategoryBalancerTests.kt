@@ -39,7 +39,18 @@ class CategoryBalancerTests {
     fun testCategoryBalancerPinned1() {
         val cats = listOf(Category("A","", 0.5f), Category("B","", 0.5f), Category("C","", 1f), Category("D","", 1f))
 
-        assertTrue(CategoryBalancer.balanceCategories(cats, 0))
+        assertTrue(CategoryBalancer.balanceCategories(cats, listOf(0)))
+        assertTrue(!CategoryBalancer.balanceCategories(cats))
+
+        println(cats)
+    }
+
+
+    @Test
+    fun testCategoryBalancerPinned2() {
+        val cats = listOf(Category("A","", 0.25f), Category("B","", 0.5f), Category("C","", 0.5f), Category("D","", 1f))
+
+        assertTrue(CategoryBalancer.balanceCategories(cats, listOf(0, 1)))
         assertTrue(!CategoryBalancer.balanceCategories(cats))
 
         println(cats)

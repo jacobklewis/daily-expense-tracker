@@ -8,7 +8,7 @@ object CategoryBalancer {
     /**
      * Return true iff categories were rebalanced
      */
-    fun balanceCategories(categories: List<Category>, pinned: Int = -1): Boolean {
+    fun balanceCategories(categories: List<Category>, pinned: List<Int> = listOf()): Boolean {
         if (!isBalanced(categories)) {
             balanceNow(pinned, categories)
             return true
@@ -16,21 +16,25 @@ object CategoryBalancer {
         return false
     }
 
-    private fun balanceNow(pinned: Int, categories: List<Category>) {
-        val pinnedOffset = 1f - (if (pinned == -1) 0f else categories[pinned].budget)
+    fun mapToExpo(original: Float): Float = Math.sqrt(original.toDouble()).toFloat()
+
+    fun mapFromExpo(expo: Float): Float = expo * expo
+
+    private fun balanceNow(pinned: List<Int>, categories: List<Category>) {
+        val pinnedOffset = 1f - pinned.map { categories[it].budget }.sum()
         assert(pinnedOffset in 0.0..1.0, lazyMessage = { "Invalid Pinned Category" })
         val sum = categories.mapIndexed { i, cat ->
-            if (i == pinned) 0f else cat.budget
+            if (pinned.contains(i)) 0f else cat.budget
         }.sum()
         if (sum != 0f) {
             categories.forEachIndexed { i, cat ->
-                if (i != pinned) {
+                if (!pinned.contains(i)) {
                     cat.budget *= pinnedOffset / sum
                 }
             }
         } else {
             categories.forEachIndexed { i, cat ->
-                if (i != pinned) {
+                if (!pinned.contains(i)) {
                     cat.budget = pinnedOffset / categories.size
                 }
             }
