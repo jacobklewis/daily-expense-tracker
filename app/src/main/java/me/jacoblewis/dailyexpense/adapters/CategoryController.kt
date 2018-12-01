@@ -1,7 +1,6 @@
 package me.jacoblewis.dailyexpense.adapters
 
 import android.content.Context
-import android.support.design.widget.Snackbar
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
@@ -22,13 +21,17 @@ import kotlin.math.roundToInt
 object CategoryController {
     val BUDGET = 500f
 
-    fun createAdapter(context: Context?, callback: ItemDelegate<Category>, saveSliderPosDelegate: () -> Unit = {}): RBRecyclerAdapter<Category, ItemDelegate<Category>> {
+    fun createAdapter(context: Context?, callback: ItemDelegate<Category>, saveSliderPosDelegate: () -> Unit): RBRecyclerAdapter<Category, ItemDelegate<Category>> {
         return CategoryItemAdapter(context, callback, saveSliderPosDelegate)
+    }
+
+    fun createChooseAdapter(context: Context?, callback: ItemDelegate<Category>): RBRecyclerAdapter<Category, ItemDelegate<Category>> {
+        return CategoryItemAdapter(context, callback, null)
     }
 
 
     // List Adapter
-    class CategoryItemAdapter(context: Context?, delegate: ItemDelegate<Category>, val saveSliderPosDelegate: () -> Unit) : RBRecyclerAdapter<Category, ItemDelegate<Category>>(context, delegate) {
+    class CategoryItemAdapter(context: Context?, delegate: ItemDelegate<Category>, val saveSliderPosDelegate: (() -> Unit)?) : RBRecyclerAdapter<Category, ItemDelegate<Category>>(context, delegate) {
         lateinit var recyclerView: RecyclerView
 
         val moveSliderDelegate: (Int, Float) -> Unit = { pos, ratio ->
@@ -47,11 +50,14 @@ object CategoryController {
             this.recyclerView = recyclerView
         }
 
-        override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): RBRecyclerViewHolder<*, *> = CategoryViewHolder(viewGroup, moveSliderDelegate, saveSliderPosDelegate)
+        override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): RBRecyclerViewHolder<*, *> = saveSliderPosDelegate?.let {
+            CategoryViewHolder(viewGroup, moveSliderDelegate, it)
+        } ?: CategoryChooseViewHolder(viewGroup)
+
         override fun getItemViewType(position: Int): Int = 0
     }
 
-    // Payment View Holder (UI)
+    // Category View Holder (UI)
     class CategoryViewHolder(viewGroup: ViewGroup, val moveSliderDelegate: (Int, Float) -> Unit, val saveSliderPosDelegate: () -> Unit) : RBRecyclerViewHolder<Category, ItemDelegate<Category>>(viewGroup, R.layout.viewholder_category) {
         @BindView(R.id.txt_category)
         lateinit var categoryTextView: TextView
@@ -61,8 +67,6 @@ object CategoryController {
         lateinit var seekBar: SeekBar
         @BindView(R.id.checkbox_lock)
         lateinit var lockedCheckBox: CheckBox
-
-        lateinit var item: Category
 
         init {
             ButterKnife.bind(this, itemView)
@@ -75,7 +79,6 @@ object CategoryController {
         }
 
         override fun setUpView(itemView: View, item: Category, position: Int, delegate: ItemDelegate<Category>) {
-            this.item = item
             categoryTextView.text = item.name
             seekBar.setOnSeekBarChangeListener(null)
             lockedCheckBox.isChecked = item.locked
@@ -102,9 +105,26 @@ object CategoryController {
         override fun onClick(itemView: View, item: Category, position: Int, delegate: ItemDelegate<Category>) {
             delegate.onItemClicked(item)
         }
+    }
 
-        override fun onLongClick(itemView: View, item: Category, position: Int, delegate: ItemDelegate<Category>) {
-            Snackbar.make(itemView, "${item.name} held", Snackbar.LENGTH_LONG).show()
+    // Category Choose View Holder (UI)
+    class CategoryChooseViewHolder(viewGroup: ViewGroup) : RBRecyclerViewHolder<Category, ItemDelegate<Category>>(viewGroup, R.layout.viewholder_category_choose) {
+        @BindView(R.id.txt_category)
+        lateinit var categoryTextView: TextView
+        @BindView(R.id.txt_balance)
+        lateinit var balanceTextView: TextView
+
+        init {
+            ButterKnife.bind(this, itemView)
+        }
+
+        override fun setUpView(itemView: View, item: Category, position: Int, delegate: ItemDelegate<Category>) {
+            categoryTextView.text = item.name
+            balanceTextView.text = (item.budget * BUDGET).roundToInt().toString()
+        }
+
+        override fun onClick(itemView: View, item: Category, position: Int, delegate: ItemDelegate<Category>) {
+            delegate.onItemClicked(item)
         }
     }
 }

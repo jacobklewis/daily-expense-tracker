@@ -1,22 +1,16 @@
 package me.jacoblewis.dailyexpense.fragments.categories
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import butterknife.BindView
-import butterknife.ButterKnife
 import butterknife.OnClick
 import me.jacoblewis.dailyexpense.R
 import me.jacoblewis.dailyexpense.adapters.CategoryController
@@ -28,10 +22,8 @@ import me.jacoblewis.dailyexpense.commons.RootFragmentOptions
 import me.jacoblewis.dailyexpense.data.models.Category
 import me.jacoblewis.dailyexpense.data.models.Payment
 import me.jacoblewis.dailyexpense.dependency.utils.MyApp
-import me.jacoblewis.dailyexpense.mainActivity.interfaces.NavigationController
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.RootFragment
-import javax.inject.Inject
 
 class ChooseCategoryFragment : RootFragment(R.layout.fragment_category_content), ItemDelegate<Category> {
     override val options: RootFragmentOptions = RootFragmentOptions(ChooseCategoryFragment::class.java)
@@ -49,7 +41,7 @@ class ChooseCategoryFragment : RootFragment(R.layout.fragment_category_content),
         ViewModelProviders.of(this, viewModelFactory).get(CategoryViewModel::class.java)
     }
 
-    private val categoryAdapter: CategoryController.CategoryItemAdapter by lazy { CategoryController.createAdapter(context, this) as CategoryController.CategoryItemAdapter }
+    private val categoryAdapter: CategoryController.CategoryItemAdapter by lazy { CategoryController.createChooseAdapter(context, this) as CategoryController.CategoryItemAdapter }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
