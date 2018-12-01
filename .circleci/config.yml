@@ -33,7 +33,7 @@ jobs:
 
       - run: chmod +x gradlew
 
-      - run: ./gradlew clean build
+      - run: ./gradlew clean build --info
 
       - save_cache:
           paths:
