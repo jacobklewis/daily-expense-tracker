@@ -54,10 +54,14 @@ class CategoryFragment : RootFragment(R.layout.fragment_category_content), ItemD
         super.onStart()
         viewModel.categories.observe(this, Observer {
             if (it != null) {
-                categoryAdapter.removeAllItems()
-                categoryAdapter.addItems(it)
+                categoryAdapter.updateItems(it)
+                categoryAdapter.notifyDataSetChanged()
             }
         })
+    }
+
+    override fun onItemRemoved(item: Category) {
+        viewModel.removeCategory(item)
     }
 
     override fun onItemClicked(item: Category) {

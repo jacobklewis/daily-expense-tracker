@@ -58,8 +58,7 @@ class ChooseCategoryFragment : RootFragment(R.layout.fragment_category_content),
 
         viewModel.categories.observe(this, Observer {
             if (it != null) {
-                categoryAdapter.removeAllItems()
-                categoryAdapter.addItems(it)
+                categoryAdapter.updateItems(it)
             }
         })
     }
@@ -69,6 +68,10 @@ class ChooseCategoryFragment : RootFragment(R.layout.fragment_category_content),
             android.R.id.home -> activity?.onBackPressed()
         }
         return true
+    }
+
+    override fun onItemRemoved(item: Category) {
+
     }
 
     override fun onItemClicked(item: Category) {

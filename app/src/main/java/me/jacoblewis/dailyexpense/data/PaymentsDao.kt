@@ -17,4 +17,7 @@ interface PaymentsDao {
 
     @Insert
     fun insertPayment(payment: Payment)
+
+    @Query("DELETE FROM payments WHERE category_id = :categoryId")
+    fun deleteByCategory(categoryId: Long)
 }

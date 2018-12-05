@@ -11,8 +11,10 @@ import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnCheckedChanged
+import butterknife.OnClick
 import me.jacoblewis.dailyexpense.R
 import me.jacoblewis.dailyexpense.commons.CategoryBalancer
+import me.jacoblewis.dailyexpense.commons.asCurrency
 import me.jacoblewis.dailyexpense.data.models.Category
 import me.jacoblewis.jklcore.components.recyclerview.RBRecyclerAdapter
 import me.jacoblewis.jklcore.components.recyclerview.RBRecyclerViewHolder
@@ -73,7 +75,7 @@ object CategoryController {
         }
 
         fun updateSlider() {
-            balanceTextView.text = (item.budget * BUDGET).roundToInt().toString()
+            balanceTextView.text = (item.budget * BUDGET).asCurrency
             seekBar.progress = (CategoryBalancer.mapToExpo(item.budget) * 1000).toInt()
             seekBar.isEnabled = !item.locked
         }
@@ -87,7 +89,6 @@ object CategoryController {
                 override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                     moveSliderDelegate(position, CategoryBalancer.mapFromExpo(progress / 1000f))
                 }
-
                 override fun onStartTrackingTouch(seekBar: SeekBar?) {}
                 override fun onStopTrackingTouch(seekBar: SeekBar?) {
                     saveSliderPosDelegate()
@@ -100,6 +101,11 @@ object CategoryController {
         fun onChecked(v: CompoundButton) {
             item.locked = v.isChecked
             updateSlider()
+        }
+
+        @OnClick(R.id.button_remove)
+        fun onRemove(v: View) {
+            delegate.onItemRemoved(item)
         }
 
         override fun onClick(itemView: View, item: Category, position: Int, delegate: ItemDelegate<Category>) {
@@ -120,7 +126,7 @@ object CategoryController {
 
         override fun setUpView(itemView: View, item: Category, position: Int, delegate: ItemDelegate<Category>) {
             categoryTextView.text = item.name
-            balanceTextView.text = (item.budget * BUDGET).roundToInt().toString()
+            balanceTextView.text = (item.budget * BUDGET).asCurrency
         }
 
         override fun onClick(itemView: View, item: Category, position: Int, delegate: ItemDelegate<Category>) {
