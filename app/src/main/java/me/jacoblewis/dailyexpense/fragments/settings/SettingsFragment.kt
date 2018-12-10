@@ -18,7 +18,7 @@ import me.jacoblewis.dailyexpense.dependency.utils.MyApp
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.RootFragment
 
-class SettingsFragment : RootFragment(R.layout.fragment_category_content) { // TODO: add layout!
+class SettingsFragment : RootFragment(R.layout.fragment_settings_content) {
     override val options: RootFragmentOptions = RootFragmentOptions(SettingsFragment::class.java, drawerNavId = R.id.menu_item_settings)
 
     init {
