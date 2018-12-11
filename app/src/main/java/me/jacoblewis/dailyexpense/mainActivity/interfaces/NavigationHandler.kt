@@ -1,8 +1,8 @@
 package me.jacoblewis.dailyexpense.mainActivity.interfaces
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.Toolbar
+import androidx.fragment.app.Fragment
+import androidx.appcompat.widget.Toolbar
 import me.jacoblewis.dailyexpense.fragments.main.MainFragment
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.RootFragment
 import java.util.*
@@ -23,7 +23,7 @@ interface NavigationHandler : ActivityController {
     }
 
     fun saveNavState(outState: Bundle) {
-        currentActivity.supportFragmentManager.putFragment(outState, RootFragment::class.java.name, rootFragmentStack.peek() as Fragment)
+        currentActivity.supportFragmentManager.putFragment(outState, RootFragment::class.java.name, rootFragmentStack.peek() as androidx.fragment.app.Fragment)
     }
 
     fun navTo(fragment: RootFragment, addToBackStack: Boolean = true, navUpTo: Boolean = false) {
@@ -40,7 +40,7 @@ interface NavigationHandler : ActivityController {
         }
         currentActivity.supportFragmentManager.beginTransaction().
 //                setCustomAnimations(rootFragmentStack.peek().transitionIn, currentRoot.transitionOut).
-                replace(fragmentFrame, rootFragmentStack.peek() as Fragment).commitNow()
+                replace(fragmentFrame, rootFragmentStack.peek() as androidx.fragment.app.Fragment).commitNow()
     }
 
     private fun navStackUpTo(fragment: RootFragment) {
@@ -57,7 +57,7 @@ interface NavigationHandler : ActivityController {
             } else {
                 currentActivity.supportFragmentManager.beginTransaction().
 //                        setCustomAnimations(rootFragmentStack.peek().transitionIn, currentRoot.transitionOut).
-                        replace(fragmentFrame, rootFragmentStack.peek() as Fragment).commitNow()
+                        replace(fragmentFrame, rootFragmentStack.peek() as androidx.fragment.app.Fragment).commitNow()
             }
         } else {
             // If an action was taken within the fragment, keep it on the stack
@@ -81,7 +81,7 @@ interface NavigationHandler : ActivityController {
 
     private infix fun RootFragment.attachIfNeededTo(activityController: ActivityController) {
         if (activityController.currentActivity.supportFragmentManager.findFragmentByTag(screenTag) == null) {
-            currentActivity.supportFragmentManager.beginTransaction().replace(fragmentFrame, this as Fragment).commitNow()
+            currentActivity.supportFragmentManager.beginTransaction().replace(fragmentFrame, this as androidx.fragment.app.Fragment).commitNow()
         }
     }
 }

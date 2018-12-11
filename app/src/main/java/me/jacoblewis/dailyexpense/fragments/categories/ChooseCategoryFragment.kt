@@ -1,15 +1,13 @@
 package me.jacoblewis.dailyexpense.fragments.categories
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.OnClick
 import me.jacoblewis.dailyexpense.R
@@ -35,7 +33,7 @@ class ChooseCategoryFragment : RootFragment(R.layout.fragment_category_content),
     @BindView(R.id.toolbar)
     lateinit var toolbar: Toolbar
     @BindView(R.id.recycler_view_category)
-    lateinit var recyclerView: RecyclerView
+    lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
 
     private val viewModel: CategoryViewModel by lazy {
         ViewModelProviders.of(this, viewModelFactory).get(CategoryViewModel::class.java)
@@ -53,7 +51,7 @@ class ChooseCategoryFragment : RootFragment(R.layout.fragment_category_content),
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
         recyclerView.adapter = categoryAdapter
 
         viewModel.categories.observe(this, Observer {
@@ -63,8 +61,8 @@ class ChooseCategoryFragment : RootFragment(R.layout.fragment_category_content),
         })
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             android.R.id.home -> activity?.onBackPressed()
         }
         return true

@@ -10,9 +10,9 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Parcelable
-import android.support.annotation.LayoutRes
-import android.support.v4.app.Fragment
-import android.support.v4.view.animation.FastOutSlowInInterpolator
+import androidx.annotation.LayoutRes
+import androidx.fragment.app.Fragment
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.ViewGroup
@@ -110,7 +110,7 @@ infix fun View.revealSettingsTo(view: View) = RevealAnimationSetting(
         height = view.measuredHeight
 )
 
-inline fun Fragment.oCV(@LayoutRes layoutId: Int, container: ViewGroup?, config: (View) -> Unit): View? {
+inline fun androidx.fragment.app.Fragment.oCV(@LayoutRes layoutId: Int, container: ViewGroup?, config: (View) -> Unit): View? {
     val rootView = layoutInflater.inflate(layoutId, container, false)
     ButterKnife.bind(this, rootView)
     config(rootView)

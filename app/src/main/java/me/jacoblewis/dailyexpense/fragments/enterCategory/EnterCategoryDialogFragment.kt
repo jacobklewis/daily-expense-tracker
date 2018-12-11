@@ -4,8 +4,8 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v7.app.AlertDialog
+import androidx.fragment.app.DialogFragment
+import androidx.appcompat.app.AlertDialog
 import android.widget.EditText
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -15,14 +15,14 @@ import me.jacoblewis.dailyexpense.data.models.Category
 import me.jacoblewis.dailyexpense.dependency.utils.MyApp
 import javax.inject.Inject
 
-class EnterCategoryDialogFragment : DialogFragment() {
+class EnterCategoryDialogFragment : androidx.fragment.app.DialogFragment() {
 
     @Inject
     lateinit var db: BalancesDB
 
     val categoryText: EditText by lazy { EditText(context) }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         MyApp.graph.inject(this)
     }

@@ -1,7 +1,7 @@
 package me.jacoblewis.dailyexpense.data.models
 
-import android.arch.persistence.room.*
 import android.os.Parcelable
+import androidx.room.*
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 
@@ -17,12 +17,12 @@ data class Payment(
         val creationDate: Calendar = Calendar.getInstance(),
 
         @ColumnInfo(name = "notes")
-        val notes: String = ""
-): Parcelable {
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    var id: Long = 0
+        val notes: String = "",
 
-    @ColumnInfo(name = "category_id")
-    var categoryId: Long = 0
-}
+        @PrimaryKey(autoGenerate = true)
+        @ColumnInfo(name = "id")
+        var id: Long = 0,
+
+        @ColumnInfo(name = "category_id")
+        var categoryId: Long = 0
+) : Parcelable

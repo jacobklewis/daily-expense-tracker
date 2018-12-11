@@ -1,12 +1,11 @@
 package me.jacoblewis.dailyexpense.fragments.categories
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.Toolbar
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.OnClick
 import me.jacoblewis.dailyexpense.R
@@ -34,16 +33,18 @@ class CategoryFragment : RootFragment(R.layout.fragment_category_content), ItemD
         ViewModelProviders.of(this, viewModelFactory).get(CategoryViewModel::class.java)
     }
 
-    private val categoryAdapter: CategoryController.CategoryItemAdapter by lazy { CategoryController.createAdapter(context, this) {
-        viewModel.updateCategories(categoryAdapter.itemList)
-    } as CategoryController.CategoryItemAdapter }
+    private val categoryAdapter: CategoryController.CategoryItemAdapter by lazy {
+        CategoryController.createAdapter(context, this) {
+            viewModel.updateCategories(categoryAdapter.itemList)
+        } as CategoryController.CategoryItemAdapter
+    }
 
     override fun onViewBound(view: View) {
         toolbar.title = "Payment Category"
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
         recyclerView.adapter = categoryAdapter
 
 
