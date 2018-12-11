@@ -1,14 +1,14 @@
 package me.jacoblewis.dailyexpense.fragments.enterPayment
 
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.AppCompatEditText
-import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatEditText
+import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import butterknife.BindView
 import me.jacoblewis.dailyexpense.R
 import me.jacoblewis.dailyexpense.commons.AnimationUtils
@@ -47,13 +47,13 @@ class EnterPaymentFragment : RootFragment(R.layout.fragment_enter_payment) {
 //        AnimationUtils.registerCircularRevealAnimation(context!!, rootView, revealSetting, ContextCompat.getColor(context!!, R.color.colorAccent), ContextCompat.getColor(context!!, R.color.white))
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.enter_payment_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.action_continue -> {
                 val price: Float = enterPriceEditText.text.toString().replace("$", "").toFloat()
                 navigationController.navigateTo(NavScreen.ChooseCategory(Payment(cost = price)))

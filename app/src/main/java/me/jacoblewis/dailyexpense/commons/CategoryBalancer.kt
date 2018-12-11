@@ -1,6 +1,7 @@
 package me.jacoblewis.dailyexpense.commons
 
 import me.jacoblewis.dailyexpense.data.models.Category
+import kotlin.math.roundToInt
 
 object CategoryBalancer {
     private val BIAS = 0.001f
@@ -46,4 +47,7 @@ object CategoryBalancer {
     }
 
 
+    fun normalizePrice(percentage: Float, budget: Float, offset: Float = 0f): Float {
+        return ((percentage * budget).roundToInt() + offset) / budget
+    }
 }

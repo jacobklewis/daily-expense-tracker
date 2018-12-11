@@ -1,15 +1,14 @@
 package me.jacoblewis.dailyexpense.mainActivity
 
-import android.arch.lifecycle.LifecycleOwner
 import android.os.Bundle
-import android.support.design.widget.NavigationView
-import android.support.v4.view.GravityCompat
-import android.support.v4.widget.DrawerLayout
-import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
+import androidx.lifecycle.LifecycleOwner
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.google.android.material.navigation.NavigationView
 import me.jacoblewis.dailyexpense.R
 import me.jacoblewis.dailyexpense.dependency.utils.MyApp
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.*
@@ -27,7 +26,7 @@ class MainActivity : AppCompatActivity(),
     var actionBarToggle: ActionBarDrawerToggle? = null
 
     @BindView(R.id.drawer_layout)
-    lateinit var drawerLayout: DrawerLayout
+    lateinit var drawerLayout: androidx.drawerlayout.widget.DrawerLayout
     @BindView(R.id.navigation_view)
     lateinit var navView: NavigationView
 
@@ -46,6 +45,7 @@ class MainActivity : AppCompatActivity(),
             when (it.itemId) {
                 R.id.menu_item_overview -> navigateTo(NavScreen.Main)
                 R.id.menu_item_categories -> navigateTo(NavScreen.Categories)
+                R.id.menu_item_settings -> navigateTo(NavScreen.Settings)
             }
             return@setNavigationItemSelectedListener true
         }

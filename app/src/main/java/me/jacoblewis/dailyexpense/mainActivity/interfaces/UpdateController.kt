@@ -1,7 +1,7 @@
 package me.jacoblewis.dailyexpense.mainActivity.interfaces
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LifecycleOwner
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavUIUpdate
 
 interface UpdateController : ActivityController {

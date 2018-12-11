@@ -1,13 +1,9 @@
 package me.jacoblewis.dailyexpense.adapters
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
-import android.widget.CompoundButton
-import android.widget.SeekBar
-import android.widget.TextView
+import android.widget.*
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnCheckedChanged
@@ -34,7 +30,7 @@ object CategoryController {
 
     // List Adapter
     class CategoryItemAdapter(context: Context?, delegate: ItemDelegate<Category>, val saveSliderPosDelegate: (() -> Unit)?) : RBRecyclerAdapter<Category, ItemDelegate<Category>>(context, delegate) {
-        lateinit var recyclerView: RecyclerView
+        lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
 
         val moveSliderDelegate: (Int, Float) -> Unit = { pos, ratio ->
             itemList[pos].budget = ratio
@@ -47,7 +43,7 @@ object CategoryController {
             }
         }
 
-        override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        override fun onAttachedToRecyclerView(recyclerView: androidx.recyclerview.widget.RecyclerView) {
             super.onAttachedToRecyclerView(recyclerView)
             this.recyclerView = recyclerView
         }
@@ -69,6 +65,10 @@ object CategoryController {
         lateinit var seekBar: SeekBar
         @BindView(R.id.checkbox_lock)
         lateinit var lockedCheckBox: CheckBox
+        @BindView(R.id.button_increase)
+        lateinit var increaseButton: ImageButton
+        @BindView(R.id.button_decrease)
+        lateinit var decreaseButton: ImageButton
 
         init {
             ButterKnife.bind(this, itemView)
@@ -78,6 +78,10 @@ object CategoryController {
             balanceTextView.text = (item.budget * BUDGET).asCurrency
             seekBar.progress = (CategoryBalancer.mapToExpo(item.budget) * 1000).toInt()
             seekBar.isEnabled = !item.locked
+            increaseButton.isEnabled = !item.locked
+            increaseButton.alpha = if (!item.locked) 1f else 0.2f
+            decreaseButton.isEnabled = !item.locked
+            decreaseButton.alpha = if (!item.locked) 1f else 0.2f
         }
 
         override fun setUpView(itemView: View, item: Category, position: Int, delegate: ItemDelegate<Category>) {
@@ -87,8 +91,11 @@ object CategoryController {
             updateSlider()
             seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                    moveSliderDelegate(position, CategoryBalancer.mapFromExpo(progress / 1000f))
+                    val ratio = CategoryBalancer.mapFromExpo(progress / 1000f)
+                    val normalizedRatio = CategoryBalancer.normalizePrice(ratio, BUDGET)
+                    moveSliderDelegate(position, normalizedRatio)
                 }
+
                 override fun onStartTrackingTouch(seekBar: SeekBar?) {}
                 override fun onStopTrackingTouch(seekBar: SeekBar?) {
                     saveSliderPosDelegate()
@@ -103,9 +110,13 @@ object CategoryController {
             updateSlider()
         }
 
-        @OnClick(R.id.button_remove)
-        fun onRemove(v: View) {
-            delegate.onItemRemoved(item)
+        @OnClick(R.id.button_remove, R.id.button_increase, R.id.button_decrease)
+        fun onButtonsClicked(v: View) {
+            when(v.id) {
+                R.id.button_remove -> delegate.onItemRemoved(item)
+                R.id.button_increase -> moveSliderDelegate(pos, CategoryBalancer.normalizePrice(item.budget, BUDGET, offset = 1f))
+                R.id.button_decrease -> moveSliderDelegate(pos, CategoryBalancer.normalizePrice(item.budget, BUDGET, offset = -1f))
+            }
         }
 
         override fun onClick(itemView: View, item: Category, position: Int, delegate: ItemDelegate<Category>) {

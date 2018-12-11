@@ -1,7 +1,7 @@
 package me.jacoblewis.dailyexpense.fragments.main
 
-import android.arch.lifecycle.MediatorLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import me.jacoblewis.dailyexpense.data.BalancesDB

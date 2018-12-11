@@ -1,6 +1,6 @@
 package me.jacoblewis.dailyexpense.commons
 
-import android.support.design.widget.AppBarLayout
+import com.google.android.material.appbar.AppBarLayout
 
 
 fun AppBarLayout.addStateChangeListener(onStateChanged: (appBarLayout: AppBarLayout, state: State) -> Unit) {

@@ -1,9 +1,9 @@
 package me.jacoblewis.dailyexpense.mainActivity.interfaces.nav
 
-import android.arch.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +12,7 @@ import me.jacoblewis.dailyexpense.commons.oCV
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.NavigationController
 import javax.inject.Inject
 
-abstract class RootFragment(private val layoutId: Int) : Fragment(), RootScreenElement {
+abstract class RootFragment(private val layoutId: Int) : androidx.fragment.app.Fragment(), RootScreenElement {
     override val screenTag: String
         get() = options.screenTag
 
@@ -27,7 +27,7 @@ abstract class RootFragment(private val layoutId: Int) : Fragment(), RootScreenE
         view?.elevation = el
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         navigationController = context as NavigationController
     }

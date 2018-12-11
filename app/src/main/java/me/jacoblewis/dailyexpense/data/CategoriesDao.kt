@@ -1,7 +1,7 @@
 package me.jacoblewis.dailyexpense.data
 
-import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.*
+import androidx.lifecycle.LiveData
+import androidx.room.*
 import me.jacoblewis.dailyexpense.data.models.Category
 
 @Dao
