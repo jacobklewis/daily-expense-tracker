@@ -3,15 +3,19 @@ package me.jacoblewis.dailyexpense.fragments.categories
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.OnClick
+import com.google.android.material.snackbar.Snackbar
 import me.jacoblewis.dailyexpense.R
 import me.jacoblewis.dailyexpense.adapters.CategoryController
 import me.jacoblewis.dailyexpense.adapters.ItemDelegate
 import me.jacoblewis.dailyexpense.commons.RootFragmentOptions
+import me.jacoblewis.dailyexpense.commons.SwipeCallback
 import me.jacoblewis.dailyexpense.data.models.Category
 import me.jacoblewis.dailyexpense.dependency.utils.MyApp
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
@@ -47,6 +51,26 @@ class CategoryFragment : RootFragment(R.layout.fragment_category_content), ItemD
         recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
         recyclerView.adapter = categoryAdapter
 
+        val removeHandler = object : SwipeCallback(context!!, ContextCompat.getDrawable(context!!,R.drawable.ic_remove)!!) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                Snackbar.make(view, "Remove it", Snackbar.LENGTH_SHORT).show()
+                val pos = viewHolder.adapterPosition
+                val item = categoryAdapter.itemList[pos]
+                viewModel.removeCategory(item)
+            }
+        }
+        val lockHandler = object : SwipeCallback(context!!, ContextCompat.getDrawable(context!!,R.drawable.ic_locked)!!, ItemTouchHelper.RIGHT) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                Snackbar.make(view, "Toggle lock", Snackbar.LENGTH_SHORT).show()
+                val pos = viewHolder.adapterPosition
+                categoryAdapter.itemList[pos].locked = !categoryAdapter.itemList[pos].locked
+                viewModel.updateCategories(categoryAdapter.itemList)
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(removeHandler)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+        val itemTouchHelper2 = ItemTouchHelper(lockHandler)
+        itemTouchHelper2.attachToRecyclerView(recyclerView)
 
         navigationController.linkToolBarToDrawer(toolbar)
     }
@@ -59,10 +83,6 @@ class CategoryFragment : RootFragment(R.layout.fragment_category_content), ItemD
                 categoryAdapter.notifyDataSetChanged()
             }
         })
-    }
-
-    override fun onItemRemoved(item: Category) {
-        viewModel.removeCategory(item)
     }
 
     override fun onItemClicked(item: Category) {

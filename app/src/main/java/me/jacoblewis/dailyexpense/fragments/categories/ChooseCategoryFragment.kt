@@ -68,10 +68,6 @@ class ChooseCategoryFragment : RootFragment(R.layout.fragment_category_content),
         return true
     }
 
-    override fun onItemRemoved(item: Category) {
-
-    }
-
     override fun onItemClicked(item: Category) {
         val payment: Payment = arguments?.get(ARG_PAYMENT) as? Payment ?: Payment(0f)
         payment.categoryId = item.categoryId

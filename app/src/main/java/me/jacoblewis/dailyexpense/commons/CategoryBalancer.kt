@@ -47,7 +47,14 @@ object CategoryBalancer {
     }
 
 
-    fun normalizePrice(percentage: Float, budget: Float, offset: Float = 0f): Float {
-        return ((percentage * budget).roundToInt() + offset) / budget
+    /**
+     * Offset the Price
+     */
+    fun offsetPrice(percentage: Float, budget: Float, offset: Float = 0f): Float {
+        return (percentage * budget + offset) / budget
+    }
+
+    fun normalizePrice(percentage: Float, budget: Float): Float {
+        return ((percentage * budget).roundToInt()) / budget
     }
 }

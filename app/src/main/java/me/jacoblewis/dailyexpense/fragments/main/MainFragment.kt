@@ -77,10 +77,6 @@ class MainFragment : RootFragment(R.layout.fragment_main_content), ItemDelegate<
         })
     }
 
-    override fun onItemRemoved(item: PaymentCategory) {
-
-    }
-
     override fun onItemClicked(item: PaymentCategory) {
         Snackbar.make(view!!, "${item.transaction?.cost ?: "N/A"}", Snackbar.LENGTH_SHORT).show()
     }
