@@ -120,6 +120,9 @@ inline fun androidx.fragment.app.Fragment.oCV(@LayoutRes layoutId: Int, containe
 val Float.asCurrency
     get() = NumberFormat.getCurrencyInstance().format(this)
 
+val String.fromCurrency
+    get() = NumberFormat.getCurrencyInstance().parse(this).toFloat()
+
 infix fun Date.formatAs(pattern: String): String {
     return SimpleDateFormat(pattern, Locale.getDefault()).format(this)
 }

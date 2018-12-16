@@ -1,65 +1,63 @@
 package me.jacoblewis.dailyexpense.adapters
 
 import android.content.Context
-import android.content.res.ColorStateList
+import android.content.SharedPreferences
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ImageButton
+import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
-import butterknife.OnCheckedChanged
 import butterknife.OnClick
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import me.jacoblewis.dailyexpense.R
 import me.jacoblewis.dailyexpense.commons.CategoryBalancer
 import me.jacoblewis.dailyexpense.commons.asCurrency
+import me.jacoblewis.dailyexpense.commons.fromCurrency
+import me.jacoblewis.dailyexpense.data.BalancesDB
 import me.jacoblewis.dailyexpense.data.models.Category
 import me.jacoblewis.jklcore.components.recyclerview.RBRecyclerAdapter
 import me.jacoblewis.jklcore.components.recyclerview.RBRecyclerViewHolder
-import kotlin.math.roundToInt
+import javax.inject.Inject
 
 object CategoryController {
-    val BUDGET = 500f
-
-    fun createAdapter(context: Context?, callback: ItemDelegate<Category>, saveSliderPosDelegate: () -> Unit): RBRecyclerAdapter<Category, ItemDelegate<Category>> {
-        return CategoryItemAdapter(context, callback, saveSliderPosDelegate)
-    }
-
-    fun createChooseAdapter(context: Context?, callback: ItemDelegate<Category>): RBRecyclerAdapter<Category, ItemDelegate<Category>> {
-        return CategoryItemAdapter(context, callback, null)
-    }
-
 
     // List Adapter
-    class CategoryItemAdapter(context: Context?, delegate: ItemDelegate<Category>, val saveSliderPosDelegate: (() -> Unit)?) : RBRecyclerAdapter<Category, ItemDelegate<Category>>(context, delegate) {
-        lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
+    class CategoryItemAdapter
+    @Inject constructor(context: Context?, val db: BalancesDB, val sp: SharedPreferences) : RBRecyclerAdapter<Category, ItemDelegate<Category>>(context, null) {
+        lateinit var recyclerView: RecyclerView
+        var editable: Boolean = false
 
-        val moveSliderDelegate: (Int, Float) -> Unit = { pos, ratio ->
-            itemList[pos].budget = ratio
-            val pinned = itemList.mapIndexedNotNull { index, category -> if (category.locked) index else null }.toMutableList().also { it.add(pos) }
-            CategoryBalancer.balanceCategories(itemList, pinned)
-
-            (0 until recyclerView.childCount).forEach {
-                val v = recyclerView.getChildAt(it)
-                val vh = recyclerView.getChildViewHolder(v) as CategoryViewHolder
-                vh.updateSlider()
+        val saveItemsDelegate: (pos: Int)->Unit = { pos ->
+            GlobalScope.launch {
+                val pinned = itemList.mapIndexedNotNull { index, category -> if (category.locked) index else null }.toMutableList().also { it.add(pos) }
+                CategoryBalancer.balanceCategories(itemList, pinned)
+                db.categoriesDao().updateCategories(itemList)
             }
         }
 
-        override fun onAttachedToRecyclerView(recyclerView: androidx.recyclerview.widget.RecyclerView) {
+        override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
             super.onAttachedToRecyclerView(recyclerView)
             this.recyclerView = recyclerView
         }
 
-        override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): RBRecyclerViewHolder<*, *> = saveSliderPosDelegate?.let {
-            CategoryViewHolder(viewGroup, moveSliderDelegate, it)
-        } ?: CategoryChooseViewHolder(viewGroup)
+        override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): RBRecyclerViewHolder<*, *> {
+            val budget = sp.getString("budget", "0").fromCurrency
+            return if (i == 0) {
+                CategoryViewHolder(viewGroup, saveItemsDelegate, budget)
+            } else {
+                CategoryChooseViewHolder(viewGroup, budget)
+            }
+        }
 
-        override fun getItemViewType(position: Int): Int = 0
+        override fun getItemViewType(position: Int): Int = if (editable) 0 else 1
     }
 
     // Category View Holder (UI)
-    class CategoryViewHolder(viewGroup: ViewGroup, val moveSliderDelegate: (Int, Float) -> Unit, val saveSliderPosDelegate: () -> Unit) : RBRecyclerViewHolder<Category, ItemDelegate<Category>>(viewGroup, R.layout.viewholder_category) {
+    class CategoryViewHolder(viewGroup: ViewGroup, val saveItemsDelegate: (pos: Int) -> Unit, val budget: Float) : RBRecyclerViewHolder<Category, ItemDelegate<Category>>(viewGroup, R.layout.viewholder_category) {
         @BindView(R.id.txt_category)
         lateinit var categoryTextView: TextView
         @BindView(R.id.txt_balance)
@@ -73,9 +71,9 @@ object CategoryController {
             ButterKnife.bind(this, itemView)
         }
 
-        fun updateSlider() {
-            val normalizedBudget: Float = CategoryBalancer.normalizePrice(item.budget, BUDGET)
-            balanceTextView.text = (normalizedBudget * BUDGET).asCurrency
+        fun updateUI() {
+            val normalizedBudget: Float = CategoryBalancer.normalizePrice(item.budget, budget)
+            balanceTextView.text = (normalizedBudget * budget).asCurrency
             val colorInt = if (item.locked) R.color.colorAccent else R.color.trans_99_black
             balanceTextView.setTextColor(ContextCompat.getColor(itemView.context, colorInt))
             increaseButton.isEnabled = !item.locked
@@ -86,15 +84,16 @@ object CategoryController {
 
         override fun setUpView(itemView: View, item: Category, position: Int, delegate: ItemDelegate<Category>) {
             categoryTextView.text = item.name
-            updateSlider()
+            updateUI()
         }
 
         @OnClick(R.id.button_increase, R.id.button_decrease)
         fun onButtonsClicked(v: View) {
-            when(v.id) {
-                R.id.button_increase -> moveSliderDelegate(pos, CategoryBalancer.offsetPrice(item.budget, BUDGET, offset = 1f))
-                R.id.button_decrease -> moveSliderDelegate(pos, CategoryBalancer.offsetPrice(item.budget, BUDGET, offset = -1f))
+            when (v.id) {
+                R.id.button_increase -> item.budget = CategoryBalancer.offsetPrice(item.budget, budget, offset = 1f)
+                R.id.button_decrease -> item.budget = CategoryBalancer.offsetPrice(item.budget, budget, offset = -1f)
             }
+            saveItemsDelegate(pos)
         }
 
         override fun onClick(itemView: View, item: Category, position: Int, delegate: ItemDelegate<Category>) {
@@ -103,7 +102,7 @@ object CategoryController {
     }
 
     // Category Choose View Holder (UI)
-    class CategoryChooseViewHolder(viewGroup: ViewGroup) : RBRecyclerViewHolder<Category, ItemDelegate<Category>>(viewGroup, R.layout.viewholder_category_choose) {
+    class CategoryChooseViewHolder(viewGroup: ViewGroup, val budget: Float) : RBRecyclerViewHolder<Category, ItemDelegate<Category>>(viewGroup, R.layout.viewholder_category_choose) {
         @BindView(R.id.txt_category)
         lateinit var categoryTextView: TextView
         @BindView(R.id.txt_balance)
@@ -115,7 +114,7 @@ object CategoryController {
 
         override fun setUpView(itemView: View, item: Category, position: Int, delegate: ItemDelegate<Category>) {
             categoryTextView.text = item.name
-            balanceTextView.text = (item.budget * BUDGET).asCurrency
+            balanceTextView.text = (item.budget * budget).asCurrency
         }
 
         override fun onClick(itemView: View, item: Category, position: Int, delegate: ItemDelegate<Category>) {

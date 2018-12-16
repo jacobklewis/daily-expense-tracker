@@ -22,6 +22,7 @@ import me.jacoblewis.dailyexpense.data.models.Payment
 import me.jacoblewis.dailyexpense.dependency.utils.MyApp
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.RootFragment
+import javax.inject.Inject
 
 class ChooseCategoryFragment : RootFragment(R.layout.fragment_category_content), ItemDelegate<Category> {
     override val options: RootFragmentOptions = RootFragmentOptions(ChooseCategoryFragment::class.java)
@@ -29,6 +30,9 @@ class ChooseCategoryFragment : RootFragment(R.layout.fragment_category_content),
     init {
         MyApp.graph.inject(this)
     }
+
+    @Inject
+    lateinit var categoryAdapter: CategoryController.CategoryItemAdapter
 
     @BindView(R.id.toolbar)
     lateinit var toolbar: Toolbar
@@ -38,8 +42,6 @@ class ChooseCategoryFragment : RootFragment(R.layout.fragment_category_content),
     private val viewModel: CategoryViewModel by lazy {
         ViewModelProviders.of(this, viewModelFactory).get(CategoryViewModel::class.java)
     }
-
-    private val categoryAdapter: CategoryController.CategoryItemAdapter by lazy { CategoryController.createChooseAdapter(context, this) as CategoryController.CategoryItemAdapter }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +53,7 @@ class ChooseCategoryFragment : RootFragment(R.layout.fragment_category_content),
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        categoryAdapter.setCallback(this)
         recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
         recyclerView.adapter = categoryAdapter
 

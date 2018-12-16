@@ -46,6 +46,21 @@ object CategoryBalancer {
         return Math.abs(categories.sumByDouble { it.budget.toDouble() } - 1f) < BIAS
     }
 
+    /**
+     * Attempts to toggle lock. If able, toggle will happen.
+     * Only able to toggle ON when there are at least 2 categories unlocked.
+     *
+     * @return true iff toggle was a success
+     */
+    fun attemptLockToggle(modifiedCategories: List<Category>, pos: Int): Boolean {
+        val newLockedVal = !modifiedCategories[pos].locked
+        if (newLockedVal && modifiedCategories.filter { !it.locked }.size <= 2) {
+            return false
+        }
+        modifiedCategories[pos].locked = newLockedVal
+        return true
+    }
+
 
     /**
      * Offset the Price

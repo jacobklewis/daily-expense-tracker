@@ -14,12 +14,14 @@ import com.google.android.material.snackbar.Snackbar
 import me.jacoblewis.dailyexpense.R
 import me.jacoblewis.dailyexpense.adapters.CategoryController
 import me.jacoblewis.dailyexpense.adapters.ItemDelegate
+import me.jacoblewis.dailyexpense.commons.CategoryBalancer
 import me.jacoblewis.dailyexpense.commons.RootFragmentOptions
 import me.jacoblewis.dailyexpense.commons.SwipeCallback
 import me.jacoblewis.dailyexpense.data.models.Category
 import me.jacoblewis.dailyexpense.dependency.utils.MyApp
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.RootFragment
+import javax.inject.Inject
 
 class CategoryFragment : RootFragment(R.layout.fragment_category_content), ItemDelegate<Category> {
     override val options: RootFragmentOptions = RootFragmentOptions(CategoryFragment::class.java, drawerNavId = R.id.menu_item_categories)
@@ -27,6 +29,8 @@ class CategoryFragment : RootFragment(R.layout.fragment_category_content), ItemD
     init {
         MyApp.graph.inject(this)
     }
+    @Inject
+    lateinit var categoryAdapter: CategoryController.CategoryItemAdapter
 
     @BindView(R.id.toolbar)
     lateinit var toolbar: Toolbar
@@ -37,17 +41,13 @@ class CategoryFragment : RootFragment(R.layout.fragment_category_content), ItemD
         ViewModelProviders.of(this, viewModelFactory).get(CategoryViewModel::class.java)
     }
 
-    private val categoryAdapter: CategoryController.CategoryItemAdapter by lazy {
-        CategoryController.createAdapter(context, this) {
-            viewModel.updateCategories(categoryAdapter.itemList)
-        } as CategoryController.CategoryItemAdapter
-    }
-
     override fun onViewBound(view: View) {
         toolbar.title = "Payment Category"
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        categoryAdapter.setCallback(this)
+        categoryAdapter.editable = true
         recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
         recyclerView.adapter = categoryAdapter
 
@@ -61,9 +61,11 @@ class CategoryFragment : RootFragment(R.layout.fragment_category_content), ItemD
         }
         val lockHandler = object : SwipeCallback(context!!, ContextCompat.getDrawable(context!!,R.drawable.ic_locked)!!, ItemTouchHelper.RIGHT) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                Snackbar.make(view, "Toggle lock", Snackbar.LENGTH_SHORT).show()
-                val pos = viewHolder.adapterPosition
-                categoryAdapter.itemList[pos].locked = !categoryAdapter.itemList[pos].locked
+                if (CategoryBalancer.attemptLockToggle(categoryAdapter.itemList, viewHolder.adapterPosition)) {
+                    Snackbar.make(view, "Toggle lock", Snackbar.LENGTH_SHORT).show()
+                } else {
+                    Snackbar.make(view, "Must have at least two categories unlocked", Snackbar.LENGTH_LONG).show()
+                }
                 viewModel.updateCategories(categoryAdapter.itemList)
             }
         }
