@@ -7,6 +7,7 @@
     <color name="trans_ee_white">#EEFFFFFF</color>
     <color name="trans_ee_black">#EE000000</color>
     <color name="trans_99_black">#99000000</color>
+    <color name="grey">#FF888888</color>
 
     <color name="white">#FFFFFFFF</color>
     <color name="green">#26A69A</color>

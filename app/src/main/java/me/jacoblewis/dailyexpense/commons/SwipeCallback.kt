@@ -1,7 +1,10 @@
 package me.jacoblewis.dailyexpense.commons
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
@@ -9,7 +12,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import me.jacoblewis.dailyexpense.R
 
-abstract class SwipeCallback(context: Context, val icon: Drawable, val swipeDirs: Int = ItemTouchHelper.LEFT) : ItemTouchHelper.SimpleCallback(0, swipeDirs) {
+abstract class SwipeCallback(context: Context, val icon: Drawable, val swipeDirs: Int = ItemTouchHelper.LEFT, val staticTop: Boolean) : ItemTouchHelper.SimpleCallback(0, swipeDirs) {
 
     private val intrinsicWidth = icon.intrinsicWidth
     private val intrinsicHeight = icon.intrinsicHeight
@@ -24,7 +27,7 @@ abstract class SwipeCallback(context: Context, val icon: Drawable, val swipeDirs
          * if (viewHolder?.itemViewType == YourAdapter.SOME_TYPE) return 0
          * if (viewHolder?.adapterPosition == 0) return 0
          */
-//        if (viewHolder.adapterPosition == 10) return 0
+        if (staticTop && viewHolder.adapterPosition == 0) return 0
         return super.getMovementFlags(recyclerView, viewHolder)
     }
 
