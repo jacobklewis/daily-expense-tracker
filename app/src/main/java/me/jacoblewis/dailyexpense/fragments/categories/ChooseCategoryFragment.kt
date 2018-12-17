@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.OnClick
 import me.jacoblewis.dailyexpense.R
-import me.jacoblewis.dailyexpense.adapters.CategoryController
+import me.jacoblewis.dailyexpense.adapters.CategoryItemAdapter
 import me.jacoblewis.dailyexpense.adapters.ItemDelegate
 import me.jacoblewis.dailyexpense.commons.ARG_PAYMENT
 import me.jacoblewis.dailyexpense.commons.AnimationUtils
@@ -22,13 +22,17 @@ import me.jacoblewis.dailyexpense.data.models.Payment
 import me.jacoblewis.dailyexpense.dependency.utils.MyApp
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.RootFragment
+import javax.inject.Inject
 
-class ChooseCategoryFragment : RootFragment(R.layout.fragment_category_content), ItemDelegate<Category> {
+class ChooseCategoryFragment : RootFragment(R.layout.fragment_category_content), ItemDelegate<Any> {
     override val options: RootFragmentOptions = RootFragmentOptions(ChooseCategoryFragment::class.java)
 
     init {
         MyApp.graph.inject(this)
     }
+
+    @Inject
+    lateinit var categoryAdapter: CategoryItemAdapter
 
     @BindView(R.id.toolbar)
     lateinit var toolbar: Toolbar
@@ -38,8 +42,6 @@ class ChooseCategoryFragment : RootFragment(R.layout.fragment_category_content),
     private val viewModel: CategoryViewModel by lazy {
         ViewModelProviders.of(this, viewModelFactory).get(CategoryViewModel::class.java)
     }
-
-    private val categoryAdapter: CategoryController.CategoryItemAdapter by lazy { CategoryController.createChooseAdapter(context, this) as CategoryController.CategoryItemAdapter }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +53,7 @@ class ChooseCategoryFragment : RootFragment(R.layout.fragment_category_content),
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        categoryAdapter.setCallback(this)
         recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
         recyclerView.adapter = categoryAdapter
 
@@ -68,16 +71,14 @@ class ChooseCategoryFragment : RootFragment(R.layout.fragment_category_content),
         return true
     }
 
-    override fun onItemRemoved(item: Category) {
+    override fun onItemClicked(item: Any) {
+        if (item is Category) {
+            val payment: Payment = arguments?.get(ARG_PAYMENT) as? Payment ?: Payment(0f)
+            payment.categoryId = item.categoryId
+            viewModel.savePayment(payment)
 
-    }
-
-    override fun onItemClicked(item: Category) {
-        val payment: Payment = arguments?.get(ARG_PAYMENT) as? Payment ?: Payment(0f)
-        payment.categoryId = item.categoryId
-        viewModel.savePayment(payment)
-
-        navigationController.navigateTo(NavScreen.Main)
+            navigationController.navigateTo(NavScreen.Main)
+        }
     }
 
     @OnClick(R.id.fab_add_new)

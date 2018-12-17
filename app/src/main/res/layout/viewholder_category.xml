@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="60dp"
     android:layout_margin="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,11 +13,18 @@
 
         <TextView
             android:id="@+id/txt_category"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
             android:layout_marginStart="@dimen/margin_default"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:textSize="18sp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/txt_balance"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Lunch" />
@@ -26,70 +33,39 @@
             android:id="@+id/txt_balance"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/button_decrease"
+            app:layout_constraintEnd_toStartOf="@+id/button_increase"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="$100" />
-
-        <SeekBar
-            android:id="@+id/seekBar"
-            android:layout_width="360dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:max="1000"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_category" />
 
 
         <ImageButton
             android:id="@+id/button_increase"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="0dp"
-            android:layout_marginBottom="0dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:background="@android:color/transparent"
             android:padding="12dp"
             android:src="@drawable/ic_baseline_add_dark_24px"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintEnd_toStartOf="@+id/button_decrease"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <ImageButton
             android:id="@+id/button_decrease"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="0dp"
-            android:layout_marginBottom="0dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginEnd="8dp"
             android:background="@android:color/transparent"
             android:padding="12dp"
             android:src="@drawable/ic_baseline_minus_dark_24px"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/button_increase" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.AppCompatCheckBox
-            android:id="@+id/checkbox_lock"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="12dp"
-            android:button="@drawable/checkbox_locked"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button_remove" />
-
-        <ImageButton
-            android:id="@+id/button_remove"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
-            android:layout_marginBottom="8dp"
-            android:background="@android:color/transparent"
-            android:padding="4dp"
-            android:src="@drawable/ic_remove"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
