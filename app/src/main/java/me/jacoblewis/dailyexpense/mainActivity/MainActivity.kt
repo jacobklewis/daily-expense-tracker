@@ -10,6 +10,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.google.android.material.navigation.NavigationView
 import me.jacoblewis.dailyexpense.R
+import me.jacoblewis.dailyexpense.commons.wait
 import me.jacoblewis.dailyexpense.dependency.utils.MyApp
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.*
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
@@ -40,12 +41,14 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun setupDrawer() {
-
         navView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.menu_item_overview -> navigateTo(NavScreen.Main)
                 R.id.menu_item_categories -> navigateTo(NavScreen.Categories)
                 R.id.menu_item_settings -> navigateTo(NavScreen.Settings)
+            }
+            wait(150) {
+                drawerLayout.closeDrawer(GravityCompat.START)
             }
             return@setNavigationItemSelectedListener true
         }
