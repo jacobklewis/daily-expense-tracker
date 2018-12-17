@@ -1,19 +1,17 @@
 package me.jacoblewis.dailyexpense.fragments.categories
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.OnClick
 import me.jacoblewis.dailyexpense.R
-import me.jacoblewis.dailyexpense.adapters.CategoryController
+import me.jacoblewis.dailyexpense.adapters.CategoryItemAdapter
 import me.jacoblewis.dailyexpense.adapters.ItemDelegate
 import me.jacoblewis.dailyexpense.commons.ARG_PAYMENT
 import me.jacoblewis.dailyexpense.commons.AnimationUtils
@@ -24,24 +22,26 @@ import me.jacoblewis.dailyexpense.data.models.Payment
 import me.jacoblewis.dailyexpense.dependency.utils.MyApp
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.RootFragment
+import javax.inject.Inject
 
-class ChooseCategoryFragment : RootFragment(R.layout.fragment_category_content), ItemDelegate<Category> {
+class ChooseCategoryFragment : RootFragment(R.layout.fragment_category_content), ItemDelegate<Any> {
     override val options: RootFragmentOptions = RootFragmentOptions(ChooseCategoryFragment::class.java)
 
     init {
         MyApp.graph.inject(this)
     }
 
+    @Inject
+    lateinit var categoryAdapter: CategoryItemAdapter
+
     @BindView(R.id.toolbar)
     lateinit var toolbar: Toolbar
     @BindView(R.id.recycler_view_category)
-    lateinit var recyclerView: RecyclerView
+    lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
 
     private val viewModel: CategoryViewModel by lazy {
         ViewModelProviders.of(this, viewModelFactory).get(CategoryViewModel::class.java)
     }
-
-    private val categoryAdapter: CategoryController.CategoryItemAdapter by lazy { CategoryController.createChooseAdapter(context, this) as CategoryController.CategoryItemAdapter }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,30 +53,32 @@ class ChooseCategoryFragment : RootFragment(R.layout.fragment_category_content),
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        categoryAdapter.setCallback(this)
+        recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
         recyclerView.adapter = categoryAdapter
 
         viewModel.categories.observe(this, Observer {
             if (it != null) {
-                categoryAdapter.removeAllItems()
-                categoryAdapter.addItems(it)
+                categoryAdapter.updateItems(it)
             }
         })
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             android.R.id.home -> activity?.onBackPressed()
         }
         return true
     }
 
-    override fun onItemClicked(item: Category) {
-        val payment: Payment = arguments?.get(ARG_PAYMENT) as? Payment ?: Payment(0f)
-        payment.categoryId = item.categoryId
-        viewModel.savePayment(payment)
+    override fun onItemClicked(item: Any) {
+        if (item is Category) {
+            val payment: Payment = arguments?.get(ARG_PAYMENT) as? Payment ?: Payment(0f)
+            payment.categoryId = item.categoryId
+            viewModel.savePayment(payment)
 
-        navigationController.navigateTo(NavScreen.Main)
+            navigationController.navigateTo(NavScreen.Main)
+        }
     }
 
     @OnClick(R.id.fab_add_new)

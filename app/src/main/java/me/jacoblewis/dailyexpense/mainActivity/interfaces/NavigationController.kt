@@ -1,17 +1,14 @@
 package me.jacoblewis.dailyexpense.mainActivity.interfaces
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.Toolbar
 import me.jacoblewis.dailyexpense.commons.ARG_PAYMENT
 import me.jacoblewis.dailyexpense.fragments.categories.CategoryFragment
 import me.jacoblewis.dailyexpense.fragments.categories.ChooseCategoryFragment
 import me.jacoblewis.dailyexpense.fragments.enterCategory.EnterCategoryDialogFragment
 import me.jacoblewis.dailyexpense.fragments.enterPayment.EnterPaymentFragment
 import me.jacoblewis.dailyexpense.fragments.main.MainFragment
+import me.jacoblewis.dailyexpense.fragments.settings.SettingsFragment
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
-import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.RootFragment
-import java.util.*
 
 interface NavigationController : NavigationHandler {
 
@@ -58,6 +55,6 @@ interface NavigationController : NavigationHandler {
 //    }
 
     private fun openSettings() {
-        TODO("Open Settings")
+        navTo(SettingsFragment(), addToBackStack = false, navUpTo = true)
     }
 }

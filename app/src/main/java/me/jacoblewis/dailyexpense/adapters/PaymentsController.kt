@@ -1,18 +1,18 @@
 package me.jacoblewis.dailyexpense.adapters
 
 import android.content.Context
-import android.support.design.widget.Snackbar
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.google.android.material.snackbar.Snackbar
 import me.jacoblewis.dailyexpense.R
+import me.jacoblewis.dailyexpense.commons.asCurrency
+import me.jacoblewis.dailyexpense.commons.formatAs
 import me.jacoblewis.dailyexpense.data.models.PaymentCategory
 import me.jacoblewis.jklcore.components.recyclerview.RBRecyclerAdapter
 import me.jacoblewis.jklcore.components.recyclerview.RBRecyclerViewHolder
-import java.text.NumberFormat
-import java.text.SimpleDateFormat
 import java.util.*
 
 object PaymentsController {
@@ -42,12 +42,10 @@ object PaymentsController {
         }
 
         override fun setUpView(itemView: View, item: PaymentCategory, position: Int, delegate: ItemDelegate<PaymentCategory>) {
-            // TODO: verify index
-            categoryTextView.text = item.category[0].name
-            val formatter = NumberFormat.getCurrencyInstance()
-            costTextView.text = formatter.format(item.transaction?.cost)
-            val dateFormat = SimpleDateFormat("MMM, d - h:mm a", Locale.getDefault())
-            dateTextView.text = dateFormat.format(Date(item.transaction?.creationDate?.timeInMillis ?: 0))
+            categoryTextView.text = if (item.category.isNotEmpty()) item.category[0].name else ""
+            costTextView.text = item.transaction?.cost?.asCurrency
+            dateTextView.text = Date(item.transaction?.creationDate?.timeInMillis
+                    ?: 0) formatAs "MMM, d - h:mm a"
         }
 
         override fun onClick(itemView: View, item: PaymentCategory, position: Int, delegate: ItemDelegate<PaymentCategory>) {
