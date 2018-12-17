@@ -19,7 +19,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import butterknife.ButterKnife
 import kotlinx.android.parcel.Parcelize
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import me.jacoblewis.dailyexpense.R
+import okhttp3.Dispatcher
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -125,4 +130,9 @@ val String.fromCurrency
 
 infix fun Date.formatAs(pattern: String): String {
     return SimpleDateFormat(pattern, Locale.getDefault()).format(this)
+}
+
+fun wait(millis: Long, block:()->Unit) = GlobalScope.launch(Dispatchers.Main) {
+    delay(millis)
+    block()
 }
