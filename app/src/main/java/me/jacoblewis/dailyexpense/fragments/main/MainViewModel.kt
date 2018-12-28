@@ -1,30 +1,18 @@
 package me.jacoblewis.dailyexpense.fragments.main
 
-import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import me.jacoblewis.dailyexpense.commons.DateHelper
 import me.jacoblewis.dailyexpense.data.BalancesDB
-import me.jacoblewis.dailyexpense.data.models.Payment
 import me.jacoblewis.dailyexpense.data.models.PaymentCategory
+import me.jacoblewis.dailyexpense.managers.BalanceManager
 import javax.inject.Inject
 
 class MainViewModel
 @Inject
-constructor(val db: BalancesDB) : ViewModel() {
+constructor(val db: BalancesDB, val balanceManager: BalanceManager) : ViewModel() {
 
-    val payments = MediatorLiveData<List<PaymentCategory>>()
+    val payments: LiveData<List<PaymentCategory>> = db.paymentsDao().getAllPaymentsSince(DateHelper.firstDayOfMonth())
+    val dailyBalance: LiveData<Float> = balanceManager.fetchDailyBalance()
 
-    init {
-        payments.addSource(db.paymentsDao().getAllPayments(), payments::setValue)
-    }
-
-    // TODO: remove and add to add payment screen
-    fun addMockPayment() {
-        val mockedPayment = Payment(cost = (Math.random() * 15000 / 100).toFloat(), notes = "")
-        GlobalScope.launch {
-            db.paymentsDao().insertPayment(mockedPayment)
-        }
-
-    }
 }

@@ -1,24 +1,19 @@
 package me.jacoblewis.dailyexpense.fragments.main
 
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import butterknife.BindView
+import butterknife.OnClick
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.appcompat.widget.Toolbar
-import android.view.View
-import butterknife.BindView
-import butterknife.OnClick
 import me.jacoblewis.dailyexpense.R
 import me.jacoblewis.dailyexpense.adapters.ItemDelegate
 import me.jacoblewis.dailyexpense.adapters.PaymentsController
-import me.jacoblewis.dailyexpense.commons.RootFragmentOptions
-import me.jacoblewis.dailyexpense.commons.State
-import me.jacoblewis.dailyexpense.commons.addStateChangeListener
-import me.jacoblewis.dailyexpense.commons.revealSettingsTo
+import me.jacoblewis.dailyexpense.commons.*
 import me.jacoblewis.dailyexpense.data.models.PaymentCategory
 import me.jacoblewis.dailyexpense.dependency.utils.MyApp
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
@@ -40,6 +35,8 @@ class MainFragment : RootFragment(R.layout.fragment_main_content), ItemDelegate<
     @BindView(R.id.recycler_view_main)
     lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
 
+    var appBarLayoutState: State = State.EXPANDED
+
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
     }
@@ -49,14 +46,9 @@ class MainFragment : RootFragment(R.layout.fragment_main_content), ItemDelegate<
     override fun onViewBound(view: View) {
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
 
-
-        val money = "$203.50"
-
         appBarLayout.addStateChangeListener { _, state ->
-            collapsingToolbarLayout.title = when (state) {
-                State.COLLAPSED -> "$money - Daily Balance"
-                else -> money
-            }
+            appBarLayoutState = state
+            updateTitle()
         }
 
         recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
@@ -75,6 +67,20 @@ class MainFragment : RootFragment(R.layout.fragment_main_content), ItemDelegate<
                 paymentAdapter.addItems(it)
             }
         })
+
+        viewModel.dailyBalance.observe(this, Observer {
+            updateTitle()
+        })
+    }
+
+    private fun updateTitle() {
+        val dailyBalance = viewModel.dailyBalance.value?.asCurrency
+        if (dailyBalance != null) {
+            collapsingToolbarLayout.title = when (appBarLayoutState) {
+                State.COLLAPSED -> "$dailyBalance - Daily Balance"
+                else -> dailyBalance
+            }
+        }
     }
 
     override fun onItemClicked(item: PaymentCategory) {
