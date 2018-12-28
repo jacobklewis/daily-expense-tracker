@@ -40,7 +40,7 @@ class CategoryItemAdapter
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): RBRecyclerViewHolder<*, *> {
-        val budget = sp.getString("budget", "0")?.fromCurrency ?: 0f
+        val budget = sp.getString("budget", "$0")?.fromCurrency ?: 0f
         return when {
             itemList[i] is Stats -> BudgetOverviewViewHolder(viewGroup)
             editable -> CategoryViewHolder(viewGroup, saveItemsDelegate, budget)
