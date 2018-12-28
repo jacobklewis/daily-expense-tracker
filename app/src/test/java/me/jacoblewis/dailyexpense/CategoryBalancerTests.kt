@@ -1,8 +1,8 @@
 package me.jacoblewis.dailyexpense
 
-import junit.framework.Assert.assertTrue
 import me.jacoblewis.dailyexpense.commons.CategoryBalancer
 import me.jacoblewis.dailyexpense.data.models.Category
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class CategoryBalancerTests {
