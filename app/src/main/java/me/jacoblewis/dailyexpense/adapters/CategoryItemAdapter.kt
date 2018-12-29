@@ -8,10 +8,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import me.jacoblewis.dailyexpense.adapters.viewholders.BudgetOverviewViewHolder
 import me.jacoblewis.dailyexpense.adapters.viewholders.CategoryChooseViewHolder
-import me.jacoblewis.dailyexpense.adapters.viewholders.CategoryViewHolder
+import me.jacoblewis.dailyexpense.adapters.viewholders.CategoryEditViewHolder
 import me.jacoblewis.dailyexpense.commons.BudgetBalancer
 import me.jacoblewis.dailyexpense.commons.CategoryBalancer
-import me.jacoblewis.dailyexpense.commons.fromCurrency
 import me.jacoblewis.dailyexpense.data.BalancesDB
 import me.jacoblewis.dailyexpense.data.models.Category
 import me.jacoblewis.dailyexpense.data.models.Stats
@@ -44,7 +43,7 @@ class CategoryItemAdapter
         val budget = BudgetBalancer.budgetFromSharedPrefs(sp)
         return when {
             itemList[i] is Stats -> BudgetOverviewViewHolder(viewGroup)
-            editable -> CategoryViewHolder(viewGroup, saveItemsDelegate, budget)
+            editable -> CategoryEditViewHolder(viewGroup)
             else -> CategoryChooseViewHolder(viewGroup, budget)
         }
     }

@@ -7,6 +7,7 @@ sealed class NavScreen {
     object Main : NavScreen()
     object Settings : NavScreen()
     object Categories : NavScreen()
+    object EditCategory : NavScreen()
     object EnterCategory : NavScreen()
     data class EnterPayment(val revealAnimationSetting: RevealAnimationSetting) : NavScreen()
     data class ChooseCategory(val payment: Payment) : NavScreen()
