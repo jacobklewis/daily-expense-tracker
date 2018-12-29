@@ -4,6 +4,7 @@ import android.app.Application
 import me.jacoblewis.dailyexpense.dependency.AppComponent
 import me.jacoblewis.dailyexpense.dependency.DaggerAppComponent
 import me.jacoblewis.dailyexpense.dependency.modules.AppModule
+import me.jacoblewis.dailyexpense.dependency.modules.DBModule
 
 /**
  * Created by Jacob on 11/28/2017.
@@ -13,6 +14,7 @@ class MyApp : Application() {
     private val appComponent: AppComponent by lazy {
         DaggerAppComponent.builder()
                 .appModule(AppModule(this))
+                .dBModule(DBModule(this))
                 .build()
     }
 
