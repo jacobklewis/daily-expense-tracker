@@ -18,6 +18,6 @@ object BudgetBalancer {
     }
 
     fun budgetFromSharedPrefs(sp: SharedPreferences): Float {
-        return sp.getString("budget", "$500")?.fromCurrency ?: 500f
+        return sp.getString("budget", "500")?.fromCurrency ?: 500f
     }
 }

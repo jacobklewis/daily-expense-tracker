@@ -125,8 +125,16 @@ val Float.asCurrency: String
 
 val String.fromCurrency: Float
     get() {
-        val num = NumberFormat.getCurrencyInstance().parse(this)
-        return num.toFloat()
+        val num = try {
+            NumberFormat.getCurrencyInstance().parse(this).toFloat()
+        } catch (e: Exception) {
+            try {
+                this.toFloat()
+            } catch (e: Exception) {
+                0f
+            }
+        }
+        return num
     }
 
 infix fun Date.formatAs(pattern: String): String {
