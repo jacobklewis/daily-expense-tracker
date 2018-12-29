@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:listitem="@layout/viewholder_category_choose" />
+        tools:listitem="@layout/viewholder_category_edit" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_new"
@@ -36,5 +36,5 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/margin_default"
-        android:src="@drawable/ic_edit" />
+        android:src="@drawable/ic_baseline_add_24px" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

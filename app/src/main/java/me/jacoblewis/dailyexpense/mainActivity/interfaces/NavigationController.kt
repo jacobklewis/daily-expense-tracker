@@ -2,7 +2,8 @@ package me.jacoblewis.dailyexpense.mainActivity.interfaces
 
 import android.os.Bundle
 import me.jacoblewis.dailyexpense.commons.ARG_PAYMENT
-import me.jacoblewis.dailyexpense.fragments.categories.CategoryFragment
+import me.jacoblewis.dailyexpense.fragments.categories.CategoryEditFragment
+import me.jacoblewis.dailyexpense.fragments.categories.CategoryOverviewFragment
 import me.jacoblewis.dailyexpense.fragments.categories.ChooseCategoryFragment
 import me.jacoblewis.dailyexpense.fragments.enterCategory.EnterCategoryDialogFragment
 import me.jacoblewis.dailyexpense.fragments.enterPayment.EnterPaymentFragment
@@ -18,7 +19,8 @@ interface NavigationController : NavigationHandler {
             is NavScreen.Settings -> openSettings()
             is NavScreen.EnterCategory -> enterCategory()
             is NavScreen.EnterPayment -> enterPayment(navScreen)
-            is NavScreen.Categories -> openCategories()
+            is NavScreen.Categories -> openCategoriesOverview()
+            is NavScreen.EditCategory -> openEditCategories()
             is NavScreen.ChooseCategory -> chooseCategory(navScreen)
         }
     }
@@ -27,8 +29,12 @@ interface NavigationController : NavigationHandler {
         navTo(MainFragment(), addToBackStack = false, navUpTo = true)
     }
 
-    private fun openCategories() {
-        navTo(CategoryFragment(), addToBackStack = false, navUpTo = true)
+    private fun openCategoriesOverview() {
+        navTo(CategoryOverviewFragment(), addToBackStack = false, navUpTo = true)
+    }
+
+    private fun openEditCategories() {
+        navTo(CategoryEditFragment())
     }
 
     private fun enterPayment(enterPayment: NavScreen.EnterPayment) {

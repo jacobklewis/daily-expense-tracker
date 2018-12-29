@@ -7,4 +7,11 @@
         android:key="budget"
         android:title="Budget" />
 
+    <Preference
+        android:defaultValue="500"
+        android:icon="@drawable/ic_baseline_category_green_24px"
+        android:summary="add / remove / rename your categories"
+        android:key="edit_cats"
+        android:title="Categories" />
+
 </PreferenceScreen>

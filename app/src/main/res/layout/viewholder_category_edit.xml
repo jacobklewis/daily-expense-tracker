@@ -14,58 +14,36 @@
         <TextView
             android:id="@+id/txt_category"
             android:layout_width="0dp"
-            android:layout_height="32dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_default"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:textSize="18sp"
             android:ellipsize="end"
             android:maxLines="1"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/txt_balance"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Lunch" />
 
         <TextView
-            android:id="@+id/txt_balance"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
+            android:id="@+id/txt_category_payments"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_default"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button_increase"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="$100" />
-
-
-        <ImageButton
-            android:id="@+id/button_increase"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@android:color/transparent"
-            android:padding="12dp"
-            android:src="@drawable/ic_baseline_add_dark_24px"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button_decrease"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <ImageButton
-            android:id="@+id/button_decrease"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginEnd="8dp"
-            android:background="@android:color/transparent"
-            android:padding="12dp"
-            android:src="@drawable/ic_baseline_minus_dark_24px"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="10 Linked Payments" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

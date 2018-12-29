@@ -5,12 +5,13 @@ import me.jacoblewis.dailyexpense.dependency.modules.AppModule
 import me.jacoblewis.dailyexpense.dependency.modules.DBModule
 import me.jacoblewis.dailyexpense.dependency.modules.ViewModelModule
 import me.jacoblewis.dailyexpense.dependency.utils.MyApp
-import me.jacoblewis.dailyexpense.fragments.categories.CategoryFragment
+import me.jacoblewis.dailyexpense.fragments.categories.CategoryEditFragment
+import me.jacoblewis.dailyexpense.fragments.categories.CategoryOverviewFragment
 import me.jacoblewis.dailyexpense.fragments.categories.ChooseCategoryFragment
-import me.jacoblewis.dailyexpense.fragments.settings.SettingsFragment
 import me.jacoblewis.dailyexpense.fragments.enterCategory.EnterCategoryDialogFragment
 import me.jacoblewis.dailyexpense.fragments.enterPayment.EnterPaymentFragment
 import me.jacoblewis.dailyexpense.fragments.main.MainFragment
+import me.jacoblewis.dailyexpense.fragments.settings.SettingsFragment
 import me.jacoblewis.dailyexpense.mainActivity.MainActivity
 import javax.inject.Singleton
 
@@ -24,7 +25,8 @@ interface AppComponent {
     fun inject(obj: MainActivity)
     fun inject(obj: MainFragment)
     fun inject(obj: EnterPaymentFragment)
-    fun inject(obj: CategoryFragment)
+    fun inject(obj: CategoryEditFragment)
+    fun inject(obj: CategoryOverviewFragment)
     fun inject(obj: ChooseCategoryFragment)
     fun inject(obj: EnterCategoryDialogFragment)
     fun inject(obj: SettingsFragment)

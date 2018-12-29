@@ -31,5 +31,8 @@ object DateHelper {
     }
 
     val dayOfMonth: Int
-        get() = DateHelper.today(Date(), TimeZone.getDefault()).get(Calendar.DAY_OF_MONTH)
+        get() = today(Date(), TimeZone.getDefault()).get(Calendar.DAY_OF_MONTH)
+
+    val beginningOfTime: Calendar
+        get() = today(Date(0), TimeZone.getDefault())
 }
