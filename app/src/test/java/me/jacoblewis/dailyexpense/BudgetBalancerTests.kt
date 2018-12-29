@@ -34,5 +34,16 @@ class BudgetBalancerTests {
         assertEquals(0.5f, BudgetBalancer.calculateRemainingMonthlyDailyBudget(10f, 20))
     }
 
+    // Daily Budget Tests
+    @Test
+    fun testRemainingDailyBudgetNoPayments() {
+        assertEquals(10f, BudgetBalancer.calculateRemainingDailyBudget(10f, listOf()))
+    }
+
+    @Test
+    fun testRemainingDailyBudgetSomePayments() {
+        assertEquals(5f, BudgetBalancer.calculateRemainingDailyBudget(10f, listOf(Payment(2f), Payment(3f))))
+    }
+
 
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import android.util.Log
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import me.jacoblewis.dailyexpense.commons.BudgetBalancer
 import me.jacoblewis.dailyexpense.commons.fromCurrency
 import me.jacoblewis.dailyexpense.data.BalancesDB
 import me.jacoblewis.dailyexpense.data.models.Category
@@ -17,7 +18,7 @@ class CategoryViewModel
 constructor(val db: BalancesDB, val sp: SharedPreferences) : ViewModel() {
 
     val categories = MediatorLiveData<List<Category>>()
-    val budget = sp.getString("budget", "0")?.fromCurrency ?: 0f
+    val budget = BudgetBalancer.budgetFromSharedPrefs(sp)
 
     init {
         categories.addSource(db.categoriesDao().getAllCategories(), categories::setValue)

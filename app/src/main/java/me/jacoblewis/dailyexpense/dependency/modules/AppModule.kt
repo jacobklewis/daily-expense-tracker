@@ -8,6 +8,7 @@ import dagger.Provides
 import dagger.Reusable
 import me.jacoblewis.dailyexpense.commons.PREFS_SETTINGS
 import me.jacoblewis.dailyexpense.data.BalancesDB
+import me.jacoblewis.dailyexpense.data.PaymentsDao
 import me.jacoblewis.dailyexpense.managers.BalanceManager
 import me.jacoblewis.jklcore.Tools
 import javax.inject.Singleton
@@ -37,15 +38,9 @@ class AppModule(private val application: Application) {
     }
 
     @Provides
-    @Singleton
-    internal fun providesDB(context: Context): BalancesDB {
-        return BalancesDB.getInstance(context)
-    }
-
-    @Provides
     @Reusable
-    internal fun provides(db: BalancesDB, sp: SharedPreferences): BalanceManager {
-        return BalanceManager(db, sp)
+    internal fun provides(paymentsDao: PaymentsDao, sp: SharedPreferences): BalanceManager {
+        return BalanceManager(paymentsDao, sp)
     }
 
 }

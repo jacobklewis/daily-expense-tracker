@@ -73,6 +73,11 @@ class MainFragment : RootFragment(R.layout.fragment_main_content), ItemDelegate<
         })
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.checkCurrentDay()
+    }
+
     private fun updateTitle() {
         val dailyBalance = viewModel.dailyBalance.value?.asCurrency
         if (dailyBalance != null) {
@@ -80,6 +85,8 @@ class MainFragment : RootFragment(R.layout.fragment_main_content), ItemDelegate<
                 State.COLLAPSED -> "$dailyBalance - Daily Balance"
                 else -> dailyBalance
             }
+        } else {
+            collapsingToolbarLayout.title = ""
         }
     }
 

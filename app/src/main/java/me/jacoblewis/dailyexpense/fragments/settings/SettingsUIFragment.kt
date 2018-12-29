@@ -1,6 +1,7 @@
 package me.jacoblewis.dailyexpense.fragments.settings
 
 import android.os.Bundle
+import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import me.jacoblewis.dailyexpense.R
 import me.jacoblewis.dailyexpense.commons.PREFS_SETTINGS
@@ -14,6 +15,6 @@ class SettingsUIFragment : PreferenceFragmentCompat() {
 
 
     override fun onBindPreferences() {
-        findPreference("budget").setSummaryProvider { preferenceManager.sharedPreferences.getString("budget", "") }
+        findPreference<Preference>("budget").setSummaryProvider { preferenceManager.sharedPreferences.getString("budget", "") }
     }
 }

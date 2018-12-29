@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import me.jacoblewis.dailyexpense.adapters.viewholders.BudgetOverviewViewHolder
 import me.jacoblewis.dailyexpense.adapters.viewholders.CategoryChooseViewHolder
 import me.jacoblewis.dailyexpense.adapters.viewholders.CategoryViewHolder
+import me.jacoblewis.dailyexpense.commons.BudgetBalancer
 import me.jacoblewis.dailyexpense.commons.CategoryBalancer
 import me.jacoblewis.dailyexpense.commons.fromCurrency
 import me.jacoblewis.dailyexpense.data.BalancesDB
@@ -40,7 +41,7 @@ class CategoryItemAdapter
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): RBRecyclerViewHolder<*, *> {
-        val budget = sp.getString("budget", "$0")?.fromCurrency ?: 0f
+        val budget = BudgetBalancer.budgetFromSharedPrefs(sp)
         return when {
             itemList[i] is Stats -> BudgetOverviewViewHolder(viewGroup)
             editable -> CategoryViewHolder(viewGroup, saveItemsDelegate, budget)
