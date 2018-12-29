@@ -10,13 +10,12 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Parcelable
-import androidx.annotation.LayoutRes
-import androidx.fragment.app.Fragment
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.LayoutRes
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import butterknife.ButterKnife
 import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +23,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.jacoblewis.dailyexpense.R
-import okhttp3.Dispatcher
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -122,17 +120,20 @@ inline fun androidx.fragment.app.Fragment.oCV(@LayoutRes layoutId: Int, containe
     return rootView
 }
 
-val Float.asCurrency
+val Float.asCurrency: String
     get() = NumberFormat.getCurrencyInstance().format(this)
 
-val String.fromCurrency
-    get() = NumberFormat.getCurrencyInstance().parse(this).toFloat()
+val String.fromCurrency: Float
+    get() {
+        val num = NumberFormat.getCurrencyInstance().parse(this)
+        return num.toFloat()
+    }
 
 infix fun Date.formatAs(pattern: String): String {
     return SimpleDateFormat(pattern, Locale.getDefault()).format(this)
 }
 
-fun wait(millis: Long, block:()->Unit) = GlobalScope.launch(Dispatchers.Main) {
+fun wait(millis: Long, block: () -> Unit) = GlobalScope.launch(Dispatchers.Main) {
     delay(millis)
     block()
 }
