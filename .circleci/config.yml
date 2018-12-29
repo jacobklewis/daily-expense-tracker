@@ -36,7 +36,7 @@ jobs:
           name: Download Dependencies
           command: ./gradlew androidDependencies
 
-      - run: ./gradlew clean build --info
+      - run: ./gradlew clean build -x test --info
 
       - save_cache:
           paths:
