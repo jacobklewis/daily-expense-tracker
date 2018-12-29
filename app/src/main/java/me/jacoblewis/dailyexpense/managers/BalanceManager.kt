@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import me.jacoblewis.dailyexpense.commons.BudgetBalancer
 import me.jacoblewis.dailyexpense.commons.DateHelper
-import me.jacoblewis.dailyexpense.commons.fromCurrency
 import me.jacoblewis.dailyexpense.data.PaymentsDao
 import java.util.*
 

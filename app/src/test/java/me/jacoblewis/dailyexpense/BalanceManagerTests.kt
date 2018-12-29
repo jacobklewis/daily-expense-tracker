@@ -14,6 +14,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Mockito.verify
@@ -40,7 +41,7 @@ class BalanceManagerTests {
 
     @Before
     fun prepareTests() {
-        Mockito.`when`(mockedSP.getString("budget", "$500")).thenReturn("$500")
+        Mockito.`when`(mockedSP.getString("budget", "500")).thenReturn("500")
         balanceManager = BalanceManager(mockedPaymentsDao, mockedSP)
     }
 
