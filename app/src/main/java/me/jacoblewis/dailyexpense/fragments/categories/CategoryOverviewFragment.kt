@@ -3,7 +3,6 @@ package me.jacoblewis.dailyexpense.fragments.categories
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
@@ -13,6 +12,7 @@ import me.jacoblewis.dailyexpense.adapters.CategoryItemAdapter
 import me.jacoblewis.dailyexpense.adapters.ItemDelegate
 import me.jacoblewis.dailyexpense.commons.DateHelper
 import me.jacoblewis.dailyexpense.commons.RootFragmentOptions
+import me.jacoblewis.dailyexpense.commons.observeBoth
 import me.jacoblewis.dailyexpense.data.models.Stats
 import me.jacoblewis.dailyexpense.dependency.utils.MyApp
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
@@ -55,15 +55,13 @@ class CategoryOverviewFragment : RootFragment(R.layout.fragment_category_content
 
     override fun onStart() {
         super.onStart()
-        viewModel.categories.observe(this, Observer {
-            if (it != null) {
-                val items: MutableList<Any> = mutableListOf()
-                items.add(Stats(viewModel.budget))
-                items.addAll(it)
-                categoryAdapter.updateItems(items)
-                categoryAdapter.notifyDataSetChanged()
-            }
-        })
+        observeBoth(viewModel.categories, viewModel.remainingBudget, this) { cats, remainingBudget ->
+            val items: MutableList<Any> = mutableListOf()
+            items.add(Stats(remainingBudget))
+            items.addAll(cats)
+            categoryAdapter.updateItems(items)
+            categoryAdapter.notifyDataSetChanged()
+        }
     }
 
     override fun onItemClicked(item: Any) {

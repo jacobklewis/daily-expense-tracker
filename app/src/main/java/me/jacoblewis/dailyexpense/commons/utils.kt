@@ -16,6 +16,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import butterknife.ButterKnife
 import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.Dispatchers
@@ -144,4 +146,22 @@ infix fun Date.formatAs(pattern: String): String {
 fun wait(millis: Long, block: () -> Unit) = GlobalScope.launch(Dispatchers.Main) {
     delay(millis)
     block()
+}
+
+fun <T, J> observeBoth(a: LiveData<T>, b: LiveData<J>, owner: LifecycleOwner, observer: (T, J) -> Unit) {
+    var cResA: T? = null
+    var cResB: J? = null
+    fun postResult() {
+        if (cResA != null && cResB != null) {
+            observer(cResA!!, cResB!!)
+        }
+    }
+    a.observe(owner, androidx.lifecycle.Observer { resA ->
+        cResA = resA
+        postResult()
+    })
+    b.observe(owner, androidx.lifecycle.Observer { resB ->
+        cResB = resB
+        postResult()
+    })
 }

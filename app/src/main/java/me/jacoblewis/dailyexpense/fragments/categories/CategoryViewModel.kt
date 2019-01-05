@@ -32,6 +32,11 @@ constructor(val categoriesDao: CategoriesDao, val paymentsDao: PaymentsDao, val 
         }
     }
     val budget = BudgetBalancer.budgetFromSharedPrefs(sp)
+    val remainingBudget: LiveData<Float> = Transformations.switchMap(fromDate) { lowerDate ->
+        Transformations.map(paymentsDao.getAllPaymentsSince(lowerDate)) { payments ->
+            BudgetBalancer.calculateRemainingBudget(budget, payments.mapNotNull { it.transaction })
+        }
+    }
 
     fun updateCategoryDate(calendar: Calendar) {
         fromDate.value = calendar
