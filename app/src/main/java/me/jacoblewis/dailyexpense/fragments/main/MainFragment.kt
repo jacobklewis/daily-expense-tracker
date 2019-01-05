@@ -15,6 +15,7 @@ import me.jacoblewis.dailyexpense.adapters.ItemDelegate
 import me.jacoblewis.dailyexpense.adapters.PaymentsController
 import me.jacoblewis.dailyexpense.commons.*
 import me.jacoblewis.dailyexpense.data.models.PaymentCategory
+import me.jacoblewis.dailyexpense.data.models.Stats
 import me.jacoblewis.dailyexpense.dependency.utils.MyApp
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.RootFragment
@@ -63,8 +64,11 @@ class MainFragment : RootFragment(R.layout.fragment_main_content), ItemDelegate<
 
         viewModel.payments.observe(this, Observer {
             if (it != null) {
+                val items: MutableList<Any> = mutableListOf()
+                items.add(Stats(it.second))
+                items.addAll(it.first)
                 paymentAdapter.removeAllItems()
-                paymentAdapter.addItems(it)
+                paymentAdapter.addItems(items)
             }
         })
 

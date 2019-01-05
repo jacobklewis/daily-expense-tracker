@@ -47,6 +47,11 @@ class EnterPaymentFragment : RootFragment(R.layout.fragment_enter_payment) {
 //        AnimationUtils.registerCircularRevealAnimation(context!!, rootView, revealSetting, ContextCompat.getColor(context!!, R.color.colorAccent), ContextCompat.getColor(context!!, R.color.white))
     }
 
+    override fun onStart() {
+        super.onStart()
+        enterPriceEditText.requestFocus()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.enter_payment_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)

@@ -8,24 +8,30 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.google.android.material.snackbar.Snackbar
 import me.jacoblewis.dailyexpense.R
+import me.jacoblewis.dailyexpense.adapters.viewholders.BudgetOverviewViewHolder
 import me.jacoblewis.dailyexpense.commons.asCurrency
 import me.jacoblewis.dailyexpense.commons.formatAs
 import me.jacoblewis.dailyexpense.data.models.PaymentCategory
+import me.jacoblewis.dailyexpense.data.models.Stats
 import me.jacoblewis.jklcore.components.recyclerview.RBRecyclerAdapter
 import me.jacoblewis.jklcore.components.recyclerview.RBRecyclerViewHolder
 import java.util.*
 
 object PaymentsController {
 
-    fun createAdapter(context: Context?, callback: ItemDelegate<PaymentCategory>): RBRecyclerAdapter<PaymentCategory, ItemDelegate<PaymentCategory>> {
+    fun createAdapter(context: Context?, callback: ItemDelegate<PaymentCategory>): RBRecyclerAdapter<Any, ItemDelegate<PaymentCategory>> {
         return PaymentItemAdapter(context, callback)
     }
 
 
     // List Adapter
-    class PaymentItemAdapter(context: Context?, delegate: ItemDelegate<PaymentCategory>) : RBRecyclerAdapter<PaymentCategory, ItemDelegate<PaymentCategory>>(context, delegate) {
-        override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): RBRecyclerViewHolder<*, *> = PaymentViewHolder(viewGroup)
-        override fun getItemViewType(position: Int): Int = 0
+    class PaymentItemAdapter(context: Context?, delegate: ItemDelegate<PaymentCategory>) : RBRecyclerAdapter<Any, ItemDelegate<PaymentCategory>>(context, delegate) {
+        override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): RBRecyclerViewHolder<*, *> = when (itemList[i]) {
+            is Stats -> BudgetOverviewViewHolder(viewGroup)
+            else -> PaymentViewHolder(viewGroup)
+        }
+
+        override fun getItemViewType(position: Int): Int = position
     }
 
     // Payment View Holder (UI)
