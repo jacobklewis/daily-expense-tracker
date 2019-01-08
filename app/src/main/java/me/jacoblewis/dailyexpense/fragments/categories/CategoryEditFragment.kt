@@ -1,5 +1,9 @@
 package me.jacoblewis.dailyexpense.fragments.categories
 
+import android.graphics.drawable.Icon
+import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +14,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.OnClick
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import me.jacoblewis.dailyexpense.R
 import me.jacoblewis.dailyexpense.adapters.CategoryItemAdapter
@@ -37,15 +42,23 @@ class CategoryEditFragment : RootFragment(R.layout.fragment_category_content), I
     lateinit var toolbar: Toolbar
     @BindView(R.id.recycler_view_category)
     lateinit var recyclerView: RecyclerView
+    @BindView(R.id.fab_add_new)
+    lateinit var fab: FloatingActionButton
 
     private val viewModel: CategoryViewModel by lazy {
         ViewModelProviders.of(this, viewModelFactory).get(CategoryViewModel::class.java)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
     }
 
     override fun onViewBound(view: View) {
         toolbar.title = "Edit Category Budgets"
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        fab.setImageIcon(Icon.createWithResource(context, R.drawable.ic_baseline_add_24px))
 
         categoryAdapter.setCallback(this)
         categoryAdapter.editable = true
