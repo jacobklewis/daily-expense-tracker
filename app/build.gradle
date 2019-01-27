@@ -71,7 +71,7 @@ dependencies {
     implementation 'com.google.dagger:dagger:2.14.1'
     kapt 'com.google.dagger:dagger-compiler:2.14.1'
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation('me.jacoblewis.core:core:1.5.5') {
+    implementation('me.jacoblewis.core:core:1.5.6') {
         exclude group: "io.reactivex"
     }
     implementation 'me.jacoblewis.core:core-annotations:1.3.3'
