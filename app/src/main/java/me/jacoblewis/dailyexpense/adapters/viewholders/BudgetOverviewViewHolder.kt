@@ -11,7 +11,7 @@ import me.jacoblewis.dailyexpense.commons.asCurrency
 import me.jacoblewis.dailyexpense.data.models.Stats
 import me.jacoblewis.jklcore.components.recyclerview.RBRecyclerViewHolder
 
-class BudgetOverviewViewHolder(viewGroup: ViewGroup) : RBRecyclerViewHolder<Stats, ItemDelegate<Stats>>(viewGroup, R.layout.viewholder_budget_overview) {
+class BudgetOverviewViewHolder(viewGroup: ViewGroup) : RBRecyclerViewHolder<Stats, ItemDelegate<Any>>(viewGroup, R.layout.viewholder_budget_overview) {
     @BindView(R.id.txt_budget)
     lateinit var budgetTextView: TextView
 
@@ -19,11 +19,11 @@ class BudgetOverviewViewHolder(viewGroup: ViewGroup) : RBRecyclerViewHolder<Stat
         ButterKnife.bind(this, itemView)
     }
 
-    override fun setUpView(itemView: View, item: Stats, position: Int, delegate: ItemDelegate<Stats>) {
+    override fun setUpView(itemView: View, item: Stats, position: Int, delegate: ItemDelegate<Any>) {
         budgetTextView.text = item.budget.asCurrency
     }
 
-    override fun onClick(itemView: View, item: Stats, position: Int, delegate: ItemDelegate<Stats>) {
-        delegate.onItemClicked(item)
+    override fun onClick(itemView: View, item: Stats, position: Int, delegate: ItemDelegate<Any>?) {
+        delegate?.onItemClicked(item)
     }
 }

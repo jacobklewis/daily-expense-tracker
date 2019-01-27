@@ -14,13 +14,14 @@ import me.jacoblewis.dailyexpense.commons.CategoryBalancer
 import me.jacoblewis.dailyexpense.data.BalancesDB
 import me.jacoblewis.dailyexpense.data.models.Category
 import me.jacoblewis.dailyexpense.data.models.Stats
+import me.jacoblewis.jklcore.components.recyclerview.IdItem
 import me.jacoblewis.jklcore.components.recyclerview.RBRecyclerAdapter
 import me.jacoblewis.jklcore.components.recyclerview.RBRecyclerViewHolder
 import javax.inject.Inject
 
 // List Adapter
 class CategoryItemAdapter
-@Inject constructor(context: Context?, val db: BalancesDB, val sp: SharedPreferences) : RBRecyclerAdapter<Any, ItemDelegate<Any>>(context, null) {
+@Inject constructor(context: Context?, val db: BalancesDB, val sp: SharedPreferences) : RBRecyclerAdapter<IdItem<*>, ItemDelegate<Any>>(context, null) {
     lateinit var recyclerView: RecyclerView
     var editable: Boolean = false
 
@@ -39,13 +40,13 @@ class CategoryItemAdapter
         this.recyclerView = recyclerView
     }
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): RBRecyclerViewHolder<*, *> {
+    override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): RBRecyclerViewHolder<IdItem<*>, ItemDelegate<Any>?> {
         val budget = BudgetBalancer.budgetFromSharedPrefs(sp)
         return when {
             itemList[i] is Stats -> BudgetOverviewViewHolder(viewGroup)
             editable -> CategoryEditViewHolder(viewGroup)
             else -> CategoryChooseViewHolder(viewGroup, budget)
-        }
+        } as RBRecyclerViewHolder<IdItem<*>, ItemDelegate<Any>?>
     }
 
     override fun getItemViewType(position: Int) = position
