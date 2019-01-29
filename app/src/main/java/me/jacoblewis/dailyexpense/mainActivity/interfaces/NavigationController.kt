@@ -2,7 +2,10 @@ package me.jacoblewis.dailyexpense.mainActivity.interfaces
 
 import android.os.Bundle
 import me.jacoblewis.dailyexpense.commons.ARG_PAYMENT
-import me.jacoblewis.dailyexpense.fragments.categories.CategoryFragment
+import me.jacoblewis.dailyexpense.data.models.Category
+import me.jacoblewis.dailyexpense.extensions.applyModel
+import me.jacoblewis.dailyexpense.fragments.categories.CategoryEditFragment
+import me.jacoblewis.dailyexpense.fragments.categories.CategoryOverviewFragment
 import me.jacoblewis.dailyexpense.fragments.categories.ChooseCategoryFragment
 import me.jacoblewis.dailyexpense.fragments.enterCategory.EnterCategoryDialogFragment
 import me.jacoblewis.dailyexpense.fragments.enterPayment.EnterPaymentFragment
@@ -17,8 +20,10 @@ interface NavigationController : NavigationHandler {
             is NavScreen.Main -> openMain()
             is NavScreen.Settings -> openSettings()
             is NavScreen.EnterCategory -> enterCategory()
+            is NavScreen.EditCategory -> editCategory(navScreen.category)
             is NavScreen.EnterPayment -> enterPayment(navScreen)
-            is NavScreen.Categories -> openCategories()
+            is NavScreen.Categories -> openCategoriesOverview()
+            is NavScreen.EditCategories -> openEditCategories()
             is NavScreen.ChooseCategory -> chooseCategory(navScreen)
         }
     }
@@ -27,8 +32,12 @@ interface NavigationController : NavigationHandler {
         navTo(MainFragment(), addToBackStack = false, navUpTo = true)
     }
 
-    private fun openCategories() {
-        navTo(CategoryFragment(), addToBackStack = false, navUpTo = true)
+    private fun openCategoriesOverview() {
+        navTo(CategoryOverviewFragment(), addToBackStack = false, navUpTo = true)
+    }
+
+    private fun openEditCategories() {
+        navTo(CategoryEditFragment())
     }
 
     private fun enterPayment(enterPayment: NavScreen.EnterPayment) {
@@ -38,6 +47,12 @@ interface NavigationController : NavigationHandler {
 
     private fun enterCategory() {
         val enterCategoryFrag = EnterCategoryDialogFragment()
+        enterCategoryFrag.show(currentActivity.supportFragmentManager, EnterCategoryDialogFragment::class.java.name)
+    }
+
+    private fun editCategory(category: Category) {
+        val enterCategoryFrag = EnterCategoryDialogFragment()
+        enterCategoryFrag.arguments = Bundle().applyModel { EnterCategoryDialogFragment.Config(category) }
         enterCategoryFrag.show(currentActivity.supportFragmentManager, EnterCategoryDialogFragment::class.java.name)
     }
 

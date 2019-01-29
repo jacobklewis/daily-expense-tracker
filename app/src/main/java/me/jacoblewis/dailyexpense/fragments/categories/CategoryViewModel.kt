@@ -1,46 +1,64 @@
 package me.jacoblewis.dailyexpense.fragments.categories
 
 import android.content.SharedPreferences
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.ViewModel
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import me.jacoblewis.dailyexpense.commons.BudgetBalancer
-import me.jacoblewis.dailyexpense.commons.fromCurrency
-import me.jacoblewis.dailyexpense.data.BalancesDB
+import me.jacoblewis.dailyexpense.data.CategoriesDao
+import me.jacoblewis.dailyexpense.data.PaymentsDao
 import me.jacoblewis.dailyexpense.data.models.Category
 import me.jacoblewis.dailyexpense.data.models.Payment
+import java.util.*
 import javax.inject.Inject
 
 class CategoryViewModel
 @Inject
-constructor(val db: BalancesDB, val sp: SharedPreferences) : ViewModel() {
+constructor(val categoriesDao: CategoriesDao, val paymentsDao: PaymentsDao, val sp: SharedPreferences) : ViewModel() {
 
-    val categories = MediatorLiveData<List<Category>>()
+    private val fromDate: MutableLiveData<Calendar> = MutableLiveData()
+    val categories: LiveData<List<Category>> = Transformations.switchMap(fromDate) { lowerDate ->
+        Transformations.map(categoriesDao.getAllCategoryPayments()) { cats ->
+            return@map cats.map { categoryPayments ->
+                val thisMonthsPayments = categoryPayments.payments.filter { payment -> payment.creationDate > lowerDate }
+                categoryPayments.category.apply {
+                    payments.addAll(thisMonthsPayments)
+                }
+            }
+        }
+    }
     val budget = BudgetBalancer.budgetFromSharedPrefs(sp)
+    val remainingBudget: LiveData<Float> = Transformations.switchMap(fromDate) { lowerDate ->
+        Transformations.map(paymentsDao.getAllPaymentsSince(lowerDate)) { payments ->
+            BudgetBalancer.calculateRemainingBudget(budget, payments.mapNotNull { it.transaction })
+        }
+    }
 
-    init {
-        categories.addSource(db.categoriesDao().getAllCategories(), categories::setValue)
+    fun updateCategoryDate(calendar: Calendar) {
+        fromDate.value = calendar
     }
 
     fun updateCategories(categories: List<Category>) {
         GlobalScope.launch {
-            db.categoriesDao().updateCategories(categories)
+            categoriesDao.updateCategories(categories)
         }
     }
 
     fun savePayment(payment: Payment) {
         GlobalScope.launch {
-            db.paymentsDao().insertPayment(payment)
+            paymentsDao.insertPayment(payment)
         }
     }
 
     fun removeCategory(category: Category) {
         GlobalScope.launch {
             try {
-                db.paymentsDao().deleteByCategory(categoryId = category.categoryId)
-                db.categoriesDao().deleteCategory(category)
+                paymentsDao.deleteByCategory(categoryId = category.categoryId)
+                categoriesDao.deleteCategory(category)
             } catch (e: Exception) {
                 // TODO: log somewhere else
                 Log.e("CategoryViewModel", e.localizedMessage)

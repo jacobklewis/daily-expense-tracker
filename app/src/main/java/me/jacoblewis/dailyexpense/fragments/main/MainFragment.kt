@@ -15,9 +15,11 @@ import me.jacoblewis.dailyexpense.adapters.ItemDelegate
 import me.jacoblewis.dailyexpense.adapters.PaymentsController
 import me.jacoblewis.dailyexpense.commons.*
 import me.jacoblewis.dailyexpense.data.models.PaymentCategory
+import me.jacoblewis.dailyexpense.data.models.Stats
 import me.jacoblewis.dailyexpense.dependency.utils.MyApp
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.RootFragment
+import me.jacoblewis.jklcore.components.recyclerview.IdItem
 
 class MainFragment : RootFragment(R.layout.fragment_main_content), ItemDelegate<PaymentCategory> {
     override val options: RootFragmentOptions = RootFragmentOptions(MainFragment::class.java, drawerNavId = R.id.menu_item_overview)
@@ -41,7 +43,7 @@ class MainFragment : RootFragment(R.layout.fragment_main_content), ItemDelegate<
         ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
     }
 
-    private val paymentAdapter: PaymentsController.PaymentItemAdapter by lazy { PaymentsController.createAdapter(context, this) as PaymentsController.PaymentItemAdapter }
+    private val paymentAdapter: PaymentsController.PaymentItemAdapter by lazy { PaymentsController.createAdapter(context!!, this) as PaymentsController.PaymentItemAdapter }
 
     override fun onViewBound(view: View) {
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
@@ -63,8 +65,10 @@ class MainFragment : RootFragment(R.layout.fragment_main_content), ItemDelegate<
 
         viewModel.payments.observe(this, Observer {
             if (it != null) {
-                paymentAdapter.removeAllItems()
-                paymentAdapter.addItems(it)
+                val items: MutableList<IdItem<Long>> = mutableListOf()
+                items.add(Stats(it.second))
+                items.addAll(it.first)
+                paymentAdapter.updateItems(items)
             }
         })
 

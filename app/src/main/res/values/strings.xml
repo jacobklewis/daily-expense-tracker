@@ -5,10 +5,11 @@
     <string name="title_close_nav">Close Nav</string>
 
     <string name="title_create_category">Create Category</string>
+    <string name="title_edit_category">Edit Category</string>
     <string name="label_save">Save</string>
     <string name="label_cancel">Cancel</string>
     <string name="label_lock">Lock</string>
-    <string name="label_overall_budget">overall monthly budget</string>
+    <string name="label_overall_budget">overall remaining monthly budget</string>
 
     <!-- Filler Text -->
     <string name="filler_label">Lorem ipsum</string>
