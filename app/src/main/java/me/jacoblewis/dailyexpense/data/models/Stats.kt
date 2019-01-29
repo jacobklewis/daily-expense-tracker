@@ -1,3 +1,7 @@
 package me.jacoblewis.dailyexpense.data.models
 
-data class Stats(val budget: Float)
+import me.jacoblewis.jklcore.components.recyclerview.IdItem
+
+data class Stats(val budget: Float) : IdItem<Long> {
+    override fun getIdentifier(): Long = 0
+}

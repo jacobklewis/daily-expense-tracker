@@ -26,7 +26,7 @@ class CategoryChooseViewHolder(viewGroup: ViewGroup, val budget: Float) : RBRecy
         balanceTextView.text = item.payments.map { it.cost }.sum().asCurrency
     }
 
-    override fun onClick(itemView: View, item: Category, position: Int, delegate: ItemDelegate<Category>) {
-        delegate.onItemClicked(item)
+    override fun onClick(itemView: View, item: Category, position: Int, delegate: ItemDelegate<Category>?) {
+        delegate?.onItemClicked(item)
     }
 }

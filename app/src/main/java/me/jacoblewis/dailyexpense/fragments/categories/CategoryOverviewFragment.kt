@@ -17,6 +17,7 @@ import me.jacoblewis.dailyexpense.data.models.Stats
 import me.jacoblewis.dailyexpense.dependency.utils.MyApp
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.RootFragment
+import me.jacoblewis.jklcore.components.recyclerview.IdItem
 import java.util.*
 import javax.inject.Inject
 
@@ -56,11 +57,10 @@ class CategoryOverviewFragment : RootFragment(R.layout.fragment_category_content
     override fun onStart() {
         super.onStart()
         observeBoth(viewModel.categories, viewModel.remainingBudget, this) { cats, remainingBudget ->
-            val items: MutableList<Any> = mutableListOf()
+            val items: MutableList<IdItem<*>> = mutableListOf()
             items.add(Stats(remainingBudget))
             items.addAll(cats)
             categoryAdapter.updateItems(items)
-            categoryAdapter.notifyDataSetChanged()
         }
     }
 
@@ -71,7 +71,7 @@ class CategoryOverviewFragment : RootFragment(R.layout.fragment_category_content
 
     @OnClick(R.id.fab_add_new)
     fun addNewCategory(v: View) {
-        navigationController.navigateTo(NavScreen.EditCategory)
+        navigationController.navigateTo(NavScreen.EditCategories)
     }
 
     /**

@@ -2,8 +2,6 @@ package me.jacoblewis.dailyexpense.fragments.categories
 
 import android.graphics.drawable.Icon
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -49,6 +47,19 @@ class CategoryEditFragment : RootFragment(R.layout.fragment_category_content), I
         ViewModelProviders.of(this, viewModelFactory).get(CategoryViewModel::class.java)
     }
 
+    private val removeCategoryListener: (Int) -> Unit = { pos ->
+        categoryAdapter.notifyItemChanged(pos)
+        view?.let { view ->
+            Snackbar.make(view, "Are you sure you want to delete?", Snackbar.LENGTH_LONG)
+                    .setAction("Confirm Delete") {
+                        val item = categoryAdapter.itemList[pos]
+                        if (item is Category) {
+                            viewModel.removeCategory(item)
+                        }
+                    }.show()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -65,13 +76,7 @@ class CategoryEditFragment : RootFragment(R.layout.fragment_category_content), I
         recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
         recyclerView.adapter = categoryAdapter
 
-        recyclerView.addSwipeListener(ItemTouchHelper.LEFT, R.drawable.ic_remove, staticTop = false) { pos ->
-            Snackbar.make(view, "Remove it", Snackbar.LENGTH_SHORT).show()
-            val item = categoryAdapter.itemList[pos]
-            if (item is Category) {
-                viewModel.removeCategory(item)
-            }
-        }
+        recyclerView.addSwipeListener(ItemTouchHelper.LEFT, R.drawable.ic_remove, staticTop = false, onSwipedListener = removeCategoryListener)
 
         viewModel.updateCategoryDate(DateHelper.beginningOfTime)
     }
@@ -94,7 +99,7 @@ class CategoryEditFragment : RootFragment(R.layout.fragment_category_content), I
     }
 
     override fun onItemClicked(item: Any) {
-        Snackbar.make(view!!, "TODO: Edit this!", Snackbar.LENGTH_LONG).show()
+        navigationController.navigateTo(NavScreen.EditCategory(item as Category))
     }
 
 

@@ -3,6 +3,7 @@ package me.jacoblewis.dailyexpense.data.models
 import android.os.Parcelable
 import androidx.room.*
 import kotlinx.android.parcel.Parcelize
+import me.jacoblewis.jklcore.components.recyclerview.IdItem
 import java.util.*
 
 @Entity(tableName = "payments",
@@ -25,4 +26,6 @@ data class Payment(
 
         @ColumnInfo(name = "category_id")
         var categoryId: Long = 0
-) : Parcelable
+) : Parcelable, IdItem<Long> {
+    override fun getIdentifier(): Long = id
+}

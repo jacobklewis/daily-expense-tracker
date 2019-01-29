@@ -33,7 +33,7 @@ class SettingsUIFragment : PreferenceFragmentCompat() {
 
         // Override Category preference and use our custom one instead
         findPreference<Preference>("edit_cats").onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            navigationController.navigateTo(NavScreen.EditCategory)
+            navigationController.navigateTo(NavScreen.EditCategories)
             return@OnPreferenceClickListener true
         }
     }

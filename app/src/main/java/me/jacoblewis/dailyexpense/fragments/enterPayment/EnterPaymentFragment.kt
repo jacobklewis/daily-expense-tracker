@@ -6,7 +6,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import butterknife.BindView
@@ -18,6 +17,7 @@ import me.jacoblewis.dailyexpense.data.models.Payment
 import me.jacoblewis.dailyexpense.dependency.utils.MyApp
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.RootFragment
+import me.jacoblewis.dailyexpense.ui.components.dynamicnumberpad.DynamicNumberPadView
 
 class EnterPaymentFragment : RootFragment(R.layout.fragment_enter_payment) {
     override val options: RootFragmentOptions = RootFragmentOptions(EnterPaymentFragment::class.java)
@@ -28,8 +28,8 @@ class EnterPaymentFragment : RootFragment(R.layout.fragment_enter_payment) {
 
     @BindView(R.id.toolbar)
     lateinit var toolbar: Toolbar
-    @BindView(R.id.edittext_enter_price)
-    lateinit var enterPriceEditText: AppCompatEditText
+    @BindView(R.id.number_pad)
+    lateinit var numberPad: DynamicNumberPadView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,11 +47,6 @@ class EnterPaymentFragment : RootFragment(R.layout.fragment_enter_payment) {
 //        AnimationUtils.registerCircularRevealAnimation(context!!, rootView, revealSetting, ContextCompat.getColor(context!!, R.color.colorAccent), ContextCompat.getColor(context!!, R.color.white))
     }
 
-    override fun onStart() {
-        super.onStart()
-        enterPriceEditText.requestFocus()
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.enter_payment_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
@@ -60,7 +55,7 @@ class EnterPaymentFragment : RootFragment(R.layout.fragment_enter_payment) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_continue -> {
-                val price: Float = enterPriceEditText.text.toString().replace("$", "").toFloat()
+                val price: Float = numberPad.currentNumber
                 navigationController.navigateTo(NavScreen.ChooseCategory(Payment(cost = price)))
 
             }

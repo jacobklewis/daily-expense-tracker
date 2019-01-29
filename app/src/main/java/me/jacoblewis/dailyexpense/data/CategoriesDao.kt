@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import me.jacoblewis.dailyexpense.data.models.Category
 import me.jacoblewis.dailyexpense.data.models.CategoryPayments
-import java.util.*
 
 @Dao
 interface CategoriesDao {
@@ -18,6 +17,9 @@ interface CategoriesDao {
 
     @Update
     fun updateCategories(categories: List<Category>)
+
+    @Update
+    fun updateCategory(category: Category)
 
     @Insert
     fun insertCategory(category: Category): Long
