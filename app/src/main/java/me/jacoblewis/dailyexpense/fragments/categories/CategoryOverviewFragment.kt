@@ -71,7 +71,7 @@ class CategoryOverviewFragment : RootFragment(R.layout.fragment_category_content
 
     @OnClick(R.id.fab_add_new)
     fun addNewCategory(v: View) {
-        navigationController.navigateTo(NavScreen.EditCategory)
+        navigationController.navigateTo(NavScreen.EditCategories)
     }
 
     /**
