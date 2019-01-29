@@ -21,7 +21,7 @@ constructor(val db: BalancesDB, val balanceManager: BalanceManager, val sp: Shar
     {
         Pair(it, BudgetBalancer.calculateRemainingBudget(BudgetBalancer.budgetFromSharedPrefs(sp), it.mapNotNull { p -> p.transaction }))
     }
-
+  
     val dailyBalance: LiveData<Float> = Transformations.switchMap(currentDayOfMonth) {
         balanceManager.fetchDailyBalance()
     }
