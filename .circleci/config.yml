@@ -38,7 +38,7 @@ jobs:
 
       - run:
           name: Add Keystore File
-          command: echo $keystore | base64 --decode > mykeystore
+          command: echo $keystore | base64 --decode > app/mykeystore
 
       - run:
           name: Replace Gradle Properties File
