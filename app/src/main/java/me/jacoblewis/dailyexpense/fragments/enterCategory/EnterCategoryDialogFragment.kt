@@ -56,7 +56,7 @@ class EnterCategoryDialogFragment : androidx.fragment.app.DialogFragment() {
                 categoryToSave.name = categoryTitle
                 db.categoriesDao().updateCategory(categoryToSave)
             } ?: run {
-                val categoryToSave = Category(categoryTitle, "#333333", 0f)
+                val categoryToSave = Category(categoryTitle, "#333333")
                 db.categoriesDao().insertCategory(categoryToSave)
             }
         }

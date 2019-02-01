@@ -20,12 +20,18 @@ data class Payment(
         @ColumnInfo(name = "notes")
         val notes: String = "",
 
-        @PrimaryKey(autoGenerate = true)
+        @PrimaryKey
         @ColumnInfo(name = "id")
-        var id: Long = 0,
+        var id: String = UUID.randomUUID().toString(),
 
         @ColumnInfo(name = "category_id")
-        var categoryId: Long = 0
-) : Parcelable, IdItem<Long> {
-    override fun getIdentifier(): Long = id
+        var categoryId: String = "",
+
+        @ColumnInfo(name = "needsSync")
+        var needsSync: Boolean = true,
+
+        @ColumnInfo(name = "deleted")
+        var deleted: Boolean = false
+) : Parcelable, IdItem<String> {
+    override fun getIdentifier(): String = id
 }

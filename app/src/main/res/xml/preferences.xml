@@ -3,15 +3,27 @@
     <EditTextPreference
         android:defaultValue="500"
         android:icon="@drawable/ic_cash"
-        android:summary="Specify how much you would like to spend each month."
         android:key="budget"
+        android:summary="Specify how much you would like to spend each month."
         android:title="Budget" />
 
     <Preference
-        android:defaultValue="500"
         android:icon="@drawable/ic_baseline_category_green_24px"
-        android:summary="add / remove / rename your categories"
         android:key="edit_cats"
+        android:summary="add / remove / rename your categories"
         android:title="Categories" />
+
+    <Preference
+        android:icon="@drawable/ic_baseline_user_green_24px"
+        android:key="edit_profile"
+        android:summary="Manage your Profile"
+        android:title="Profile" />
+
+    <Preference
+        android:enabled="false"
+        android:icon="@drawable/ic_baseline_sync_green_24px"
+        android:key="sync_now"
+        android:summary="Synchronize your data immediately"
+        android:title="Sync Now" />
 
 </PreferenceScreen>

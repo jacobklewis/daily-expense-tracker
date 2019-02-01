@@ -7,6 +7,7 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 import me.jacoblewis.jklcore.components.recyclerview.IdItem
+import java.util.*
 
 @Entity(tableName = "categories")
 @Parcelize
@@ -17,18 +18,21 @@ data class Category(
         @ColumnInfo(name = "color")
         val color: String,
 
-        // Float 0-1 based on relative ratio
-        @ColumnInfo(name = "category_budget")
-        var budget: Float = 0f,
+        @ColumnInfo(name = "notes")
+        val notes: String = "",
 
-        @PrimaryKey(autoGenerate = true)
+        @PrimaryKey
         @ColumnInfo(name = "id")
-        var categoryId: Long = 0
-) : IdItem<Long>, Parcelable {
-    var locked: Boolean = false
+        var categoryId: String = UUID.randomUUID().toString(),
 
+        @ColumnInfo(name = "needsSync")
+        var needsSync: Boolean = true,
+
+        @ColumnInfo(name = "deleted")
+        var deleted: Boolean = false
+) : IdItem<String>, Parcelable {
     @Ignore
     val payments: MutableList<Payment> = mutableListOf()
 
-    override fun getIdentifier(): Long = categoryId
+    override fun getIdentifier(): String = categoryId
 }

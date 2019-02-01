@@ -4,7 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Relation
 import me.jacoblewis.jklcore.components.recyclerview.IdItem
 
-class PaymentCategory : IdItem<Long> {
+class PaymentCategory : IdItem<String> {
 
     @Embedded
     var transaction: Payment? = null
@@ -12,5 +12,5 @@ class PaymentCategory : IdItem<Long> {
     @Relation(parentColumn = "category_id", entityColumn = "id")
     var category: List<Category> = listOf()
 
-    override fun getIdentifier(): Long = transaction?.identifier ?: 0
+    override fun getIdentifier(): String = transaction?.identifier ?: ""
 }

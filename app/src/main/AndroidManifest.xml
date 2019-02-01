@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="me.jacoblewis.dailyexpense">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".dependency.utils.MyApp"
         android:allowBackup="true"
@@ -12,8 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".mainActivity.MainActivity"
-            android:screenOrientation="portrait" >
+        <activity
+            android:name=".mainActivity.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

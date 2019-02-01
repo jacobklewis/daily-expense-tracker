@@ -1,5 +1,6 @@
-package me.jacoblewis.dailyexpense.data
+package me.jacoblewis.dailyexpense.data.daos
 
+import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import me.jacoblewis.dailyexpense.data.models.Category
@@ -15,15 +16,27 @@ interface CategoriesDao {
     @Query("SELECT * FROM categories ORDER BY name ASC")
     fun getAllCategoryPayments(): LiveData<List<CategoryPayments>>
 
+    @WorkerThread
+    @Query("SELECT * FROM categories WHERE needsSync = 1")
+    fun getAllToSync(): List<Category>
+
+    @WorkerThread
     @Update
     fun updateCategories(categories: List<Category>)
 
+    @WorkerThread
     @Update
     fun updateCategory(category: Category)
 
+    @WorkerThread
     @Insert
     fun insertCategory(category: Category): Long
 
+    @WorkerThread
     @Delete
     fun deleteCategory(category: Category)
+
+    @WorkerThread
+    @Query("UPDATE categories SET needsSync = 0")
+    fun setAllSync()
 }
