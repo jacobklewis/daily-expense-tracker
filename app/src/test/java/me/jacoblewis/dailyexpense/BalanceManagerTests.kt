@@ -1,11 +1,12 @@
 package me.jacoblewis.dailyexpense
 
-import android.content.SharedPreferences
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import me.jacoblewis.dailyexpense.commons.DateHelper
-import me.jacoblewis.dailyexpense.data.PaymentsDao
+import me.jacoblewis.dailyexpense.data.daos.BudgetsDao
+import me.jacoblewis.dailyexpense.data.daos.PaymentsDao
+import me.jacoblewis.dailyexpense.data.models.Budget
 import me.jacoblewis.dailyexpense.data.models.Payment
 import me.jacoblewis.dailyexpense.data.models.PaymentCategory
 import me.jacoblewis.dailyexpense.managers.BalanceManager
@@ -14,7 +15,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers.any
+import org.mockito.ArgumentMatchers
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Mockito.verify
@@ -31,7 +32,7 @@ class BalanceManagerTests {
     @Mock
     lateinit var mockedPaymentsDao: PaymentsDao
     @Mock
-    lateinit var mockedSP: SharedPreferences
+    lateinit var mockedBudgetsDao: BudgetsDao
 
     // Constants
     val timeZone = TimeZone.getTimeZone("CST")
@@ -41,8 +42,7 @@ class BalanceManagerTests {
 
     @Before
     fun prepareTests() {
-        Mockito.`when`(mockedSP.getString("budget", "500")).thenReturn("500")
-        balanceManager = BalanceManager(mockedPaymentsDao, mockedSP)
+        Mockito.`when`(mockedBudgetsDao.getBudgetForMonth(ArgumentMatchers.anyInt(), ArgumentMatchers.anyInt())).thenReturn(Budget(500f, 0, 0))
     }
 
     @Test
@@ -55,7 +55,8 @@ class BalanceManagerTests {
 
         val observer: Observer<Float> = Mockito.mock(getClazz())
 
-        balanceManager.fetchDailyBalance(date, timeZone).observeForever(observer)
+        balanceManager = BalanceManager(mockedPaymentsDao, mockedBudgetsDao, date, timeZone)
+        balanceManager.fetchDailyBalance().observeForever(observer)
 
         // $500 / 16 days remaining. No payments
         verify(observer).onChanged(31.25f)
@@ -73,7 +74,8 @@ class BalanceManagerTests {
 
         val observer: Observer<Float> = Mockito.mock(getClazz())
 
-        balanceManager.fetchDailyBalance(date, timeZone).observeForever(observer)
+        balanceManager = BalanceManager(mockedPaymentsDao, mockedBudgetsDao, date, timeZone)
+        balanceManager.fetchDailyBalance().observeForever(observer)
 
         // ($500-$50) / 16 days remaining.
         verify(observer).onChanged(28.125f)
@@ -91,7 +93,8 @@ class BalanceManagerTests {
 
         val observer: Observer<Float> = Mockito.mock(getClazz())
 
-        balanceManager.fetchDailyBalance(date, timeZone).observeForever(observer)
+        balanceManager = BalanceManager(mockedPaymentsDao, mockedBudgetsDao, date, timeZone)
+        balanceManager.fetchDailyBalance().observeForever(observer)
 
         // ($500-$100) / 16 days remaining. Each day is independent
         verify(observer).onChanged(25f)
@@ -110,7 +113,8 @@ class BalanceManagerTests {
 
         val observer: Observer<Float> = Mockito.mock(getClazz())
 
-        balanceManager.fetchDailyBalance(date, timeZone).observeForever(observer)
+        balanceManager = BalanceManager(mockedPaymentsDao, mockedBudgetsDao, date, timeZone)
+        balanceManager.fetchDailyBalance().observeForever(observer)
 
         // $500 / 16 days remaining. $25 payment on
         verify(observer).onChanged(6.25f)
@@ -129,7 +133,8 @@ class BalanceManagerTests {
 
         val observer: Observer<Float> = Mockito.mock(getClazz())
 
-        balanceManager.fetchDailyBalance(date, timeZone).observeForever(observer)
+        balanceManager = BalanceManager(mockedPaymentsDao, mockedBudgetsDao, date, timeZone)
+        balanceManager.fetchDailyBalance().observeForever(observer)
 
         // ($500-$10) / 16 days remaining. $10 payment on
         verify(observer).onChanged(20.625f)

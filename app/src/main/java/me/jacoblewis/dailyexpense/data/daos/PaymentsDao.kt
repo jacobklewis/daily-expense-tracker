@@ -1,5 +1,6 @@
-package me.jacoblewis.dailyexpense.data
+package me.jacoblewis.dailyexpense.data.daos
 
+import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
@@ -20,9 +21,19 @@ interface PaymentsDao {
     @Query("SELECT * FROM payments WHERE creation_date >= :date ORDER BY creation_date DESC")
     fun getAllPaymentsSince(date: Calendar): LiveData<List<PaymentCategory>>
 
+    @WorkerThread
+    @Query("SELECT * FROM payments WHERE needsSync = 1")
+    fun getAllToSync(): List<Payment>
+
+    @WorkerThread
+    @Query("DELETE FROM payments WHERE category_id = :categoryId")
+    fun deleteByCategory(categoryId: String)
+
+    @WorkerThread
     @Insert
     fun insertPayment(payment: Payment)
 
-    @Query("DELETE FROM payments WHERE category_id = :categoryId")
-    fun deleteByCategory(categoryId: Long)
+    @WorkerThread
+    @Query("UPDATE payments SET needsSync = 0")
+    fun setAllSync()
 }

@@ -65,7 +65,7 @@ class MainFragment : RootFragment(R.layout.fragment_main_content), ItemDelegate<
 
         viewModel.payments.observe(this, Observer {
             if (it != null) {
-                val items: MutableList<IdItem<Long>> = mutableListOf()
+                val items: MutableList<IdItem<*>> = mutableListOf()
                 items.add(Stats(it.second))
                 items.addAll(it.first)
                 paymentAdapter.updateItems(items)

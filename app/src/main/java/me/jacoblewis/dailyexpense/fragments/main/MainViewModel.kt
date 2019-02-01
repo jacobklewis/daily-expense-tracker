@@ -1,6 +1,5 @@
 package me.jacoblewis.dailyexpense.fragments.main
 
-import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -15,13 +14,13 @@ import javax.inject.Inject
 
 class MainViewModel
 @Inject
-constructor(val db: BalancesDB, val balanceManager: BalanceManager, val sp: SharedPreferences) : ViewModel() {
+constructor(val db: BalancesDB, val balanceManager: BalanceManager) : ViewModel() {
     private val currentDayOfMonth: MutableLiveData<Int> = MutableLiveData()
     val payments: LiveData<Pair<List<PaymentCategory>, Float>> = Transformations.map(db.paymentsDao().getAllPaymentsSince(DateHelper.firstDayOfMonth(Date(), TimeZone.getDefault())))
     {
-        Pair(it, BudgetBalancer.calculateRemainingBudget(BudgetBalancer.budgetFromSharedPrefs(sp), it.mapNotNull { p -> p.transaction }))
+        Pair(it, BudgetBalancer.calculateRemainingBudget(balanceManager.currentBudget, it.mapNotNull { p -> p.transaction }))
     }
-  
+
     val dailyBalance: LiveData<Float> = Transformations.switchMap(currentDayOfMonth) {
         balanceManager.fetchDailyBalance()
     }
