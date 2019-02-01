@@ -7,8 +7,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import me.jacoblewis.dailyexpense.commons.PREFS_SETTINGS
-import me.jacoblewis.dailyexpense.data.BalancesDB
-import me.jacoblewis.dailyexpense.data.PaymentsDao
+import me.jacoblewis.dailyexpense.data.daos.BudgetsDao
+import me.jacoblewis.dailyexpense.data.daos.PaymentsDao
 import me.jacoblewis.dailyexpense.managers.BalanceManager
 import me.jacoblewis.jklcore.Tools
 import javax.inject.Singleton
@@ -39,8 +39,8 @@ class AppModule(private val application: Application) {
 
     @Provides
     @Reusable
-    internal fun provides(paymentsDao: PaymentsDao, sp: SharedPreferences): BalanceManager {
-        return BalanceManager(paymentsDao, sp)
+    internal fun provides(paymentsDao: PaymentsDao, budgetsDao: BudgetsDao): BalanceManager {
+        return BalanceManager(paymentsDao, budgetsDao)
     }
 
 }

@@ -5,8 +5,9 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import me.jacoblewis.dailyexpense.data.BalancesDB
-import me.jacoblewis.dailyexpense.data.CategoriesDao
-import me.jacoblewis.dailyexpense.data.PaymentsDao
+import me.jacoblewis.dailyexpense.data.daos.BudgetsDao
+import me.jacoblewis.dailyexpense.data.daos.CategoriesDao
+import me.jacoblewis.dailyexpense.data.daos.PaymentsDao
 import javax.inject.Singleton
 
 @Module
@@ -26,5 +27,10 @@ class DBModule(private val application: Application) {
     @Provides
     internal fun providesCategoriesDao(db: BalancesDB): CategoriesDao {
         return db.categoriesDao()
+    }
+
+    @Provides
+    internal fun providesBudgetsDao(db: BalancesDB): BudgetsDao {
+        return db.budgetsDao()
     }
 }

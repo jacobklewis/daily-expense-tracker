@@ -36,6 +36,18 @@ jobs:
           name: Download Dependencies
           command: ./gradlew androidDependencies
 
+      - run:
+          name: Add Google Services File
+          command: echo $googleservices | base64 --decode > app/google-services.json
+
+      - run:
+          name: Add Keystore File
+          command: echo $keystore | base64 --decode > mykeystore
+
+      - run:
+          name: Replace Gradle Properties File
+          command: echo $gradleprops | base64 --decode > gradle.properties
+
       - run: ./gradlew clean build -x test --info
 
       - save_cache:
@@ -54,4 +66,9 @@ jobs:
           
       - store_test_results:
           path: app/build/test-results
+
+      # Assemble Release
+      - run:
+          name: Assemble Release
+          command: ./gradlew assembleRelease
 

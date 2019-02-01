@@ -12,7 +12,9 @@ import me.jacoblewis.dailyexpense.fragments.enterCategory.EnterCategoryDialogFra
 import me.jacoblewis.dailyexpense.fragments.enterPayment.EnterPaymentFragment
 import me.jacoblewis.dailyexpense.fragments.main.MainFragment
 import me.jacoblewis.dailyexpense.fragments.settings.SettingsFragment
+import me.jacoblewis.dailyexpense.fragments.settings.SettingsUIFragment
 import me.jacoblewis.dailyexpense.mainActivity.MainActivity
+import me.jacoblewis.dailyexpense.managers.SyncManager
 import javax.inject.Singleton
 
 /**
@@ -30,4 +32,5 @@ interface AppComponent {
     fun inject(obj: ChooseCategoryFragment)
     fun inject(obj: EnterCategoryDialogFragment)
     fun inject(obj: SettingsFragment)
+    fun inject(obj: SettingsUIFragment)
 }

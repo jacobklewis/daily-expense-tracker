@@ -143,6 +143,45 @@ infix fun Date.formatAs(pattern: String): String {
     return SimpleDateFormat(pattern, Locale.getDefault()).format(this)
 }
 
+// Optional Conditional Chaining
+
+/**
+ * Continue to return non-null object as long as block is true
+ */
+inline fun <T> T.and(block: (T) -> Boolean): T? {
+    return if (block(this)) this else null
+}
+
+inline fun <R, A> ifAll(a: A?, block: (A) -> R?): R? {
+    return if (a != null) {
+        block(a)
+    } else null
+}
+
+inline fun <R, A, B> ifAll(a: A?, b: B?, block: (A, B) -> R?): R? {
+    return if (a != null && b != null) {
+        block(a, b)
+    } else null
+}
+
+inline fun <R, A, B, C> ifAll(a: A?, b: B?, c: C?, block: (A, B, C) -> R?): R? {
+    return if (a != null && b != null && c != null) {
+        block(a, b, c)
+    } else null
+}
+
+inline fun <R, A, B, C, D> ifAll(a: A?, b: B?, c: C?, d: D?, block: (A, B, C, D) -> R?): R? {
+    return if (a != null && b != null && c != null && d != null) {
+        block(a, b, c, d)
+    } else null
+}
+
+inline fun <R, A, B, C, D, E> ifAll(a: A?, b: B?, c: C?, d: D?, e: E?, block: (A, B, C, D, E) -> R?): R? {
+    return if (a != null && b != null && c != null && d != null && e != null) {
+        block(a, b, c, d, e)
+    } else null
+}
+
 fun wait(millis: Long, block: () -> Unit) = GlobalScope.launch(Dispatchers.Main) {
     delay(millis)
     block()
