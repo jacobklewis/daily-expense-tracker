@@ -33,10 +33,6 @@ jobs:
          command: sudo chmod +x ./gradlew
 
       - run:
-          name: Download Dependencies
-          command: ./gradlew androidDependencies
-
-      - run:
           name: Add Google Services File
           command: echo $googleservices | base64 --decode > app/google-services.json
 
@@ -47,6 +43,10 @@ jobs:
       - run:
           name: Replace Gradle Properties File
           command: echo $gradleprops | base64 --decode > gradle.properties
+
+      - run:
+          name: Download Dependencies
+          command: ./gradlew androidDependencies
 
       - run: ./gradlew clean build -x test --info
 
