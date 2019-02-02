@@ -72,3 +72,10 @@ jobs:
           name: Assemble Release
           command: ./gradlew assembleRelease
 
+      - run:
+          name: Add Publish Key File
+          command: echo publishkey | base64 --decode > app/my-publish-key.json
+
+      - run:
+          name: Submit Update To Internal
+          command: ./gradlew publishBundle
