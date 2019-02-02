@@ -120,6 +120,7 @@ play {
     track = "internal"
     releaseStatus = "completed"
     defaultToAppBundles = true
+    resolutionStrategy = "auto"
 }
 
 apply plugin: 'kotlin-android-extensions'
