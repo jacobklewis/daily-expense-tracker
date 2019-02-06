@@ -7,9 +7,22 @@
     <string name="title_create_category">Create Category</string>
     <string name="title_edit_category">Edit Category</string>
     <string name="label_save">Save</string>
+    <string name="label_delete">Delete</string>
     <string name="label_cancel">Cancel</string>
     <string name="label_lock">Lock</string>
     <string name="label_overall_budget">overall remaining monthly budget</string>
+
+    <!-- Number Pad -->
+    <string name="label_num0">0</string>
+    <string name="label_num1">1</string>
+    <string name="label_num2">2</string>
+    <string name="label_num3">3</string>
+    <string name="label_num4">4</string>
+    <string name="label_num5">5</string>
+    <string name="label_num6">6</string>
+    <string name="label_num7">7</string>
+    <string name="label_num8">8</string>
+    <string name="label_num9">9</string>
 
     <!-- Filler Text -->
     <string name="filler_label">Lorem ipsum</string>

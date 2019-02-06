@@ -27,10 +27,162 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <me.jacoblewis.dailyexpense.ui.components.dynamicnumberpad.DynamicNumberPadView
-            android:id="@+id/number_pad"
+        <TextView
+            android:id="@+id/text_final_input"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="150dp"
+            android:layout_marginEnd="8dp"
+            android:textAlignment="center"
+            android:textSize="72sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="$0.00" />
 
+        <Button
+            android:id="@+id/btn_num1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/margin_keyboard"
+            android:layout_marginTop="50dp"
+            android:text="@string/label_num1"
+            app:layout_constraintBottom_toTopOf="@+id/btn_num4"
+            app:layout_constraintEnd_toStartOf="@+id/btn_num2"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_final_input" />
+
+        <Button
+            android:id="@+id/btn_num2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="50dp"
+            android:text="@string/label_num2"
+            app:layout_constraintBottom_toTopOf="@+id/btn_num5"
+            app:layout_constraintEnd_toStartOf="@+id/btn_num3"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btn_num1"
+            app:layout_constraintTop_toBottomOf="@+id/text_final_input" />
+
+        <Button
+            android:id="@+id/btn_num3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="@dimen/margin_keyboard"
+            android:text="@string/label_num3"
+            app:layout_constraintBottom_toTopOf="@+id/btn_num6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btn_num2"
+            app:layout_constraintTop_toBottomOf="@+id/text_final_input" />
+
+        <Button
+            android:id="@+id/btn_num4"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/margin_keyboard"
+            android:text="@string/label_num4"
+            app:layout_constraintBottom_toTopOf="@+id/btn_num7"
+            app:layout_constraintEnd_toStartOf="@+id/btn_num5"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_num1" />
+
+        <Button
+            android:id="@+id/btn_num5"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="@string/label_num5"
+            app:layout_constraintBottom_toTopOf="@+id/btn_num8"
+            app:layout_constraintEnd_toStartOf="@+id/btn_num6"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btn_num4"
+            app:layout_constraintTop_toBottomOf="@+id/btn_num2" />
+
+        <Button
+            android:id="@+id/btn_num6"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="@dimen/margin_keyboard"
+            android:text="@string/label_num6"
+            app:layout_constraintBottom_toTopOf="@+id/btn_num9"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btn_num5"
+            app:layout_constraintTop_toBottomOf="@+id/btn_num3" />
+
+        <Button
+            android:id="@+id/btn_num7"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/margin_keyboard"
+            android:text="@string/label_num7"
+            app:layout_constraintBottom_toTopOf="@+id/btn_num0"
+            app:layout_constraintEnd_toStartOf="@+id/btn_num8"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_num4" />
+
+        <Button
+            android:id="@+id/btn_num8"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="@string/label_num8"
+            app:layout_constraintBottom_toTopOf="@+id/btn_num0"
+            app:layout_constraintEnd_toStartOf="@+id/btn_num9"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btn_num7"
+            app:layout_constraintTop_toBottomOf="@+id/btn_num5" />
+
+        <Button
+            android:id="@+id/btn_num9"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="@dimen/margin_keyboard"
+            android:text="@string/label_num9"
+            app:layout_constraintBottom_toTopOf="@+id/btn_num0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btn_num8"
+            app:layout_constraintTop_toBottomOf="@+id/btn_num6" />
+
+        <Button
+            android:id="@+id/btn_del"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/margin_keyboard"
+            android:layout_marginBottom="40dp"
+            android:text="@string/label_delete"
+            android:textColor="@color/colorDanger"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_num0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_num7" />
+
+        <Button
+            android:id="@+id/btn_num0"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="40dp"
+            android:text="@string/label_num0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_next"
+            app:layout_constraintStart_toEndOf="@+id/btn_del"
+            app:layout_constraintTop_toBottomOf="@+id/btn_num8" />
+
+        <Button
+            android:id="@+id/btn_next"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="@dimen/margin_keyboard"
+            android:layout_marginBottom="40dp"
+            android:text="@string/label_save"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btn_num8"
+            app:layout_constraintTop_toBottomOf="@+id/btn_num9" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

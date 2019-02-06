@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#004D40</color>
     <color name="colorAccent">#0091EA</color>
 
+    <color name="colorDanger">#B71C1C</color>
+
     <color name="trans_ee_white">#EEFFFFFF</color>
     <color name="trans_ee_black">#EE000000</color>
     <color name="trans_99_black">#99000000</color>
