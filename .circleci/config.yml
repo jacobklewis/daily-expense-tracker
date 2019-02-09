@@ -30,12 +30,20 @@ jobs:
         command: sudo chmod +x ./gradlew
 
     - run:
+        name: Add Keystore File
+        command: echo $keystore | base64 --decode > app/mykeystore
+
+    - run:
         name: Add Google Services File
         command: echo $googleservices | base64 --decode > app/google-services.json
 
     - run:
         name: Replace Gradle Properties File
         command: echo $gradleprops | base64 --decode > gradle.properties
+
+    - run:
+        name: Add Publish Key File
+        command: echo $publishkey | base64 --decode > app/my-publish-key.json
 
     - run:
         name: Download Dependencies
@@ -47,6 +55,11 @@ jobs:
         paths:
         - ~/.gradle
         key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+
+    # Assemble Release
+    - run:
+        name: Assemble Release
+        command: ./gradlew assembleRelease
 
     - persist_to_workspace:
         # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
@@ -91,11 +104,6 @@ jobs:
     - attach_workspace:
         # Must be absolute path or relative path from working_directory
         at: /repo/workspace
-
-    # Assemble Release
-    - run:
-        name: Assemble Release
-        command: ./gradlew assembleRelease
 
     - run:
         name: Submit Update To Internal
