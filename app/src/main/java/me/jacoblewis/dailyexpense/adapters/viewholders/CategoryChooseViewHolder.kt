@@ -16,14 +16,17 @@ class CategoryChooseViewHolder(viewGroup: ViewGroup, val budget: Float) : RBRecy
     lateinit var categoryTextView: TextView
     @BindView(R.id.txt_balance)
     lateinit var balanceTextView: TextView
+    @BindView(R.id.txt_category_payments)
+    lateinit var numOfPaymentsTextView: TextView
 
     init {
         ButterKnife.bind(this, itemView)
     }
 
     override fun setUpView(itemView: View, item: Category, position: Int, delegate: ItemDelegate<Category>) {
-        categoryTextView.text = item.name
+        categoryTextView.text = item.name.toUpperCase()
         balanceTextView.text = item.payments.map { it.cost }.sum().asCurrency
+        numOfPaymentsTextView.text = itemView.context.getString(R.string.label_x_linked_payments, item.payments.size)
     }
 
     override fun onClick(itemView: View, item: Category, position: Int, delegate: ItemDelegate<Category>?) {

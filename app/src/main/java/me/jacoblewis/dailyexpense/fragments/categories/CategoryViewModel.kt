@@ -5,7 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.jacoblewis.dailyexpense.commons.BudgetBalancer
 import me.jacoblewis.dailyexpense.data.daos.CategoriesDao
@@ -37,25 +38,27 @@ constructor(val categoriesDao: CategoriesDao, val paymentsDao: PaymentsDao, bala
             BudgetBalancer.calculateRemainingBudget(budget, payments.mapNotNull { it.transaction })
         }
     }
+    var associatedPayment: Payment? = null
+
 
     fun updateCategoryDate(calendar: Calendar) {
         fromDate.value = calendar
     }
 
-    fun updateCategories(categories: List<Category>) {
-        GlobalScope.launch {
-            categoriesDao.updateCategories(categories)
+    fun applyCategoryToPayment(category: Category) {
+        associatedPayment?.categoryId = category.categoryId
+    }
+
+    fun commitPayment(scope: CoroutineScope) {
+        associatedPayment?.let {
+            scope.launch(context = Dispatchers.IO) {
+                paymentsDao.insertPayment(it)
+            }
         }
     }
 
-    fun savePayment(payment: Payment) {
-        GlobalScope.launch {
-            paymentsDao.insertPayment(payment)
-        }
-    }
-
-    fun removeCategory(category: Category) {
-        GlobalScope.launch {
+    fun removeCategory(scope: CoroutineScope, category: Category) {
+        scope.launch(context = Dispatchers.IO) {
             try {
                 paymentsDao.deleteByCategory(categoryId = category.categoryId)
                 categoriesDao.deleteCategory(category)

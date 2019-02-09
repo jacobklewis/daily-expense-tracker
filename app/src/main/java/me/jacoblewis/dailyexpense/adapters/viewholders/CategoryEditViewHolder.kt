@@ -21,8 +21,8 @@ class CategoryEditViewHolder(viewGroup: ViewGroup) : RBRecyclerViewHolder<Catego
     }
 
     override fun setUpView(itemView: View, item: Category, position: Int, delegate: ItemDelegate<Category>) {
-        categoryTextView.text = item.name
-        categoryPaymentsTextView.text = "${item.payments.size} linked payments"
+        categoryTextView.text = item.name.toUpperCase()
+        categoryPaymentsTextView.text = itemView.context.getString(R.string.label_x_linked_payments, item.payments.size)
     }
 
     override fun onClick(itemView: View, item: Category, position: Int, delegate: ItemDelegate<Category>?) {
