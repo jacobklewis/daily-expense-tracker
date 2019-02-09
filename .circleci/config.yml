@@ -66,7 +66,7 @@ jobs:
         # taken to be the root directory of the workspace.
         root: ~/repo
         paths:
-        - *
+        - build
 
   test:
     executor: my-executor
@@ -76,9 +76,7 @@ jobs:
       TERM: dumb
 
     steps:
-    - attach_workspace:
-        # Must be absolute path or relative path from working_directory
-        at: ~/repo/build
+    - checkout
 
     # run tests!
     - run:
@@ -100,6 +98,8 @@ jobs:
       TERM: dumb
 
     steps:
+    - checkout
+    
     - attach_workspace:
         # Must be absolute path or relative path from working_directory
         at: ~/repo/build
