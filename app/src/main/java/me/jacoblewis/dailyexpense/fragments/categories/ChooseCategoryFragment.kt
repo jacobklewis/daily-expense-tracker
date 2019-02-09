@@ -44,10 +44,12 @@ class ChooseCategoryFragment : RootFragment(R.layout.fragment_category_content),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        viewModel.associatedPayment = arguments?.get(ARG_PAYMENT) as? Payment
     }
 
     override fun onViewBound(view: View) {
-        toolbar.title = "Payment Category"
+        val currentPayment = (viewModel.associatedPayment?.cost ?: 0f).asCurrency
+        toolbar.title = "$currentPayment - Payment Category"
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -72,9 +74,8 @@ class ChooseCategoryFragment : RootFragment(R.layout.fragment_category_content),
 
     override fun onItemClicked(item: Any) {
         if (item is Category) {
-            val payment: Payment = arguments?.get(ARG_PAYMENT) as? Payment ?: Payment(0f)
-            payment.categoryId = item.categoryId
-            viewModel.savePayment(payment)
+            viewModel.applyCategoryToPayment(item)
+            viewModel.commitPayment(coroutineScope)
 
             navigationController.navigateTo(NavScreen.Main)
         }

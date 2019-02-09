@@ -19,6 +19,6 @@ class EnterInputManager(private var value: Float = 0f) {
     }
 
     fun removeDigit() {
-        applyValue(((value * 100).toInt() / 10) / 100f)
+        applyValue(((value * 100).toLong() / 10) / 100f)
     }
 }
