@@ -77,6 +77,8 @@ jobs:
     - attach_workspace:
         # Must be absolute path or relative path from working_directory
         at: /repo/build
+        paths:
+        - outputs
 
     # run tests!
     - run:
