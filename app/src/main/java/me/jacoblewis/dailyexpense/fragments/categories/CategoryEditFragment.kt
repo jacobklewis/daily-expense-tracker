@@ -54,7 +54,7 @@ class CategoryEditFragment : RootFragment(R.layout.fragment_category_content), I
                     .setAction("Confirm Delete") {
                         val item = categoryAdapter.itemList[pos]
                         if (item is Category) {
-                            viewModel.removeCategory(item)
+                            viewModel.removeCategory(coroutineScope, item)
                         }
                     }.show()
         }

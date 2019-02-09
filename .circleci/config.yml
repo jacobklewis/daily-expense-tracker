@@ -3,79 +3,116 @@
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
 version: 2
-jobs:
-  build:
+executors:
+  my-executor:
     docker:
-      # specify the version you desire here
-      - image: circleci/android:api-28-alpha
-      
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
-
+    # specify the version you desire here
+    - image: circleci/android:api-28-alpha
     working_directory: ~/repo
 
+jobs:
+  build:
     environment:
       # Customize the JVM maximum heap limit
       JVM_OPTS: -Xmx3200m
       TERM: dumb
-    
+
     steps:
-      - checkout
+    - checkout
 
-      # Download and cache dependencies
-      - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+    # Download and cache dependencies
+    - restore_cache:
+        key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
 
-      - run:
-         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
-         command: sudo chmod +x ./gradlew
+    - run:
+        name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
+        command: sudo chmod +x ./gradlew
 
-      - run:
-          name: Add Google Services File
-          command: echo $googleservices | base64 --decode > app/google-services.json
+    - run:
+        name: Add Google Services File
+        command: echo $googleservices | base64 --decode > app/google-services.json
 
-      - run:
-          name: Add Keystore File
-          command: echo $keystore | base64 --decode > app/mykeystore
+    - run:
+        name: Replace Gradle Properties File
+        command: echo $gradleprops | base64 --decode > gradle.properties
 
-      - run:
-          name: Replace Gradle Properties File
-          command: echo $gradleprops | base64 --decode > gradle.properties
+    - run:
+        name: Download Dependencies
+        command: ./gradlew androidDependencies
 
-      - run:
-          name: Add Publish Key File
-          command: echo $publishkey | base64 --decode > app/my-publish-key.json
+    - run: ./gradlew clean build -x test --info
 
-      - run:
-          name: Download Dependencies
-          command: ./gradlew androidDependencies
+    - save_cache:
+        paths:
+        - ~/.gradle
+        key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
 
-      - run: ./gradlew clean build -x test --info
+    - persist_to_workspace:
+        # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
+        # taken to be the root directory of the workspace.
+        root: workspace
+        # Must be relative path from root
+        paths:
+        - build
 
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
-        
-      # run tests!
-      - run:
-          name: Run Tests
-          command: ./gradlew lint test
+  test:
+    environment:
+      # Customize the JVM maximum heap limit
+      JVM_OPTS: -Xmx3200m
+      TERM: dumb
 
-      - store_artifacts:
-          path: app/build/reports
-          destination: reports
-          
-      - store_test_results:
-          path: app/build/test-results
+    steps:
+    - attach_workspace:
+        # Must be absolute path or relative path from working_directory
+        at: /repo/workspace
 
-      # Assemble Release
-      - run:
-          name: Assemble Release
-          command: ./gradlew assembleRelease
+    # run tests!
+    - run:
+        name: Run Tests
+        command: ./gradlew lint test
 
-      - run:
-          name: Submit Update To Internal
-          command: ./gradlew publishBundle
+    - store_artifacts:
+        path: app/build/reports
+        destination: reports
+
+    - store_test_results:
+        path: app/build/test-results
+
+  publish:
+    environment:
+      # Customize the JVM maximum heap limit
+      JVM_OPTS: -Xmx3200m
+      TERM: dumb
+
+    steps:
+    - attach_workspace:
+        # Must be absolute path or relative path from working_directory
+        at: /repo/workspace
+
+    # Assemble Release
+    - run:
+        name: Assemble Release
+        command: ./gradlew assembleRelease
+
+    - run:
+        name: Submit Update To Internal
+        command: ./gradlew publishBundle
+
+workflows:
+  version: 2
+
+  btd:
+    jobs:
+    - build
+    - test:
+        requires:
+        - build
+    - publish:
+        filters:
+          branches:
+            only:
+            - develop
+            - master
+        requires:
+        - build
+        - test

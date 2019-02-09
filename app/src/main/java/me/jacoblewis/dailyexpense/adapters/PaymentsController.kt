@@ -49,7 +49,7 @@ object PaymentsController {
         }
 
         override fun setUpView(itemView: View, item: PaymentCategory, position: Int, delegate: ItemDelegate<PaymentCategory>?) {
-            categoryTextView.text = if (item.category.isNotEmpty()) item.category[0].name else ""
+            categoryTextView.text = if (item.category.isNotEmpty()) item.category[0].name.toUpperCase() else ""
             costTextView.text = item.transaction?.cost?.asCurrency
             dateTextView.text = Date(item.transaction?.creationDate?.timeInMillis
                     ?: 0) formatAs "MMM, d - h:mm a"
