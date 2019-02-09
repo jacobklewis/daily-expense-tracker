@@ -78,6 +78,10 @@ jobs:
     steps:
     - checkout
 
+    - run:
+        name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
+        command: sudo chmod +x ./gradlew
+
     # run tests!
     - run:
         name: Run Tests
@@ -99,7 +103,11 @@ jobs:
 
     steps:
     - checkout
-    
+
+    - run:
+        name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
+        command: sudo chmod +x ./gradlew
+
     - attach_workspace:
         # Must be absolute path or relative path from working_directory
         at: ~/repo/build
