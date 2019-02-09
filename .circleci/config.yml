@@ -65,8 +65,7 @@ jobs:
         # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
         # taken to be the root directory of the workspace.
         root: ~/repo
-        paths:
-        - build
+        paths: *
 
   test:
     executor: my-executor
