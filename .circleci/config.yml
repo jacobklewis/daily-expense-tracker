@@ -82,6 +82,18 @@ jobs:
         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
         command: sudo chmod +x ./gradlew
 
+    - run:
+        name: Add Keystore File
+        command: echo $keystore | base64 --decode > app/mykeystore
+
+    - run:
+        name: Replace Gradle Properties File
+        command: echo $gradleprops | base64 --decode > gradle.properties
+
+    - run:
+        name: Download Dependencies
+        command: ./gradlew androidDependencies
+
     # run tests!
     - run:
         name: Run Tests
@@ -103,6 +115,14 @@ jobs:
 
     steps:
     - checkout
+
+    - run:
+        name: Add Keystore File
+        command: echo $keystore | base64 --decode > app/mykeystore
+
+    - run:
+        name: Replace Gradle Properties File
+        command: echo $gradleprops | base64 --decode > gradle.properties
 
     - run:
         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
