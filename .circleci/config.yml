@@ -79,6 +79,10 @@ jobs:
     steps:
     - checkout
 
+    # Download and cache dependencies
+    - restore_cache:
+        key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+
     - run:
         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
         command: sudo chmod +x ./gradlew
@@ -130,8 +134,16 @@ jobs:
         command: echo $keystore | base64 --decode > app/mykeystore
 
     - run:
+        name: Add Google Services File
+        command: echo $googleservices | base64 --decode > app/google-services.json
+
+    - run:
         name: Replace Gradle Properties File
         command: echo $gradleprops | base64 --decode > gradle.properties
+
+    - run:
+        name: Add Publish Key File
+        command: echo $publishkey | base64 --decode > app/my-publish-key.json
 
     - run:
         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
@@ -139,7 +151,7 @@ jobs:
 
     - attach_workspace:
         # Must be absolute path or relative path from working_directory
-        at: ~/repo/build
+        at: ~/repo
 
     - run:
         name: Submit Update To Internal
