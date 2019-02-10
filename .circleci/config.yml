@@ -67,6 +67,7 @@ jobs:
         root: ~/repo
         paths:
         - build
+        - .gradle
 
   test:
     executor: my-executor
@@ -85,6 +86,10 @@ jobs:
     - run:
         name: Add Keystore File
         command: echo $keystore | base64 --decode > app/mykeystore
+
+    - run:
+        name: Add Google Services File
+        command: echo $googleservices | base64 --decode > app/google-services.json
 
     - run:
         name: Replace Gradle Properties File
