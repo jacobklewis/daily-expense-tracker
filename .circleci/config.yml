@@ -99,10 +99,6 @@ jobs:
         name: Add Publish Key File
         command: echo $publishkey | base64 --decode > app/my-publish-key.json
 
-    - attach_workspace:
-        # Must be absolute path or relative path from working_directory
-        at: ~/repo/build
-
     - run:
         name: Download Dependencies
         command: ./gradlew androidDependencies
@@ -155,9 +151,7 @@ workflows:
   btd:
     jobs:
     - build
-    - test:
-        requires:
-        - build
+    - test
     - publish:
         filters:
           branches:
