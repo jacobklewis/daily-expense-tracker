@@ -122,7 +122,7 @@ inline fun androidx.fragment.app.Fragment.oCV(@LayoutRes layoutId: Int, containe
     return rootView
 }
 
-val Float.asCurrency: String
+val Number.asCurrency: String
     get() = NumberFormat.getCurrencyInstance().format(this)
 
 val String.fromCurrency: Float
