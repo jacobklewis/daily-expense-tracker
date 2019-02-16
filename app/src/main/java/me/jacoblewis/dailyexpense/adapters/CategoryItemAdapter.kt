@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import me.jacoblewis.dailyexpense.adapters.viewholders.BudgetOverviewViewHolder
 import me.jacoblewis.dailyexpense.adapters.viewholders.CategoryChooseViewHolder
 import me.jacoblewis.dailyexpense.adapters.viewholders.CategoryEditViewHolder
+import me.jacoblewis.dailyexpense.adapters.viewholders.StatPieViewHolder
+import me.jacoblewis.dailyexpense.commons.StatsType
 import me.jacoblewis.dailyexpense.data.BalancesDB
 import me.jacoblewis.dailyexpense.data.models.Stats
 import me.jacoblewis.dailyexpense.managers.BalanceManager
@@ -27,9 +29,12 @@ class CategoryItemAdapter
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): RBRecyclerViewHolder<IdItem<*>, ItemDelegate<Any>?> {
-
+        val item = itemList[i]
         return when {
-            itemList[i] is Stats -> BudgetOverviewViewHolder(viewGroup)
+            item is Stats -> when (item.displayType) {
+                is StatsType.Overview -> BudgetOverviewViewHolder(viewGroup)
+                is StatsType.PieChart -> StatPieViewHolder(viewGroup)
+            }
             editable -> CategoryEditViewHolder(viewGroup)
             else -> CategoryChooseViewHolder(viewGroup, budget)
         } as RBRecyclerViewHolder<IdItem<*>, ItemDelegate<Any>?>

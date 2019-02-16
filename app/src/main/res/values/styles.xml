@@ -16,4 +16,8 @@
         <item name="android:textColor">@color/trans_ee_white</item>
     </style>
 
+    <declare-styleable name="ThinPieChart">
+        <attr name="title" format="string" />
+    </declare-styleable>
+
 </resources>

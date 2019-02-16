@@ -50,7 +50,7 @@ constructor(context: Context, attrs: AttributeSet? = null) : View(context, attrs
         mPaintBlack.color = c1
         mPaintWhite.color = c2
 
-        setColors(intArrayOf(c1, c1, c1), intArrayOf(c1, c2, c2))
+//        setColors(intArrayOf(c1, c1, c1), intArrayOf(c1, c2, c2))
     }
 
     fun setColors(priColor: IntArray, secColor: IntArray) {
@@ -63,7 +63,7 @@ constructor(context: Context, attrs: AttributeSet? = null) : View(context, attrs
     }
 
     fun setLineThickness(thickness: Float) {
-        mPaintWhite.strokeWidth = thickness
+//        mPaintWhite.strokeWidth = thickness
         mPaintBlack.strokeWidth = thickness
 
         for (i in 0..2) {
@@ -72,8 +72,8 @@ constructor(context: Context, attrs: AttributeSet? = null) : View(context, attrs
         }
     }
 
-    internal fun dp2px(dp: Float): Float {
-        return dp * density
+    internal fun dp2px(dp: Number): Float {
+        return dp.toFloat() * density
     }
 
     internal val Number.dp: Float
@@ -94,13 +94,22 @@ constructor(context: Context, attrs: AttributeSet? = null) : View(context, attrs
      * Helper functions
      */
     internal fun printLabel(canvas: Canvas, t1: String, t2: String, tx: Float, ty: Float, textColor: Paint) {
+        val orgiSize = textColor.textSize
         textColor.getTextBounds(t1, 0, t1.length - 1, text1r)
+        textColor.textSize *= 0.75f
         textColor.getTextBounds(t2, 0, t2.length - 1, text2r)
+        textColor.textSize = orgiSize
+
+
 
         text1r.offset((tx - text1r.centerX()).toInt(), ty.toInt())
         text1r.inset((-textColor.textSize).toInt(), (-textColor.textSize).toInt() / 2)
         text2r.offset((tx - text2r.centerX()).toInt(), (ty + textColor.textSize * 3 / 2).toInt())
         text2r.inset((-textColor.textSize).toInt(), (-textColor.textSize).toInt() / 2)
+
+        if (text1r.width() - text1r.height() < text2r.width()) {
+            text1r.inset(-(text2r.width() - text1r.width() + text1r.height())/2, 0)
+        }
 
         with(label_bg) {
             reset()
@@ -139,7 +148,9 @@ constructor(context: Context, attrs: AttributeSet? = null) : View(context, attrs
         mPaintBlack.alpha = 255
 
         canvas.drawText(t1, tx, ty, textColor)
-        canvas.drawText(t2, tx, ty + textColor.textSize * 3 / 2, textColor)
+        textColor.textSize *= 0.75f
+        canvas.drawText(t2, tx, ty + textColor.textSize * 11 / 5, textColor)
+        textColor.textSize = orgiSize
     }
 
     internal fun printLabel(canvas: Canvas, t1: String, tx: Float, ty: Float, textColor: Paint) {

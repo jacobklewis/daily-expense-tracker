@@ -12,6 +12,7 @@ import me.jacoblewis.dailyexpense.adapters.CategoryItemAdapter
 import me.jacoblewis.dailyexpense.adapters.ItemDelegate
 import me.jacoblewis.dailyexpense.commons.DateHelper
 import me.jacoblewis.dailyexpense.commons.RootFragmentOptions
+import me.jacoblewis.dailyexpense.commons.StatsType
 import me.jacoblewis.dailyexpense.commons.observeBoth
 import me.jacoblewis.dailyexpense.data.models.Stats
 import me.jacoblewis.dailyexpense.dependency.utils.MyApp
@@ -58,7 +59,7 @@ class CategoryOverviewFragment : RootFragment(R.layout.fragment_category_content
         super.onStart()
         observeBoth(viewModel.categories, viewModel.remainingBudget, this) { cats, remainingBudget ->
             val items: MutableList<IdItem<*>> = mutableListOf()
-            items.add(Stats(remainingBudget))
+            items.add(Stats(remainingBudget, cats, StatsType.PieChart))
             items.addAll(cats)
             categoryAdapter.updateItems(items)
         }

@@ -29,7 +29,7 @@ constructor(val categoriesDao: CategoriesDao, val paymentsDao: PaymentsDao, bala
                 categoryPayments.category.apply {
                     payments.addAll(thisMonthsPayments)
                 }
-            }
+            }.sortedByDescending { it.payments.map { p -> p.cost }.sum() }
         }
     }
     val budget = balanceManager.currentBudget
