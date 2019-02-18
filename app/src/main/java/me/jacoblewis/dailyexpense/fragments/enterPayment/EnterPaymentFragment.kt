@@ -74,7 +74,7 @@ class EnterPaymentFragment : RootFragment(R.layout.fragment_enter_payment) {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.enter_payment_menu, menu)
+        inflater.inflate(R.menu.menu_enter_payment, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
