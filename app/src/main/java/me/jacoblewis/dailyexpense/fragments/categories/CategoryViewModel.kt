@@ -1,6 +1,7 @@
 package me.jacoblewis.dailyexpense.fragments.categories
 
 import android.util.Log
+import androidx.annotation.IntRange
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -9,9 +10,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.jacoblewis.dailyexpense.commons.BudgetBalancer
+import me.jacoblewis.dailyexpense.commons.DateHelper
 import me.jacoblewis.dailyexpense.data.daos.CategoriesDao
 import me.jacoblewis.dailyexpense.data.daos.PaymentsDao
 import me.jacoblewis.dailyexpense.data.models.Category
+import me.jacoblewis.dailyexpense.data.models.MonthDisplay
 import me.jacoblewis.dailyexpense.data.models.Payment
 import me.jacoblewis.dailyexpense.managers.BalanceManager
 import java.util.*
@@ -66,6 +69,23 @@ constructor(val categoriesDao: CategoriesDao, val paymentsDao: PaymentsDao, bala
                 // TODO: log somewhere else
                 Log.e("CategoryViewModel", e.localizedMessage)
             }
+        }
+    }
+
+    // TODO: add to a manager
+    fun getPreviousMonths(@IntRange(from = 1, to = 12) numOfMonths: Int,
+                          date: Date = Date(),
+                          timeZone: TimeZone = TimeZone.getDefault()): List<MonthDisplay> {
+        val thisMonth = DateHelper.firstDayOfMonth(date, timeZone)
+        val year = thisMonth.get(Calendar.YEAR)
+        val month = thisMonth.get(Calendar.MONTH)
+        val date = thisMonth.get(Calendar.DATE)
+        return (0..numOfMonths).map { i ->
+            val newCalendar = GregorianCalendar()
+            val newMonth = (month - i) % 12
+            val newYear = if (newMonth > month) year - 1 else year
+            newCalendar.set(newYear, newMonth, date)
+            MonthDisplay(newCalendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()), newCalendar)
         }
     }
 }
