@@ -1,7 +1,12 @@
 package me.jacoblewis.dailyexpense.fragments.categories
 
+import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
+import android.widget.SimpleAdapter
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatSpinner
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
@@ -41,6 +46,11 @@ class CategoryOverviewFragment : RootFragment(R.layout.fragment_category_content
         ViewModelProviders.of(this, viewModelFactory).get(CategoryViewModel::class.java)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onViewBound(view: View) {
         toolbar.title = "Categories"
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
@@ -53,6 +63,19 @@ class CategoryOverviewFragment : RootFragment(R.layout.fragment_category_content
         navigationController.linkToolBarToDrawer(toolbar)
 
         viewModel.updateCategoryDate(DateHelper.firstDayOfMonth(Date(), TimeZone.getDefault()))
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_category_overview, menu)
+        val menuItem = menu.findItem(R.id.spinner)
+        val monthSpinner = menuItem.actionView as AppCompatSpinner
+
+        val data = viewModel.getPreviousMonths(3)
+        val mapped = data.map { mapOf(Pair("title", it.display)) }
+
+        val simpleAdapter = SimpleAdapter(context!!, mapped, android.R.layout.simple_dropdown_item_1line, arrayOf("title"), intArrayOf(android.R.id.text1))
+        monthSpinner.adapter = simpleAdapter
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onStart() {
