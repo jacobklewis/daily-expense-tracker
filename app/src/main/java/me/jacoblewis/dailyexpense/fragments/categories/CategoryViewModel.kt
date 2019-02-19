@@ -85,7 +85,9 @@ constructor(val categoriesDao: CategoriesDao, val paymentsDao: PaymentsDao, bala
             val newMonth = (month - i) % 12
             val newYear = if (newMonth > month) year - 1 else year
             newCalendar.set(newYear, newMonth, date)
-            MonthDisplay(newCalendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()), newCalendar)
+            val monthName = newCalendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())
+            val yearName = newCalendar.get(Calendar.YEAR)
+            MonthDisplay("$monthName $yearName", newCalendar)
         }
     }
 }
