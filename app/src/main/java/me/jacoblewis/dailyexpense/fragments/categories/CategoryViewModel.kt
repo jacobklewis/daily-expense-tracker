@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.jacoblewis.dailyexpense.commons.BudgetBalancer
 import me.jacoblewis.dailyexpense.commons.DateHelper
+import me.jacoblewis.dailyexpense.commons.DateRange
 import me.jacoblewis.dailyexpense.data.daos.CategoriesDao
 import me.jacoblewis.dailyexpense.data.daos.PaymentsDao
 import me.jacoblewis.dailyexpense.data.models.Category
@@ -24,11 +25,11 @@ class CategoryViewModel
 @Inject
 constructor(val categoriesDao: CategoriesDao, val paymentsDao: PaymentsDao, balanceManager: BalanceManager) : ViewModel() {
 
-    private val fromDate: MutableLiveData<Calendar> = MutableLiveData()
-    val categories: LiveData<List<Category>> = Transformations.switchMap(fromDate) { lowerDate ->
+    private val dateRange: MutableLiveData<DateRange> = MutableLiveData()
+    val categories: LiveData<List<Category>> = Transformations.switchMap(dateRange) { dRange ->
         Transformations.map(categoriesDao.getAllCategoryPayments()) { cats ->
             return@map cats.map { categoryPayments ->
-                val thisMonthsPayments = categoryPayments.payments.filter { payment -> payment.creationDate > lowerDate }
+                val thisMonthsPayments = categoryPayments.payments.filter { payment -> payment.creationDate >= dRange.from && payment.creationDate <= dRange.to }
                 categoryPayments.category.apply {
                     payments.addAll(thisMonthsPayments)
                 }
@@ -36,16 +37,16 @@ constructor(val categoriesDao: CategoriesDao, val paymentsDao: PaymentsDao, bala
         }
     }
     val budget = balanceManager.currentBudget
-    val remainingBudget: LiveData<Float> = Transformations.switchMap(fromDate) { lowerDate ->
-        Transformations.map(paymentsDao.getAllPaymentsSince(lowerDate)) { payments ->
+    val remainingBudget: LiveData<Float> = Transformations.switchMap(dateRange) { dRange ->
+        Transformations.map(paymentsDao.getAllPaymentsBetween(dRange.from, dRange.to)) { payments ->
             BudgetBalancer.calculateRemainingBudget(budget, payments.mapNotNull { it.transaction })
         }
     }
     var associatedPayment: Payment? = null
 
 
-    fun updateCategoryDate(calendar: Calendar) {
-        fromDate.value = calendar
+    fun updateCategoryDate(from: Calendar, to: Calendar = Calendar.getInstance()) {
+        dateRange.value = DateRange(from, to)
     }
 
     fun applyCategoryToPayment(category: Category) {

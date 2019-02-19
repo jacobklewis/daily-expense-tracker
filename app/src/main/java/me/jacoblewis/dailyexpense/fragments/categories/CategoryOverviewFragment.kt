@@ -64,6 +64,13 @@ class CategoryOverviewFragment : RootFragment(R.layout.fragment_category_content
         navigationController.linkToolBarToDrawer(toolbar)
 
         viewModel.updateCategoryDate(DateHelper.firstDayOfMonth(Date(), TimeZone.getDefault()))
+
+        observeBoth(viewModel.categories, viewModel.remainingBudget, this) { cats, remainingBudget ->
+            val items: MutableList<IdItem<*>> = mutableListOf()
+            items.add(Stats(remainingBudget, cats, StatsType.PieChart))
+            items.addAll(cats)
+            categoryAdapter.updateItems(items)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -82,21 +89,12 @@ class CategoryOverviewFragment : RootFragment(R.layout.fragment_category_content
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                viewModel.updateCategoryDate(data[position].calendar)
+                val cal = data[position].calendar
+                viewModel.updateCategoryDate(cal, DateHelper.endOfMonth(cal))
             }
 
         }
         super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        observeBoth(viewModel.categories, viewModel.remainingBudget, this) { cats, remainingBudget ->
-            val items: MutableList<IdItem<*>> = mutableListOf()
-            items.add(Stats(remainingBudget, cats, StatsType.PieChart))
-            items.addAll(cats)
-            categoryAdapter.updateItems(items)
-        }
     }
 
     override fun onItemClicked(item: Any) {
