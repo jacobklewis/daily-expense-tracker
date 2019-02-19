@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
+import android.widget.AdapterView
 import android.widget.SimpleAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatSpinner
@@ -73,8 +74,18 @@ class CategoryOverviewFragment : RootFragment(R.layout.fragment_category_content
         val data = viewModel.getPreviousMonths(3)
         val mapped = data.map { mapOf(Pair("title", it.display)) }
 
-        val simpleAdapter = SimpleAdapter(context!!, mapped, android.R.layout.simple_dropdown_item_1line, arrayOf("title"), intArrayOf(android.R.id.text1))
+        val simpleAdapter = SimpleAdapter(toolbar.context, mapped, android.R.layout.simple_dropdown_item_1line, arrayOf("title"), intArrayOf(android.R.id.text1))
         monthSpinner.adapter = simpleAdapter
+        monthSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                viewModel.updateCategoryDate(data[position].calendar)
+            }
+
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 

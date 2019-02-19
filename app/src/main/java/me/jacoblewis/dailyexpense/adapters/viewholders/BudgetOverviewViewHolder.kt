@@ -22,8 +22,4 @@ class BudgetOverviewViewHolder(viewGroup: ViewGroup) : RBRecyclerViewHolder<Stat
     override fun setUpView(itemView: View, item: Stats, position: Int, delegate: ItemDelegate<Any>) {
         budgetTextView.text = item.budget.asCurrency
     }
-
-    override fun onClick(itemView: View, item: Stats, position: Int, delegate: ItemDelegate<Any>?) {
-        delegate?.onItemClicked(item)
-    }
 }
