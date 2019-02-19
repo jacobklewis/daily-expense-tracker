@@ -34,5 +34,9 @@ data class Category(
     @Ignore
     val payments: MutableList<Payment> = mutableListOf()
 
+    override fun equals(other: Any?): Boolean {
+        return other is Category && payments == other.payments && super.equals(other)
+    }
+
     override fun getIdentifier(): String = categoryId
 }
