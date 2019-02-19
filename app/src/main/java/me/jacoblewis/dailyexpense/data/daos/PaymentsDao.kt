@@ -21,6 +21,10 @@ interface PaymentsDao {
     @Query("SELECT * FROM payments WHERE creation_date >= :date ORDER BY creation_date DESC")
     fun getAllPaymentsSince(date: Calendar): LiveData<List<PaymentCategory>>
 
+    @Transaction
+    @Query("SELECT * FROM payments WHERE creation_date >= :from AND creation_date <= :to ORDER BY creation_date DESC")
+    fun getAllPaymentsBetween(from: Calendar, to: Calendar): LiveData<List<PaymentCategory>>
+
     @WorkerThread
     @Query("SELECT * FROM payments WHERE needsSync = 1")
     fun getAllToSync(): List<Payment>
