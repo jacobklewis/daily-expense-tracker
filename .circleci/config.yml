@@ -67,7 +67,6 @@ jobs:
         root: ~/
         paths:
         - repo/build
-        - .gradle
 
   test:
     executor: my-executor
