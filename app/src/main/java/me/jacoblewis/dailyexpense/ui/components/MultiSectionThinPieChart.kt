@@ -67,7 +67,7 @@ class MultiSectionThinPieChart : AnimationElementBlockView {
         for (i in items.indices) {
             mPaint[1].color = items[i].color
             mPaint[1].strokeWidth = dp2px(30)
-            drawTo += 360f * percentComplete * (items[i].value.toFloat() / totalAmount)
+            drawTo += 360f * percentComplete * (items[i].value.toFloat() / totalAmount) + 0.2f
             mPaint[1].style = Paint.Style.STROKE
             canvas.drawArc(mBoundsF, drawFrom, drawTo - drawFrom, false, mPaint[1])
             val mid = (drawFrom + drawTo) / 2
@@ -78,7 +78,7 @@ class MultiSectionThinPieChart : AnimationElementBlockView {
             } else {
                 printLabel(canvas, items[i].label, items[i].subLabel, x.toFloat(), y.toFloat(), mPaintWhite)
             }
-            drawFrom = drawTo
+            drawFrom = drawTo - 0.2f // We need a little overlap for a better display
         }
 
 

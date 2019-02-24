@@ -80,12 +80,12 @@ constructor(val categoriesDao: CategoriesDao, val paymentsDao: PaymentsDao, bala
         val thisMonth = DateHelper.firstDayOfMonth(date, timeZone)
         val year = thisMonth.get(Calendar.YEAR)
         val month = thisMonth.get(Calendar.MONTH)
-        val date = thisMonth.get(Calendar.DATE)
+        val d = thisMonth.get(Calendar.DATE)
         return (0..numOfMonths).map { i ->
             val newCalendar = GregorianCalendar()
             val newMonth = (month - i) % 12
             val newYear = if (newMonth > month) year - 1 else year
-            newCalendar.set(newYear, newMonth, date)
+            newCalendar.set(newYear, newMonth, d)
             val monthName = newCalendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())
             val yearName = newCalendar.get(Calendar.YEAR)
             MonthDisplay("$monthName $yearName", newCalendar)
