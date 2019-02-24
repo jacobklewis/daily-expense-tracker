@@ -34,6 +34,9 @@ data class Category(
     @Ignore
     val payments: MutableList<Payment> = mutableListOf()
 
+    val totalCost: Float
+        get() = payments.map { p -> p.cost }.sum()
+
     override fun equals(other: Any?): Boolean {
         return other is Category && payments == other.payments && super.equals(other)
     }
