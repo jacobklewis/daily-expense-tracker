@@ -15,7 +15,7 @@ import butterknife.OnClick
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import me.jacoblewis.dailyexpense.R
-import me.jacoblewis.dailyexpense.adapters.CategoryItemAdapter
+import me.jacoblewis.dailyexpense.adapters.GeneralItemAdapter
 import me.jacoblewis.dailyexpense.adapters.ItemDelegate
 import me.jacoblewis.dailyexpense.commons.DateHelper
 import me.jacoblewis.dailyexpense.commons.RootFragmentOptions
@@ -24,6 +24,7 @@ import me.jacoblewis.dailyexpense.dependency.utils.MyApp
 import me.jacoblewis.dailyexpense.extensions.addSwipeListener
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.RootFragment
+import me.jacoblewis.dailyexpense.viewModels.CategoryViewModel
 import javax.inject.Inject
 
 class CategoryEditFragment : RootFragment(R.layout.fragment_category_content), ItemDelegate<Any> {
@@ -34,17 +35,17 @@ class CategoryEditFragment : RootFragment(R.layout.fragment_category_content), I
     }
 
     @Inject
-    lateinit var categoryAdapter: CategoryItemAdapter
+    lateinit var categoryAdapter: GeneralItemAdapter
 
     @BindView(R.id.toolbar)
     lateinit var toolbar: Toolbar
-    @BindView(R.id.recycler_view_category)
+    @BindView(R.id.recycler_view)
     lateinit var recyclerView: RecyclerView
     @BindView(R.id.fab_add_new)
     lateinit var fab: FloatingActionButton
 
     private val viewModel: CategoryViewModel by lazy {
-        ViewModelProviders.of(this, viewModelFactory).get(CategoryViewModel::class.java)
+        ViewModelProviders.of(activity!!, viewModelFactory).get(CategoryViewModel::class.java)
     }
 
     private val removeCategoryListener: (Int) -> Unit = { pos ->

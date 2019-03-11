@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.OnClick
 import me.jacoblewis.dailyexpense.R
-import me.jacoblewis.dailyexpense.adapters.CategoryItemAdapter
+import me.jacoblewis.dailyexpense.adapters.GeneralItemAdapter
 import me.jacoblewis.dailyexpense.adapters.ItemDelegate
 import me.jacoblewis.dailyexpense.commons.DateHelper
 import me.jacoblewis.dailyexpense.commons.RootFragmentOptions
@@ -24,6 +24,7 @@ import me.jacoblewis.dailyexpense.data.models.Stats
 import me.jacoblewis.dailyexpense.dependency.utils.MyApp
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.RootFragment
+import me.jacoblewis.dailyexpense.viewModels.CategoryViewModel
 import me.jacoblewis.jklcore.components.recyclerview.IdItem
 import java.util.*
 import javax.inject.Inject
@@ -36,15 +37,15 @@ class CategoryOverviewFragment : RootFragment(R.layout.fragment_category_content
     }
 
     @Inject
-    lateinit var categoryAdapter: CategoryItemAdapter
+    lateinit var categoryAdapter: GeneralItemAdapter
 
     @BindView(R.id.toolbar)
     lateinit var toolbar: Toolbar
-    @BindView(R.id.recycler_view_category)
+    @BindView(R.id.recycler_view)
     lateinit var recyclerView: RecyclerView
 
     private val viewModel: CategoryViewModel by lazy {
-        ViewModelProviders.of(this, viewModelFactory).get(CategoryViewModel::class.java)
+        ViewModelProviders.of(activity!!, viewModelFactory).get(CategoryViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -9,6 +9,7 @@ import me.jacoblewis.dailyexpense.R
 import me.jacoblewis.dailyexpense.adapters.ItemDelegate
 import me.jacoblewis.dailyexpense.commons.asCurrency
 import me.jacoblewis.dailyexpense.data.models.Category
+import me.jacoblewis.dailyexpense.extensions.asColorInt
 import me.jacoblewis.jklcore.components.recyclerview.RBRecyclerViewHolder
 
 class CategoryChooseViewHolder(viewGroup: ViewGroup, val budget: Float) : RBRecyclerViewHolder<Category, ItemDelegate<Category>>(viewGroup, R.layout.viewholder_category_choose) {
@@ -18,6 +19,8 @@ class CategoryChooseViewHolder(viewGroup: ViewGroup, val budget: Float) : RBRecy
     lateinit var balanceTextView: TextView
     @BindView(R.id.txt_category_payments)
     lateinit var numOfPaymentsTextView: TextView
+    @BindView(R.id.view_color)
+    lateinit var colorView: View
 
     init {
         ButterKnife.bind(this, itemView)
@@ -27,6 +30,7 @@ class CategoryChooseViewHolder(viewGroup: ViewGroup, val budget: Float) : RBRecy
         categoryTextView.text = item.name.toUpperCase()
         balanceTextView.text = item.payments.map { it.cost }.sum().asCurrency
         numOfPaymentsTextView.text = itemView.context.getString(R.string.label_x_linked_payments, item.payments.size)
+        colorView.setBackgroundColor(item.color.asColorInt)
     }
 
     override fun onClick(itemView: View, item: Category, position: Int, delegate: ItemDelegate<Category>?) {

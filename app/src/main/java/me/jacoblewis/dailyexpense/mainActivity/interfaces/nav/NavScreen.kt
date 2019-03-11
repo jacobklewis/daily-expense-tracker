@@ -8,6 +8,7 @@ sealed class NavScreen {
     object Main : NavScreen()
     object Settings : NavScreen()
     object Categories : NavScreen()
+    object Payments : NavScreen()
     object EditCategories : NavScreen()
     object EnterCategory : NavScreen()
     data class EditCategory(val category: Category) : NavScreen()

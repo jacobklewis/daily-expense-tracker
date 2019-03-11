@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity(),
         navView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.menu_item_overview -> navigateTo(NavScreen.Main)
+                R.id.menu_item_payments -> navigateTo(NavScreen.Payments)
                 R.id.menu_item_categories -> navigateTo(NavScreen.Categories)
                 R.id.menu_item_settings -> navigateTo(NavScreen.Settings)
             }

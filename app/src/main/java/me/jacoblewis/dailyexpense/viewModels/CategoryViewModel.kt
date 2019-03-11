@@ -1,4 +1,4 @@
-package me.jacoblewis.dailyexpense.fragments.categories
+package me.jacoblewis.dailyexpense.viewModels
 
 import android.util.Log
 import androidx.annotation.IntRange
