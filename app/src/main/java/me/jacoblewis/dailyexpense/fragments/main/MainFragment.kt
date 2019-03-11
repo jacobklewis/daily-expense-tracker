@@ -100,7 +100,6 @@ class MainFragment : RootFragment(R.layout.fragment_main_content), ItemDelegate<
 
     @OnClick(R.id.fab_add_new)
     fun addNewFabClicked(v: View) {
-//        viewModel.addMockPayment()
         val v2 = view ?: return
         navigationController.navigateTo(NavScreen.EnterPayment(v revealSettingsTo v2))
     }
