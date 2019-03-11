@@ -16,7 +16,7 @@ data class Category(
         var name: String,
 
         @ColumnInfo(name = "color")
-        val color: String,
+        var color: String,
 
         @ColumnInfo(name = "notes")
         val notes: String = "",
