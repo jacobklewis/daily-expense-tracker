@@ -2,10 +2,8 @@ package me.jacoblewis.dailyexpense.data.daos
 
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Transaction
+import androidx.room.*
+import me.jacoblewis.dailyexpense.data.models.Category
 import me.jacoblewis.dailyexpense.data.models.Payment
 import me.jacoblewis.dailyexpense.data.models.PaymentCategory
 import java.util.*
@@ -36,6 +34,10 @@ interface PaymentsDao {
     @WorkerThread
     @Insert
     fun insertPayment(payment: Payment)
+
+    @WorkerThread
+    @Delete
+    fun deletePayment(payment: Payment)
 
     @WorkerThread
     @Query("UPDATE payments SET needsSync = 0")

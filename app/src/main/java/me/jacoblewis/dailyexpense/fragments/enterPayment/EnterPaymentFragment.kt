@@ -22,6 +22,7 @@ import me.jacoblewis.dailyexpense.data.models.Payment
 import me.jacoblewis.dailyexpense.dependency.utils.MyApp
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.RootFragment
+import me.jacoblewis.dailyexpense.viewModels.EnterPaymentViewModel
 
 class EnterPaymentFragment : RootFragment(R.layout.fragment_enter_payment) {
     override val options: RootFragmentOptions = RootFragmentOptions(EnterPaymentFragment::class.java)
