@@ -7,9 +7,9 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import me.jacoblewis.dailyexpense.dependency.utils.ViewModelFactory
 import me.jacoblewis.dailyexpense.dependency.utils.ViewModelKey
-import me.jacoblewis.dailyexpense.fragments.categories.CategoryViewModel
-import me.jacoblewis.dailyexpense.fragments.enterPayment.EnterPaymentViewModel
-import me.jacoblewis.dailyexpense.fragments.main.MainViewModel
+import me.jacoblewis.dailyexpense.viewModels.CategoryViewModel
+import me.jacoblewis.dailyexpense.viewModels.EnterPaymentViewModel
+import me.jacoblewis.dailyexpense.viewModels.PaymentViewModel
 
 /**
  * Created by LEJ4MTP on 3/3/2018.
@@ -22,8 +22,8 @@ abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(MainViewModel::class)
-    abstract fun bindMainViewModel(viewModel: MainViewModel): ViewModel
+    @ViewModelKey(PaymentViewModel::class)
+    abstract fun bindMainViewModel(viewModel: PaymentViewModel): ViewModel
 
     @Binds
     @IntoMap

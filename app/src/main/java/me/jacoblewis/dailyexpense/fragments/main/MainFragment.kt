@@ -5,23 +5,28 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import butterknife.BindView
 import butterknife.OnClick
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.snackbar.Snackbar
 import me.jacoblewis.dailyexpense.R
+import me.jacoblewis.dailyexpense.adapters.GeneralItemAdapter
 import me.jacoblewis.dailyexpense.adapters.ItemDelegate
-import me.jacoblewis.dailyexpense.adapters.PaymentsController
 import me.jacoblewis.dailyexpense.commons.*
 import me.jacoblewis.dailyexpense.data.models.PaymentCategory
 import me.jacoblewis.dailyexpense.data.models.Stats
 import me.jacoblewis.dailyexpense.dependency.utils.MyApp
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.RootFragment
+import me.jacoblewis.dailyexpense.viewModels.CategoryViewModel
+import me.jacoblewis.dailyexpense.viewModels.PaymentViewModel
 import me.jacoblewis.jklcore.components.recyclerview.IdItem
+import java.util.*
+import javax.inject.Inject
 
-class MainFragment : RootFragment(R.layout.fragment_main_content), ItemDelegate<PaymentCategory> {
+class MainFragment : RootFragment(R.layout.fragment_main_content), ItemDelegate<Any> {
     override val options: RootFragmentOptions = RootFragmentOptions(MainFragment::class.java, drawerNavId = R.id.menu_item_overview)
 
     init {
@@ -37,13 +42,17 @@ class MainFragment : RootFragment(R.layout.fragment_main_content), ItemDelegate<
     @BindView(R.id.recycler_view_main)
     lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
 
+    @Inject
+    lateinit var overviewAdapter: GeneralItemAdapter
+
     var appBarLayoutState: State = State.EXPANDED
 
-    private val viewModel: MainViewModel by lazy {
-        ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
+    private val paymentViewModel: PaymentViewModel by lazy {
+        ViewModelProviders.of(activity!!, viewModelFactory).get(PaymentViewModel::class.java)
     }
-
-    private val paymentAdapter: PaymentsController.PaymentItemAdapter by lazy { PaymentsController.createAdapter(context!!, this) as PaymentsController.PaymentItemAdapter }
+    private val categoryViewModel: CategoryViewModel by lazy {
+        ViewModelProviders.of(activity!!, viewModelFactory).get(CategoryViewModel::class.java)
+    }
 
     override fun onViewBound(view: View) {
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
@@ -53,37 +62,39 @@ class MainFragment : RootFragment(R.layout.fragment_main_content), ItemDelegate<
             updateTitle()
         }
 
-        recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
-        recyclerView.adapter = paymentAdapter
+        overviewAdapter.setCallback(this)
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = overviewAdapter
 
         navigationController.linkToolBarToDrawer(toolbar)
+
+        categoryViewModel.updateCategoryDate(DateHelper.firstDayOfMonth(Date(), TimeZone.getDefault()))
+
+        observeBoth(paymentViewModel.payments, categoryViewModel.categories, this) { payments, cats ->
+            val items: MutableList<IdItem<*>> = mutableListOf()
+            // Add our items here
+            items.add(Stats(payments.second))
+            items.add(Stats(payments.second, cats, StatsType.PieChart))
+            overviewAdapter.updateItems(items)
+        }
+
+        paymentViewModel.dailyBalance.observe(this, Observer {
+            updateTitle()
+        })
     }
 
     override fun onStart() {
         super.onStart()
         collapsingToolbarLayout.post { collapsingToolbarLayout.requestLayout() }
-
-        viewModel.payments.observe(this, Observer {
-            if (it != null) {
-                val items: MutableList<IdItem<*>> = mutableListOf()
-                items.add(Stats(it.second))
-                items.addAll(it.first)
-                paymentAdapter.updateItems(items)
-            }
-        })
-
-        viewModel.dailyBalance.observe(this, Observer {
-            updateTitle()
-        })
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.checkCurrentDay()
+        paymentViewModel.checkCurrentDay()
     }
 
     private fun updateTitle() {
-        val dailyBalance = viewModel.dailyBalance.value?.asCurrency
+        val dailyBalance = paymentViewModel.dailyBalance.value?.asCurrency
         if (dailyBalance != null) {
             collapsingToolbarLayout.title = when (appBarLayoutState) {
                 State.COLLAPSED -> "$dailyBalance - Daily Balance"
@@ -94,8 +105,11 @@ class MainFragment : RootFragment(R.layout.fragment_main_content), ItemDelegate<
         }
     }
 
-    override fun onItemClicked(item: PaymentCategory) {
-        Snackbar.make(view!!, "${item.transaction?.cost ?: "N/A"}", Snackbar.LENGTH_SHORT).show()
+    override fun onItemClicked(item: Any) {
+        if (item is PaymentCategory) {
+            Snackbar.make(view!!, "${item.transaction?.cost
+                    ?: "N/A"}", Snackbar.LENGTH_SHORT).show()
+        }
     }
 
     @OnClick(R.id.fab_add_new)

@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.OnClick
 import me.jacoblewis.dailyexpense.R
-import me.jacoblewis.dailyexpense.adapters.CategoryItemAdapter
+import me.jacoblewis.dailyexpense.adapters.GeneralItemAdapter
 import me.jacoblewis.dailyexpense.adapters.ItemDelegate
 import me.jacoblewis.dailyexpense.commons.*
 import me.jacoblewis.dailyexpense.data.models.Category
@@ -19,6 +19,7 @@ import me.jacoblewis.dailyexpense.data.models.Payment
 import me.jacoblewis.dailyexpense.dependency.utils.MyApp
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.RootFragment
+import me.jacoblewis.dailyexpense.viewModels.CategoryViewModel
 import java.util.*
 import javax.inject.Inject
 
@@ -30,15 +31,15 @@ class ChooseCategoryFragment : RootFragment(R.layout.fragment_category_content),
     }
 
     @Inject
-    lateinit var categoryAdapter: CategoryItemAdapter
+    lateinit var categoryAdapter: GeneralItemAdapter
 
     @BindView(R.id.toolbar)
     lateinit var toolbar: Toolbar
-    @BindView(R.id.recycler_view_category)
+    @BindView(R.id.recycler_view)
     lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
 
     private val viewModel: CategoryViewModel by lazy {
-        ViewModelProviders.of(this, viewModelFactory).get(CategoryViewModel::class.java)
+        ViewModelProviders.of(activity!!, viewModelFactory).get(CategoryViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,7 +78,7 @@ class ChooseCategoryFragment : RootFragment(R.layout.fragment_category_content),
             viewModel.applyCategoryToPayment(item)
             viewModel.commitPayment(coroutineScope)
 
-            navigationController.navigateTo(NavScreen.Main)
+            navigationController.navigateTo(NavScreen.Payments)
         }
     }
 

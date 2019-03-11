@@ -5,6 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="72dp">
 
+    <FrameLayout
+        android:id="@+id/view_color"
+        android:layout_width="10dp"
+        android:layout_height="match_parent"
+        android:background="@color/green"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/txt_category"
         android:layout_width="0dp"
@@ -16,7 +25,7 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/txt_category_payments"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/view_color"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Lunch" />
 

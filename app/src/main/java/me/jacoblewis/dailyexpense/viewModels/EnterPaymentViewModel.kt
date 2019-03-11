@@ -1,4 +1,4 @@
-package me.jacoblewis.dailyexpense.fragments.enterPayment
+package me.jacoblewis.dailyexpense.viewModels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel

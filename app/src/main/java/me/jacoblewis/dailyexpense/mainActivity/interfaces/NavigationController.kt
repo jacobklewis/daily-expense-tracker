@@ -10,6 +10,7 @@ import me.jacoblewis.dailyexpense.fragments.categories.ChooseCategoryFragment
 import me.jacoblewis.dailyexpense.fragments.enterCategory.EnterCategoryDialogFragment
 import me.jacoblewis.dailyexpense.fragments.enterPayment.EnterPaymentFragment
 import me.jacoblewis.dailyexpense.fragments.main.MainFragment
+import me.jacoblewis.dailyexpense.fragments.payments.PaymentsFragment
 import me.jacoblewis.dailyexpense.fragments.settings.SettingsFragment
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
 
@@ -23,6 +24,7 @@ interface NavigationController : NavigationHandler {
             is NavScreen.EditCategory -> editCategory(navScreen.category)
             is NavScreen.EnterPayment -> enterPayment(navScreen)
             is NavScreen.Categories -> openCategoriesOverview()
+            is NavScreen.Payments -> openPaymentsOverview()
             is NavScreen.EditCategories -> openEditCategories()
             is NavScreen.ChooseCategory -> chooseCategory(navScreen)
         }
@@ -34,6 +36,10 @@ interface NavigationController : NavigationHandler {
 
     private fun openCategoriesOverview() {
         navTo(CategoryOverviewFragment(), addToBackStack = false, navUpTo = true)
+    }
+
+    private fun openPaymentsOverview() {
+        navTo(PaymentsFragment(), addToBackStack = false, navUpTo = true)
     }
 
     private fun openEditCategories() {

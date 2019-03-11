@@ -14,5 +14,5 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/margin_default"
-        android:src="@drawable/ic_edit" />
+        android:src="@drawable/ic_baseline_add_24px" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

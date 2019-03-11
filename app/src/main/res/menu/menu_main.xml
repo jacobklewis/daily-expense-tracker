@@ -11,6 +11,10 @@
                     android:icon="@drawable/ic_baseline_donut_small_24px"
                     android:title="Overview" />
                 <item
+                    android:id="@+id/menu_item_payments"
+                    android:icon="@drawable/ic_cash"
+                    android:title="Payments" />
+                <item
                     android:id="@+id/menu_item_categories"
                     android:icon="@drawable/ic_baseline_category_24px"
                     android:title="Categories" />
