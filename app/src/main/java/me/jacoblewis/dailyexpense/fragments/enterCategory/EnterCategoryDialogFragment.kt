@@ -55,6 +55,7 @@ class EnterCategoryDialogFragment : androidx.fragment.app.DialogFragment() {
         val titleRes = config?.category?.let { cat ->
             val color = cat.color.asColorInt
             categoryText.setText(cat.name)
+            currentColor = color
             categoryColor.setColor(color)
             previewImage.setColorFilter(color)
             R.string.title_edit_category
