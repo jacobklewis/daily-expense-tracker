@@ -1,6 +1,7 @@
 package me.jacoblewis.dailyexpense.managers
 
 import android.util.Log
+import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import kotlinx.coroutines.*
@@ -34,15 +35,7 @@ class BalanceManager(val paymentsDao: PaymentsDao, val budgetsDao: BudgetsDao, v
             val budget = cachedBudget?.and { it.month == today.get(Calendar.MONTH) }
                     ?: runBlocking {
                         Log.e("Balance Manager", "Pulling Balance from DB")
-
-                        withContext(Dispatchers.IO) {
-                            budgetsDao.getBudgetForMonth(today.get(Calendar.YEAR), today.get(Calendar.MONTH))
-                                    ?: run {
-                                        val newBudget = Budget(500f, today.get(Calendar.YEAR), today.get(Calendar.MONTH))
-                                        budgetsDao.insertBudget(newBudget)
-                                        newBudget
-                                    }
-                        }.also { cachedBudget = it }
+                        getBudgetFromDB(today).also { cachedBudget = it }
                     }
             return budget.amount
         }
@@ -56,4 +49,26 @@ class BalanceManager(val paymentsDao: PaymentsDao, val budgetsDao: BudgetsDao, v
                 budgetsDao.updateBudget(updatedBudget)
             }
         }
+
+    /**
+     * Get this month's budget from the Room DB
+     */
+    private suspend fun getBudgetFromDB(today: Calendar): Budget = withContext(Dispatchers.IO) {
+        budgetsDao.getBudgetForMonth(today.get(Calendar.YEAR), today.get(Calendar.MONTH))
+                ?: createBudgetForThisMonth(today)
+    }
+
+    /**
+     * Create this month's budget and save it to the Room DB
+     */
+    @WorkerThread
+    private fun createBudgetForThisMonth(today: Calendar) = run {
+        // Create New Budget for this month if one does not yet exist
+        // Use last month's budget for this month's budget
+        val lastBudget = budgetsDao.getLastBudget()
+        val newBudget = Budget(lastBudget?.amount
+                ?: 500f, today.get(Calendar.YEAR), today.get(Calendar.MONTH))
+        budgetsDao.insertBudget(newBudget)
+        newBudget
+    }
 }
