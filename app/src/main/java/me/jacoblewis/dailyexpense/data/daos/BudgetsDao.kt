@@ -15,6 +15,9 @@ interface BudgetsDao {
     @Query("SELECT * FROM budgets WHERE year = :year AND month = :month LIMIT 1")
     fun getBudgetForMonth(year: Int, month: Int): Budget?
 
+    @Query("SELECT * FROM budgets ORDER BY year, month DESC LIMIT 1")
+    fun getLastBudget(): Budget?
+
     @WorkerThread
     @Query("SELECT * FROM budgets WHERE needsSync = 1")
     fun getAllToSync(): List<Budget>
