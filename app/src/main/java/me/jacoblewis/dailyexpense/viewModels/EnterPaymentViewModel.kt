@@ -9,7 +9,7 @@ class EnterPaymentViewModel
 @Inject
 constructor() : ViewModel() {
     private val enterInputManager = EnterInputManager()
-    val finalInput: LiveData<Float> = enterInputManager.currentValue
+    val finalInput: LiveData<Double> = enterInputManager.currentValue
 
     fun addDigit(digit: Int) {
         enterInputManager.addDigit(digit)
