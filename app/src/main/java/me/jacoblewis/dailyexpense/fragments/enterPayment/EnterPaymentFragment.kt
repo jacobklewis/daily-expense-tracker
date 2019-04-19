@@ -70,7 +70,7 @@ class EnterPaymentFragment : RootFragment(R.layout.fragment_enter_payment) {
         viewModel.finalInput.observe(this, Observer { payment ->
             finalInputText.text = payment.asCurrency
             // Only have continue button enabled if there is a payment
-            view.findViewById<View>(R.id.btn_next).isEnabled = payment != 0f
+            view.findViewById<View>(R.id.btn_next).isEnabled = payment?.toFloat() != 0f
         })
     }
 
@@ -100,7 +100,7 @@ class EnterPaymentFragment : RootFragment(R.layout.fragment_enter_payment) {
     }
 
     private fun navigateForwards() {
-        navigationController.navigateTo(NavScreen.ChooseCategory(Payment(cost = viewModel.finalInput.value
+        navigationController.navigateTo(NavScreen.ChooseCategory(Payment(cost = viewModel.finalInput.value?.toFloat()
                 ?: 0f)))
     }
 
