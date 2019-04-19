@@ -2,23 +2,23 @@ package me.jacoblewis.dailyexpense.managers
 
 import androidx.lifecycle.MutableLiveData
 
-class EnterInputManager(private var value: Float = 0f) {
-    val currentValue: MutableLiveData<Float> = MutableLiveData()
+class EnterInputManager(private var value: Double = 0.0) {
+    val currentValue: MutableLiveData<Double> = MutableLiveData()
 
     init {
         applyValue(value)
     }
 
-    private fun applyValue(v: Float) {
+    private fun applyValue(v: Double) {
         value = v
         currentValue.postValue(v)
     }
 
     fun addDigit(digit: Int) {
-        applyValue(value * 10 + digit / 100f)
+        applyValue(value * 10 + digit / 100.0)
     }
 
     fun removeDigit() {
-        applyValue(((value * 100).toLong() / 10) / 100f)
+        applyValue(((value * 100).toLong() / 10) / 100.0)
     }
 }
