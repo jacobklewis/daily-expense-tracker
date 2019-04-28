@@ -53,7 +53,7 @@ class CategoryEditFragment : RootFragment(R.layout.fragment_category_content), I
         view?.let { view ->
             Snackbar.make(view, "Are you sure you want to delete?", Snackbar.LENGTH_LONG)
                     .setAction("Confirm Delete") {
-                        val item = categoryAdapter.itemList[pos]
+                        val item = categoryAdapter.currentList[pos]
                         if (item is Category) {
                             viewModel.removeCategory(coroutineScope, item)
                         }
@@ -72,7 +72,7 @@ class CategoryEditFragment : RootFragment(R.layout.fragment_category_content), I
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         fab.setImageIcon(Icon.createWithResource(context, R.drawable.ic_baseline_add_24px))
 
-        categoryAdapter.setCallback(this)
+        categoryAdapter.callback = this
         categoryAdapter.editable = true
         recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
         recyclerView.adapter = categoryAdapter
@@ -86,7 +86,7 @@ class CategoryEditFragment : RootFragment(R.layout.fragment_category_content), I
         super.onStart()
         viewModel.categories.observe(this, Observer {
             if (it != null) {
-                categoryAdapter.updateItems(it)
+                categoryAdapter.submitList(it)
                 categoryAdapter.notifyDataSetChanged()
             }
         })

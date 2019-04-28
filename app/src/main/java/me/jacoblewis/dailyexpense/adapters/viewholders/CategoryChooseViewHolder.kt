@@ -12,7 +12,7 @@ import me.jacoblewis.dailyexpense.data.models.Category
 import me.jacoblewis.dailyexpense.extensions.asColorInt
 import me.jacoblewis.jklcore.components.recyclerview.RBRecyclerViewHolder
 
-class CategoryChooseViewHolder(viewGroup: ViewGroup, val budget: Float) : RBRecyclerViewHolder<Category, ItemDelegate<Category>>(viewGroup, R.layout.viewholder_category_choose) {
+class CategoryChooseViewHolder(viewGroup: ViewGroup, val budget: Float) : RBRecyclerViewHolder<Category, ItemDelegate<Category>>(viewGroup, LAYOUT_TYPE) {
     @BindView(R.id.txt_category)
     lateinit var categoryTextView: TextView
     @BindView(R.id.txt_balance)
@@ -35,5 +35,9 @@ class CategoryChooseViewHolder(viewGroup: ViewGroup, val budget: Float) : RBRecy
 
     override fun onClick(itemView: View, item: Category, position: Int, delegate: ItemDelegate<Category>?) {
         delegate?.onItemClicked(item)
+    }
+
+    companion object {
+        const val LAYOUT_TYPE: Int = R.layout.viewholder_category_choose
     }
 }

@@ -62,7 +62,7 @@ class MainFragment : RootFragment(R.layout.fragment_main_content), ItemDelegate<
             updateTitle()
         }
 
-        overviewAdapter.setCallback(this)
+        overviewAdapter.callback = this
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = overviewAdapter
 
@@ -75,7 +75,7 @@ class MainFragment : RootFragment(R.layout.fragment_main_content), ItemDelegate<
             // Add our items here
             items.add(Stats(payments.second))
             items.add(Stats(payments.second, cats, StatsType.PieChart))
-            overviewAdapter.updateItems(items)
+            overviewAdapter.submitList(items)
         }
 
         paymentViewModel.dailyBalance.observe(this, Observer {

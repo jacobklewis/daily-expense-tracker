@@ -9,4 +9,5 @@ data class Stats(val budget: Float,
                  val displayType: StatsType = StatsType.Overview,
                  val unique: Boolean = false) : IdItem<String> {
     override fun getIdentifier(): String = if (unique) UUID.randomUUID().toString() else "STAT"
+    override fun getHash(): Int = hashCode()
 }

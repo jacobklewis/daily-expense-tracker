@@ -54,13 +54,13 @@ class ChooseCategoryFragment : RootFragment(R.layout.fragment_category_content),
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        categoryAdapter.setCallback(this)
+        categoryAdapter.callback = this
         recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
         recyclerView.adapter = categoryAdapter
 
         viewModel.categories.observe(this, Observer {
             if (it != null) {
-                categoryAdapter.updateItems(it)
+                categoryAdapter.submitList(it)
             }
         })
         viewModel.updateCategoryDate(DateHelper.firstDayOfMonth(Date(), TimeZone.getDefault()))
