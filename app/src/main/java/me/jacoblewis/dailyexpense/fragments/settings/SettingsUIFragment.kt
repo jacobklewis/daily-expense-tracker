@@ -67,20 +67,20 @@ class SettingsUIFragment : PreferenceFragmentCompat() {
 
     override fun onBindPreferences() {
         // Change the summary
-        findPreference<Preference>("budget").setSummaryProvider { balanceManager.currentBudget.asCurrency }
-        findPreference<Preference>("budget").setOnPreferenceChangeListener { preference, newValue ->
+        findPreference<Preference>("budget")?.setSummaryProvider { balanceManager.currentBudget.asCurrency }
+        findPreference<Preference>("budget")?.setOnPreferenceChangeListener { preference, newValue ->
             balanceManager.currentBudget = (newValue as? String ?: "0").toFloat()
             true
         }
 
         // Override Category preference and use our custom one instead
-        findPreference<Preference>("edit_cats").onPreferenceClickListener = Preference.OnPreferenceClickListener {
+        findPreference<Preference>("edit_cats")?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             navigationController.navigateTo(NavScreen.EditCategories)
             return@OnPreferenceClickListener true
         }
 
         // Override Category preference and use our custom one instead
-        findPreference<Preference>("edit_profile").onPreferenceClickListener = Preference.OnPreferenceClickListener {
+        findPreference<Preference>("edit_profile")?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             Toast.makeText(context, "Attempting Sign in...", Toast.LENGTH_SHORT).show()
             val signInIntent = mGoogleSignInClient.signInIntent
             startActivityForResult(signInIntent, 1203)

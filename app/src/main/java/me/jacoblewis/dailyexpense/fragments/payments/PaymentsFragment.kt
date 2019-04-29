@@ -50,7 +50,7 @@ class PaymentsFragment : RootFragment(R.layout.fragment_payments_content), ItemD
         view?.let { view ->
             Snackbar.make(view, "Are you sure you want to delete?", Snackbar.LENGTH_LONG)
                     .setAction("Confirm Delete") {
-                        val item = paymentAdapter.itemList[pos]
+                        val item = paymentAdapter.currentList[pos]
                         if (item is PaymentCategory && item.transaction != null) {
                             viewModel.removePayment(coroutineScope, item.transaction!!)
                         }
@@ -62,7 +62,7 @@ class PaymentsFragment : RootFragment(R.layout.fragment_payments_content), ItemD
         toolbar.title = "Payments"
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
 
-        paymentAdapter.setCallback(this)
+        paymentAdapter.callback = this
         paymentAdapter.editable = true
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = paymentAdapter
@@ -73,7 +73,7 @@ class PaymentsFragment : RootFragment(R.layout.fragment_payments_content), ItemD
 
         viewModel.payments.observe(this, Observer {
             if (it != null) {
-                paymentAdapter.updateItems(mutableListOf<IdItem<*>>().apply {
+                paymentAdapter.submitList(mutableListOf<IdItem<*>>().apply {
                     addAll(it.first)
                     add(Footer("${it.first.size} Payments"))
                 })

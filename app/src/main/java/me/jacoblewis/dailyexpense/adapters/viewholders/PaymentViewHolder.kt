@@ -15,7 +15,7 @@ import me.jacoblewis.jklcore.components.recyclerview.RBRecyclerViewHolder
 import java.util.*
 
 // Payment View Holder (UI)
-class PaymentViewHolder(viewGroup: ViewGroup) : RBRecyclerViewHolder<PaymentCategory, ItemDelegate<PaymentCategory>?>(viewGroup, R.layout.viewholder_payment) {
+class PaymentViewHolder(viewGroup: ViewGroup) : RBRecyclerViewHolder<PaymentCategory, ItemDelegate<PaymentCategory>?>(viewGroup, LAYOUT_TYPE) {
     @BindView(R.id.txt_category)
     lateinit var categoryTextView: TextView
     @BindView(R.id.txt_cost)
@@ -41,5 +41,9 @@ class PaymentViewHolder(viewGroup: ViewGroup) : RBRecyclerViewHolder<PaymentCate
     override fun onLongClick(itemView: View, item: PaymentCategory, position: Int, delegate: ItemDelegate<PaymentCategory>?): Boolean {
         Snackbar.make(itemView, "${item.transaction?.cost} held", Snackbar.LENGTH_LONG).show()
         return true
+    }
+
+    companion object {
+        const val LAYOUT_TYPE: Int = R.layout.viewholder_payment
     }
 }

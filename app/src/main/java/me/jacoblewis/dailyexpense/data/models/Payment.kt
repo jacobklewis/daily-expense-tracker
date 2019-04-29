@@ -34,4 +34,5 @@ data class Payment(
         var deleted: Boolean = false
 ) : Parcelable, IdItem<String> {
     override fun getIdentifier(): String = id
+    override fun getHash(): Int = hashCode()
 }

@@ -11,7 +11,7 @@ import me.jacoblewis.dailyexpense.data.models.Footer
 import me.jacoblewis.jklcore.components.recyclerview.RBRecyclerViewHolder
 
 // Footer View Holder (UI)
-class FooterViewHolder(viewGroup: ViewGroup) : RBRecyclerViewHolder<Footer, ItemDelegate<Footer>?>(viewGroup, R.layout.viewholder_footer) {
+class FooterViewHolder(viewGroup: ViewGroup) : RBRecyclerViewHolder<Footer, ItemDelegate<Footer>?>(viewGroup, LAYOUT_TYPE) {
     @BindView(R.id.txt_title)
     lateinit var footerTitleText: TextView
 
@@ -21,5 +21,9 @@ class FooterViewHolder(viewGroup: ViewGroup) : RBRecyclerViewHolder<Footer, Item
 
     override fun setUpView(itemView: View, item: Footer, position: Int, delegate: ItemDelegate<Footer>?) {
         footerTitleText.text = item.text
+    }
+
+    companion object {
+        const val LAYOUT_TYPE: Int = R.layout.viewholder_footer
     }
 }
