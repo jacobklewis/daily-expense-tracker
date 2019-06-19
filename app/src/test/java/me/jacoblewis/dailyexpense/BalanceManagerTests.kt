@@ -55,7 +55,7 @@ class BalanceManagerTests {
 
         val observer: Observer<Float> = Mockito.mock(getClazz())
 
-        balanceManager = BalanceManager(mockedPaymentsDao, mockedBudgetsDao, date, timeZone)
+        balanceManager = BalanceManager(mockedPaymentsDao, mockedBudgetsDao, date, timeZone, distributionFactor = 1.0)
         balanceManager.fetchDailyBalance().observeForever(observer)
 
         // $500 / 16 days remaining. No payments
@@ -74,7 +74,7 @@ class BalanceManagerTests {
 
         val observer: Observer<Float> = Mockito.mock(getClazz())
 
-        balanceManager = BalanceManager(mockedPaymentsDao, mockedBudgetsDao, date, timeZone)
+        balanceManager = BalanceManager(mockedPaymentsDao, mockedBudgetsDao, date, timeZone, distributionFactor = 1.0)
         balanceManager.fetchDailyBalance().observeForever(observer)
 
         // ($500-$50) / 16 days remaining.
@@ -93,7 +93,7 @@ class BalanceManagerTests {
 
         val observer: Observer<Float> = Mockito.mock(getClazz())
 
-        balanceManager = BalanceManager(mockedPaymentsDao, mockedBudgetsDao, date, timeZone)
+        balanceManager = BalanceManager(mockedPaymentsDao, mockedBudgetsDao, date, timeZone, distributionFactor = 1.0)
         balanceManager.fetchDailyBalance().observeForever(observer)
 
         // ($500-$100) / 16 days remaining. Each day is independent
@@ -113,7 +113,7 @@ class BalanceManagerTests {
 
         val observer: Observer<Float> = Mockito.mock(getClazz())
 
-        balanceManager = BalanceManager(mockedPaymentsDao, mockedBudgetsDao, date, timeZone)
+        balanceManager = BalanceManager(mockedPaymentsDao, mockedBudgetsDao, date, timeZone, distributionFactor = 1.0)
         balanceManager.fetchDailyBalance().observeForever(observer)
 
         // $500 / 16 days remaining. $25 payment on
@@ -133,7 +133,7 @@ class BalanceManagerTests {
 
         val observer: Observer<Float> = Mockito.mock(getClazz())
 
-        balanceManager = BalanceManager(mockedPaymentsDao, mockedBudgetsDao, date, timeZone)
+        balanceManager = BalanceManager(mockedPaymentsDao, mockedBudgetsDao, date, timeZone, distributionFactor = 1.0)
         balanceManager.fetchDailyBalance().observeForever(observer)
 
         // ($500-$10) / 16 days remaining. $10 payment on
