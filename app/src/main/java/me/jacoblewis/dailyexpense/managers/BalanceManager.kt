@@ -13,7 +13,7 @@ import me.jacoblewis.dailyexpense.data.daos.PaymentsDao
 import me.jacoblewis.dailyexpense.data.models.Budget
 import java.util.*
 
-class BalanceManager(val paymentsDao: PaymentsDao, val budgetsDao: BudgetsDao, val date: Date = Date(), val timeZone: TimeZone = TimeZone.getDefault()) {
+class BalanceManager(val paymentsDao: PaymentsDao, private val budgetsDao: BudgetsDao, val date: Date = Date(), private val timeZone: TimeZone = TimeZone.getDefault(), private val distributionFactor: Double = Math.E) {
 
     private var cachedBudget: Budget? = null
 
@@ -22,7 +22,7 @@ class BalanceManager(val paymentsDao: PaymentsDao, val budgetsDao: BudgetsDao, v
         // Calculate Remaining budget
         val remainingBudget = BudgetBalancer.calculateRemainingBudget(currentBudget, currentPayments.mapNotNull { it.transaction }.filter { it.creationDate.get(Calendar.DAY_OF_MONTH) != today.get(Calendar.DAY_OF_MONTH) })
         // Calculate Average Remaining daily budget
-        val monthlyDailyBudget = BudgetBalancer.calculateRemainingMonthlyDailyBudget(remainingBudget, DateHelper.daysLeftInMonth(date, timeZone))
+        val monthlyDailyBudget = BudgetBalancer.calculateRemainingMonthlyDailyBudget(currentBudget, remainingBudget, DateHelper.daysInMonth(date, timeZone), DateHelper.daysLeftInMonth(date, timeZone), distributionFactor)
         // Get today's Payments
         val todaysPayments = currentPayments.mapNotNull { it.transaction }.filter { it.creationDate.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH) }
         // Factor in Today's Payments
