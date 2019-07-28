@@ -14,6 +14,12 @@
         android:title="Categories" />
 
     <Preference
+        android:icon="@drawable/ic_baseline_export_24px"
+        android:key="export_csv"
+        android:summary="Export all data in CSV format"
+        android:title="Export CSV Report" />
+
+    <Preference
         android:icon="@drawable/ic_baseline_user_green_24px"
         android:key="edit_profile"
         android:summary="Manage your Profile"
