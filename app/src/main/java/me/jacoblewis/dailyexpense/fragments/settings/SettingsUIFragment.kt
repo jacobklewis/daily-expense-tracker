@@ -22,6 +22,7 @@ import me.jacoblewis.dailyexpense.dependency.utils.MyApp
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.NavigationController
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
 import me.jacoblewis.dailyexpense.managers.BalanceManager
+import me.jacoblewis.dailyexpense.managers.ExportManager
 import me.jacoblewis.dailyexpense.managers.SyncManager
 import javax.inject.Inject
 
@@ -30,6 +31,9 @@ class SettingsUIFragment : PreferenceFragmentCompat() {
 
     @Inject
     lateinit var syncManager: SyncManager
+
+    @Inject
+    lateinit var exportManager: ExportManager
 
     @Inject
     lateinit var balanceManager: BalanceManager
@@ -76,6 +80,13 @@ class SettingsUIFragment : PreferenceFragmentCompat() {
         // Override Category preference and use our custom one instead
         findPreference<Preference>("edit_cats")?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             navigationController.navigateTo(NavScreen.EditCategories)
+            return@OnPreferenceClickListener true
+        }
+
+        // Override Category preference and use our custom one instead
+        findPreference<Preference>("export_csv")?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            Toast.makeText(context, "Exporting CSV Now...", Toast.LENGTH_SHORT).show()
+            exportManager.exportNow()
             return@OnPreferenceClickListener true
         }
 
