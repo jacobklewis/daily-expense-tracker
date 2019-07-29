@@ -34,7 +34,7 @@ constructor(context: Context, attrs: AttributeSet? = null) : View(context, attrs
 
     internal val bounds: RectF
         get() {
-            mBoundsF = RectF(0f, 0f, width.toFloat(), height.toFloat())
+            mBoundsF = RectF(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat())
             val halfBorder = (mPaint[0].strokeWidth / 2f + 0.5f).toInt()
             if (isInset)
                 mBoundsF.inset(halfBorder.toFloat(), halfBorder.toFloat())
