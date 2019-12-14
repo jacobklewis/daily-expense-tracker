@@ -204,3 +204,19 @@ fun <T, J> observeBoth(a: LiveData<T>, b: LiveData<J>, owner: LifecycleOwner, ob
         postResult()
     })
 }
+
+/**
+ * Modified from:
+ * https://gist.github.com/clementgarbay/49288c006252955c2a3c6139a61ca92a
+ */
+fun <E> transposeStrict(xs: List<List<E?>>): List<List<E?>> {
+    fun <E> List<E?>.head(): E? = this.firstOrNull()
+    fun <E> List<E?>.tail(): List<E?> = if(isEmpty()) this else this.takeLast(this.size - 1)
+    fun <E> E.append(xs: List<E>): List<E> = listOf(this).plus(xs)
+
+    return if (!xs.all { it.isEmpty() }) {
+        xs.map { it.head() }.append(transposeStrict(xs.map { it.tail() }))
+    } else {
+        listOf()
+    }
+}
