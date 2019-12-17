@@ -9,6 +9,10 @@ interface BudgetsDao {
     @Insert
     fun insertBudget(budget: Budget)
 
+    @WorkerThread
+    @Insert
+    fun insertBudgets(budgets: List<Budget>)
+
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun updateBudget(budget: Budget)
 
@@ -25,4 +29,8 @@ interface BudgetsDao {
     @WorkerThread
     @Query("UPDATE budgets SET needsSync = 0")
     fun setAllSync()
+
+    @WorkerThread
+    @Query("DELETE FROM budgets")
+    fun deleteAll()
 }

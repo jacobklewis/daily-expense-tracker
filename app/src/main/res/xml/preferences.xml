@@ -32,4 +32,11 @@
         android:summary="Synchronize your data immediately"
         android:title="Sync Now" />
 
+    <Preference
+        android:enabled="false"
+        android:icon="@drawable/ic_baseline_restore_green_24px"
+        android:key="restore_now"
+        android:summary="Restore Data from your account. This replaces your current data"
+        android:title="Restore" />
+
 </PreferenceScreen>

@@ -40,10 +40,18 @@ interface PaymentsDao {
     fun insertPayment(payment: Payment)
 
     @WorkerThread
+    @Insert
+    fun insertPayments(payments: List<Payment>)
+
+    @WorkerThread
     @Delete
     fun deletePayment(payment: Payment)
 
     @WorkerThread
     @Query("UPDATE payments SET needsSync = 0")
     fun setAllSync()
+
+    @WorkerThread
+    @Query("DELETE FROM payments")
+    fun deleteAll()
 }

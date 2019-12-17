@@ -42,6 +42,7 @@ class SettingsUIFragment : PreferenceFragmentCompat() {
     private lateinit var mGoogleSignInClient: GoogleSignInClient
     private lateinit var auth: FirebaseAuth
     private var syncPref: Preference? = null
+    private var restorePref: Preference? = null
 
     init {
         MyApp.graph.inject(this)
@@ -104,16 +105,29 @@ class SettingsUIFragment : PreferenceFragmentCompat() {
             syncManager.syncNow()
             return@OnPreferenceClickListener true
         }
+
+        restorePref = findPreference("restore_now")
+        restorePref?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            //            Toast.makeText(context, "Attempting Sync", Toast.LENGTH_SHORT).show()
+            syncManager.restoreNow { error ->
+                if (error == null) {
+                    Toast.makeText(context, "Restore Completed Successfully!", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(context, "Error Restoring: ${error.issue}", Toast.LENGTH_LONG).show()
+                }
+            }
+            return@OnPreferenceClickListener true
+        }
     }
 
     override fun onStart() {
         super.onStart()
         val currentUser = auth.currentUser
         if (currentUser != null) {
-            syncPref?.isEnabled = true
+            enableLoggedInFeatures(true)
         } else {
             Toast.makeText(context, "No user signed in...", Toast.LENGTH_SHORT).show()
-            syncPref?.isEnabled = false
+            enableLoggedInFeatures(false)
         }
     }
 
@@ -147,5 +161,9 @@ class SettingsUIFragment : PreferenceFragmentCompat() {
         }
     }
 
+    fun enableLoggedInFeatures(enabled: Boolean) {
+        syncPref?.isEnabled = enabled
+        restorePref?.isEnabled = enabled
+    }
 
 }
