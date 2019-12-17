@@ -23,6 +23,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".services.CloseService"
+            android:enabled="true"
+            android:stopWithTask="false">
+
+        </service>
     </application>
 
 </manifest>

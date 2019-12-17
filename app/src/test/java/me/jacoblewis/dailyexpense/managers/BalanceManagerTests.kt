@@ -1,4 +1,4 @@
-package me.jacoblewis.dailyexpense
+package me.jacoblewis.dailyexpense.managers
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
@@ -9,7 +9,6 @@ import me.jacoblewis.dailyexpense.data.daos.PaymentsDao
 import me.jacoblewis.dailyexpense.data.models.Budget
 import me.jacoblewis.dailyexpense.data.models.Payment
 import me.jacoblewis.dailyexpense.data.models.PaymentCategory
-import me.jacoblewis.dailyexpense.managers.BalanceManager
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
