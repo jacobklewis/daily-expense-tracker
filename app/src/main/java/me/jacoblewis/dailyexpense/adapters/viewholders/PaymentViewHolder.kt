@@ -35,7 +35,7 @@ class PaymentViewHolder(viewGroup: ViewGroup) : RBRecyclerViewHolder<PaymentCate
     }
 
     override fun onClick(itemView: View, item: PaymentCategory, position: Int, delegate: ItemDelegate<PaymentCategory>?) {
-        Snackbar.make(itemView, "${item.transaction?.cost} selected", Snackbar.LENGTH_LONG).show()
+        delegate?.onItemClicked(item)
     }
 
     override fun onLongClick(itemView: View, item: PaymentCategory, position: Int, delegate: ItemDelegate<PaymentCategory>?): Boolean {

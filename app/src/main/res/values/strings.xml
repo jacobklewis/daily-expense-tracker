@@ -13,6 +13,10 @@
     <string name="label_overall_budget">overall remaining monthly budget</string>
     <string name="label_x_linked_payments">%d linked payments</string>
 
+    <!-- Notifications -->
+    <string name="channel_name">Morning Notifications</string>
+    <string name="channel_description">Notifications for the Morning</string>
+
     <!-- Number Pad -->
     <string name="label_num0">0</string>
     <string name="label_num1">1</string>

@@ -83,7 +83,8 @@ class PaymentsFragment : RootFragment(R.layout.fragment_payments_content), ItemD
 
 
     override fun onItemClicked(item: Any) {
-        if (item is PaymentCategory) {
+        val ctx = context
+        if (item is PaymentCategory && ctx != null) {
             Snackbar.make(view!!, "${item.transaction?.cost
                     ?: "N/A"}", Snackbar.LENGTH_SHORT).show()
         }
