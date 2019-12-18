@@ -59,7 +59,7 @@ class MultiSectionThinPieChart : AnimationElementBlockView {
         mPaint[0].textSize = mBoundsF.width() / 5
         mPaint[0].isFakeBoldText = true
 
-        mPaintWhite.style = Paint.Style.STROKE
+        mPaintWhite.style = Paint.Style.FILL_AND_STROKE
         canvas.drawOval(mBoundsF, mPaintWhite)
 
         var drawTo = -90f

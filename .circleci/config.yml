@@ -153,6 +153,10 @@ jobs:
         at: ~/
 
     - run:
+        name: Build Bundle
+        command: ./gradlew bundleRelease
+
+    - run:
         name: Submit Update To Internal
         command: ./gradlew publishBundle
 
