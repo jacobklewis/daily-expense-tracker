@@ -3,7 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-android-extensions'
     id 'kotlin-kapt'
-    id 'com.github.triplet.play' version '2.1.0'
+    id 'com.github.triplet.play' version '2.3.0'
 }
 
 android {
@@ -124,6 +124,7 @@ play {
     releaseStatus = "completed"
     defaultToAppBundles = true
     resolutionStrategy = "auto"
+    artifactDir = file("./build/outputs/bundle/release/app-release.aab")
 }
 
 apply plugin: 'kotlin-android-extensions'
