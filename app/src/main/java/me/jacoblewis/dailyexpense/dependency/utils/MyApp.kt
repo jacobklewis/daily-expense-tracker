@@ -49,6 +49,7 @@ class MyApp : Application(), LifecycleObserver, CoroutineScope {
     override fun onCreate() {
         super.onCreate()
         job = Job()
+        appScope = this
         graph = appComponent
         graph.inject(this)
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
@@ -59,10 +60,12 @@ class MyApp : Application(), LifecycleObserver, CoroutineScope {
 
     companion object {
         lateinit var graph: AppComponent
+        var appScope: CoroutineScope? = null
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun onDestroy() {
+        appScope = null
         job.cancelChildren()
         job.cancel()
     }
