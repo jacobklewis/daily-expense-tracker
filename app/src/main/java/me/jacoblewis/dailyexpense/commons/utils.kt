@@ -25,6 +25,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.jacoblewis.dailyexpense.R
+import me.jacoblewis.dailyexpense.dependency.utils.MyApp
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -182,7 +183,7 @@ inline fun <R, A, B, C, D, E> ifAll(a: A?, b: B?, c: C?, d: D?, e: E?, block: (A
     } else null
 }
 
-fun wait(millis: Long, block: () -> Unit) = GlobalScope.launch(Dispatchers.Main) {
+fun wait(millis: Long, block: () -> Unit) = MyApp.appScope?.launch(Dispatchers.Main) {
     delay(millis)
     block()
 }

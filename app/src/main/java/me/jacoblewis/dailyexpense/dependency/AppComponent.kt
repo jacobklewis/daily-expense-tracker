@@ -15,6 +15,7 @@ import me.jacoblewis.dailyexpense.fragments.payments.PaymentsFragment
 import me.jacoblewis.dailyexpense.fragments.settings.SettingsFragment
 import me.jacoblewis.dailyexpense.fragments.settings.SettingsUIFragment
 import me.jacoblewis.dailyexpense.mainActivity.MainActivity
+import me.jacoblewis.dailyexpense.workers.MorningBalanceWorker
 import javax.inject.Singleton
 
 /**
@@ -34,4 +35,5 @@ interface AppComponent {
     fun inject(obj: EnterCategoryDialogFragment)
     fun inject(obj: SettingsFragment)
     fun inject(obj: SettingsUIFragment)
+    fun inject(obj: MorningBalanceWorker)
 }
