@@ -84,6 +84,7 @@ class EnterCategoryDialogFragment : androidx.fragment.app.DialogFragment() {
                 val categoryToSave = it
                 categoryToSave.name = categoryTitle
                 categoryToSave.color = String.format("#%06X", 0xFFFFFF and currentColor)
+                categoryToSave.needsSync = true
                 db.categoriesDao().updateCategory(categoryToSave)
             } ?: run {
                 val categoryToSave = Category(categoryTitle, String.format("#%06X", 0xFFFFFF and currentColor))

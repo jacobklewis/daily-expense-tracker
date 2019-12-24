@@ -42,4 +42,5 @@ data class Category(
     }
 
     override fun getIdentifier(): String = categoryId
+    override fun getHash(): Int = hashCode()
 }

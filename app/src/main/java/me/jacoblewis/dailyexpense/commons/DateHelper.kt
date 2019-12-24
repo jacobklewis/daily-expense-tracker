@@ -7,8 +7,14 @@ object DateHelper {
     fun daysLeftInMonth(date: Date, timezone: TimeZone): Int {
         val calendar = GregorianCalendar(timezone)
         calendar.time = date
-        val daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+        val daysInMonth = daysInMonth(date, timezone)
         return daysInMonth - calendar.get(Calendar.DAY_OF_MONTH) + 1
+    }
+
+    fun daysInMonth(date: Date, timezone: TimeZone): Int {
+        val calendar = GregorianCalendar(timezone)
+        calendar.time = date
+        return calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
     }
 
     fun firstDayOfMonth(date: Date, timezone: TimeZone): Calendar {

@@ -25,6 +25,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.jacoblewis.dailyexpense.R
+import me.jacoblewis.dailyexpense.dependency.utils.MyApp
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -182,7 +183,7 @@ inline fun <R, A, B, C, D, E> ifAll(a: A?, b: B?, c: C?, d: D?, e: E?, block: (A
     } else null
 }
 
-fun wait(millis: Long, block: () -> Unit) = GlobalScope.launch(Dispatchers.Main) {
+fun wait(millis: Long, block: () -> Unit) = MyApp.appScope?.launch(Dispatchers.Main) {
     delay(millis)
     block()
 }
@@ -203,4 +204,31 @@ fun <T, J> observeBoth(a: LiveData<T>, b: LiveData<J>, owner: LifecycleOwner, ob
         cResB = resB
         postResult()
     })
+}
+
+inline fun <reified T> Any?.asNum(): T? {
+    val num = (this as? Number)
+    return when(T::class) {
+        Float::class -> num?.toFloat()
+        Double::class -> num?.toDouble()
+        Int::class -> num?.toInt()
+        Long::class -> num?.toLong()
+        else -> num
+    } as? T
+}
+
+/**
+ * Modified from:
+ * https://gist.github.com/clementgarbay/49288c006252955c2a3c6139a61ca92a
+ */
+fun <E> transposeStrict(xs: List<List<E?>>): List<List<E?>> {
+    fun <E> List<E?>.head(): E? = this.firstOrNull()
+    fun <E> List<E?>.tail(): List<E?> = if (isEmpty()) this else this.takeLast(this.size - 1)
+    fun <E> E.append(xs: List<E>): List<E> = listOf(this).plus(xs)
+
+    return if (!xs.all { it.isEmpty() }) {
+        xs.map { it.head() }.append(transposeStrict(xs.map { it.tail() }))
+    } else {
+        listOf()
+    }
 }

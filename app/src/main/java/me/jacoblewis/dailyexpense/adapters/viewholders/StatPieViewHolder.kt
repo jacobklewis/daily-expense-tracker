@@ -15,7 +15,7 @@ import me.jacoblewis.dailyexpense.ui.components.ChartItem
 import me.jacoblewis.dailyexpense.ui.components.MultiSectionThinPieChart
 import me.jacoblewis.jklcore.components.recyclerview.RBRecyclerViewHolder
 
-class StatPieViewHolder(viewGroup: ViewGroup) : RBRecyclerViewHolder<Stats, ItemDelegate<Any>>(viewGroup, R.layout.viewholder_pie_dist) {
+class StatPieViewHolder(viewGroup: ViewGroup) : RBRecyclerViewHolder<Stats, ItemDelegate<Any>>(viewGroup, LAYOUT_TYPE) {
     @BindView(R.id.chart_pie)
     lateinit var pieChart: MultiSectionThinPieChart
 
@@ -40,5 +40,9 @@ class StatPieViewHolder(viewGroup: ViewGroup) : RBRecyclerViewHolder<Stats, Item
             val color = it.second.color.asColorInt
             ChartItem(cost, color, it.second.name, cost.asCurrency)
         }.filter { it.value.toFloat() > 0f }.sortedByDescending { it.value.toFloat() }
+    }
+
+    companion object {
+        const val LAYOUT_TYPE: Int = R.layout.viewholder_pie_dist
     }
 }

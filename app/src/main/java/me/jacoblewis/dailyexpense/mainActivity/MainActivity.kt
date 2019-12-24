@@ -12,6 +12,7 @@ import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelChildren
 import me.jacoblewis.dailyexpense.R
 import me.jacoblewis.dailyexpense.commons.wait
 import me.jacoblewis.dailyexpense.dependency.utils.MyApp
@@ -51,7 +52,7 @@ class MainActivity : AppCompatActivity(),
 
     override fun onDestroy() {
         super.onDestroy()
-        job.cancel()
+        job.cancelChildren()
     }
 
     private fun setupDrawer() {

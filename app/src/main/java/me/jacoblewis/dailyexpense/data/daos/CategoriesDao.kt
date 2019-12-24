@@ -33,10 +33,18 @@ interface CategoriesDao {
     fun insertCategory(category: Category): Long
 
     @WorkerThread
+    @Insert
+    fun insertCategories(categories: List<Category>)
+
+    @WorkerThread
     @Delete
     fun deleteCategory(category: Category)
 
     @WorkerThread
     @Query("UPDATE categories SET needsSync = 0")
     fun setAllSync()
+
+    @WorkerThread
+    @Query("DELETE FROM categories")
+    fun deleteAll()
 }

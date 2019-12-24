@@ -5,7 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
-import android.view.View
+import android.view.ViewGroup
 import me.jacoblewis.dailyexpense.R
 import me.jacoblewis.dailyexpense.commons.asCurrency
 import kotlin.math.cos
@@ -59,7 +59,7 @@ class MultiSectionThinPieChart : AnimationElementBlockView {
         mPaint[0].textSize = mBoundsF.width() / 5
         mPaint[0].isFakeBoldText = true
 
-        mPaintWhite.style = Paint.Style.STROKE
+        mPaintWhite.style = Paint.Style.FILL_AND_STROKE
         canvas.drawOval(mBoundsF, mPaintWhite)
 
         var drawTo = -90f
@@ -101,7 +101,10 @@ class MultiSectionThinPieChart : AnimationElementBlockView {
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), View.MeasureSpec.EXACTLY))
+        val lp = (layoutParams as ViewGroup.MarginLayoutParams)
+        val horzMargin = lp.marginStart + lp.marginEnd
+        val vertMargin = lp.topMargin + lp.bottomMargin
+        super.onMeasure(widthMeasureSpec - horzMargin, widthMeasureSpec - vertMargin)
     }
 //
 //    fun animateThis(totAmount: Int, time: Int) {
