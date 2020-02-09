@@ -25,6 +25,7 @@ class GeneralItemAdapter
             // Stats
             BudgetOverviewViewHolder.LAYOUT_TYPE -> BudgetOverviewViewHolder(parent)
             StatPieViewHolder.LAYOUT_TYPE -> StatPieViewHolder(parent)
+            StatPressureViewHolder.LAYOUT_TYPE -> StatPressureViewHolder(parent)
             // Categories
             CategoryEditViewHolder.LAYOUT_TYPE -> CategoryEditViewHolder(parent)
             CategoryChooseViewHolder.LAYOUT_TYPE -> CategoryChooseViewHolder(parent, budget)
@@ -43,6 +44,7 @@ class GeneralItemAdapter
             is Stats -> when (item.displayType) {
                 is StatsType.Overview -> BudgetOverviewViewHolder.LAYOUT_TYPE
                 is StatsType.PieChart -> StatPieViewHolder.LAYOUT_TYPE
+                is StatsType.PressureMeter -> StatPressureViewHolder.LAYOUT_TYPE
             }
             // Categories
             is Category -> when {

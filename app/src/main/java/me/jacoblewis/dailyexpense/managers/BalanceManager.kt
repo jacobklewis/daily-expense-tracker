@@ -67,6 +67,14 @@ class BalanceManager(val paymentsDao: PaymentsDao, private val budgetsDao: Budge
         }
 
     /**
+     * @return pressure from current usage [0..1]
+     */
+    val currentBudgetPressure: Float
+        get() {
+            return 0f
+        }
+
+    /**
      * Get this month's budget from the Room DB
      */
     private suspend fun getBudgetFromDB(today: Calendar): Budget = withContext(Dispatchers.IO) {

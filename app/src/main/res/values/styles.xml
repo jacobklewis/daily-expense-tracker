@@ -20,4 +20,13 @@
         <attr name="title" format="string" />
     </declare-styleable>
 
+    <declare-styleable name="PressureChart">
+        <attr name="startColor" format="color" />
+        <attr name="middleColor" format="color" />
+        <attr name="endColor" format="color" />
+        <attr name="pressure" format="float" />
+        <attr name="aspect" format="float" />
+        <attr name="segments" format="integer" />
+    </declare-styleable>
+
 </resources>

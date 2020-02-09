@@ -1,5 +1,6 @@
 package me.jacoblewis.dailyexpense.managers
 
+import androidx.annotation.IntRange
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -139,6 +140,66 @@ class BalanceManagerTests {
         verify(observer).onChanged(20.625f)
         verifyNoMoreInteractions(observer)
     }
+
+    @Test
+    fun testBudgetPressure() {
+        val date = Date(1545017609086L) // Dec 16th, 2018 - CST
+        val firstDayOfMonth = DateHelper.firstDayOfMonth(date, timeZone)
+        val dayBefore = DateHelper.today(date, timeZone).apply { set(Calendar.DAY_OF_MONTH, 15) } // Dec 15th, 2018
+        val dayOn = DateHelper.today(date, timeZone) // Dec 16th, 2018
+        Mockito.`when`(mockedPaymentsDao.getAllPaymentsSince(firstDayOfMonth)).thenReturn(MutableLiveData<List<PaymentCategory>>().apply {
+            value = getPaymentCats(Payment(10f, dayBefore), Payment(10f, dayOn))
+        })
+        balanceManager = BalanceManager(mockedPaymentsDao, mockedBudgetsDao, date, timeZone, distributionFactor = 1.0)
+
+
+        val pressure = balanceManager.currentBudgetPressure
+//        19 december 2020 at (11 h 30 m 0)
+//        19 december 2020 at "11:30:00.000"
+
+    }
+
+    infix fun Int.december(year: Int): Date {
+        return Date()
+    }
+
+    infix fun Date.at(dayTime: DayTime): Date {
+        return this
+    }
+
+
+    infix fun Date.at(timeStr: String): Date {
+        return this
+    }
+
+    infix fun Int.h(minute: Int): DayTime {
+        return DayTime(this, minute)
+    }
+    infix fun DayTime.m(second: Int): DayTime {
+        this.second = second
+        return this
+    }
+
+    infix fun Date.atHour(hour: Int): Date {
+        return this
+    }
+
+    infix fun Date.atMinute(minute: Int): Date {
+        return this
+    }
+
+    infix fun Date.atSecond(second: Int): Date {
+        return this
+    }
+
+    infix fun Date.atMillisecond(millisecond: Int): Date {
+        return this
+    }
+
+    data class DayTime(@IntRange(from = 0, to = 23) val hour: Int,
+                       @IntRange(from = 0, to = 59) val minute: Int,
+                       @IntRange(from = 0, to = 59) var second: Int = 0,
+                       @IntRange(from = 0, to = 999) var millisecond: Int = 0)
 
     private inline fun <reified T> getClazz(): Class<T> {
         return T::class.java

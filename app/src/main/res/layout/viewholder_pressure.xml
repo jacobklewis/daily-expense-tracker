@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <me.jacoblewis.dailyexpense.ui.components.MultiSectionThinPieChart
-        android:id="@+id/chart_pie"
+    <me.jacoblewis.dailyexpense.ui.components.PressureChart
+        android:id="@+id/chart_pressure"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_default"

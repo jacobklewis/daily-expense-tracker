@@ -74,6 +74,7 @@ class MainFragment : RootFragment(R.layout.fragment_main_content), ItemDelegate<
             val items: MutableList<IdItem<*>> = mutableListOf()
             // Add our items here
             items.add(Stats(payments.second))
+            items.add(Stats(payments.second, cats, StatsType.PressureMeter))
             items.add(Stats(payments.second, cats, StatsType.PieChart))
             overviewAdapter.submitList(items)
         }
