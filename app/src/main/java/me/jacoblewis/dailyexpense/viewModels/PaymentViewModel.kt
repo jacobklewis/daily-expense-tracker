@@ -29,6 +29,9 @@ constructor(val paymentsDao: PaymentsDao, val balanceManager: BalanceManager) : 
     val dailyBalance: LiveData<Float> = Transformations.switchMap(currentDayOfMonth) {
         balanceManager.fetchDailyBalance()
     }
+    val dailyPressure: LiveData<Float> = Transformations.switchMap(currentDayOfMonth) {
+        balanceManager.fetchBudgetPressure()
+    }
 
     init {
         currentDayOfMonth.value = DateHelper.dayOfMonth

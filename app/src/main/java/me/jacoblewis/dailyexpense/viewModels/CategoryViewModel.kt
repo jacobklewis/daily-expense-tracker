@@ -44,6 +44,7 @@ constructor(val categoriesDao: CategoriesDao, val paymentsDao: PaymentsDao, bala
     }
     var associatedPayment: Payment? = null
 
+    val pressure: LiveData<Float> = balanceManager.fetchBudgetPressure()
 
     fun updateCategoryDate(from: Calendar, to: Calendar = Calendar.getInstance()) {
         dateRange.value = DateRange(from, to)

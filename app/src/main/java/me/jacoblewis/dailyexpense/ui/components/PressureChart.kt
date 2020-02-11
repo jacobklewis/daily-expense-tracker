@@ -48,13 +48,13 @@ class PressureChart : AnimationElementBlockView {
 
     override fun onDraw(canvas: Canvas) {
         setInset(true)
-        setLineThickness(dp2px(30))
+        setLineThickness(dp2px(2))
         mBoundsF = bounds
 
         val middleIndex = segments / 2 // Even segments will be slightly offset
 
         for (i in 0 until middleIndex) {
-            mPaint[0].color = ColorUtils.blendARGB(startColor, endColor, i.toFloat() / middleIndex)
+            mPaint[0].color = ColorUtils.blendARGB(startColor, middleColor, i.toFloat() / middleIndex)
             val offsetLeft = mBoundsF.width() * i / segments
             val offsetRight = mBoundsF.width() * (1 - (i + 1).toFloat() / segments)
             canvas.drawRect(mBoundsF.left + offsetLeft,
@@ -64,7 +64,7 @@ class PressureChart : AnimationElementBlockView {
                     mPaint[0])
         }
         for (i in middleIndex until segments) {
-            mPaint[0].color = ColorUtils.blendARGB(endColor, startColor, (i.toFloat() - middleIndex) / (segments - middleIndex - 1))
+            mPaint[0].color = ColorUtils.blendARGB(middleColor, endColor, (i.toFloat() - middleIndex) / (segments - middleIndex - 1))
             val offsetLeft = mBoundsF.width() * i / segments
             val offsetRight = mBoundsF.width() * (1 - (i + 1).toFloat() / segments)
             canvas.drawRect(mBoundsF.left + offsetLeft,
@@ -74,6 +74,23 @@ class PressureChart : AnimationElementBlockView {
                     mPaint[0])
         }
 
+        mPaint[0].color = Color.parseColor("#99000000")
+        mPaint[1].style = Paint.Style.FILL_AND_STROKE
+        mPaint[1].color = Color.parseColor("#99000000")
+        mPaint[1].style = Paint.Style.STROKE
+
+        val offsetLeft = pressure * mBoundsF.width() - dp2px(10)
+        val offsetRight = (1 - pressure) * mBoundsF.width() - dp2px(10)
+        canvas.drawRect(mBoundsF.left + offsetLeft,
+                mBoundsF.top + dp2px(10),
+                mBoundsF.right - offsetRight,
+                mBoundsF.bottom - dp2px(10),
+                mPaint[0])
+        canvas.drawRect(mBoundsF.left + offsetLeft,
+                mBoundsF.top + dp2px(10),
+                mBoundsF.right - offsetRight,
+                mBoundsF.bottom - dp2px(10),
+                mPaint[1])
 
     }
 

@@ -4,6 +4,7 @@ import androidx.annotation.IntRange
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import com.google.common.truth.Truth.assertThat
 import me.jacoblewis.dailyexpense.commons.DateHelper
 import me.jacoblewis.dailyexpense.data.daos.BudgetsDao
 import me.jacoblewis.dailyexpense.data.daos.PaymentsDao
@@ -143,19 +144,55 @@ class BalanceManagerTests {
 
     @Test
     fun testBudgetPressure() {
-        val date = Date(1545017609086L) // Dec 16th, 2018 - CST
+        val date = Date(1544097100000) // Dec 6th, 2018 - CST
         val firstDayOfMonth = DateHelper.firstDayOfMonth(date, timeZone)
         val dayBefore = DateHelper.today(date, timeZone).apply { set(Calendar.DAY_OF_MONTH, 15) } // Dec 15th, 2018
         val dayOn = DateHelper.today(date, timeZone) // Dec 16th, 2018
-        Mockito.`when`(mockedPaymentsDao.getAllPaymentsSince(firstDayOfMonth)).thenReturn(MutableLiveData<List<PaymentCategory>>().apply {
-            value = getPaymentCats(Payment(10f, dayBefore), Payment(10f, dayOn))
-        })
+//        Mockito.`when`(mockedPaymentsDao.getAllPaymentsSince(firstDayOfMonth)).thenReturn(MutableLiveData<List<PaymentCategory>>().apply {
+//            value = getPaymentCats(Payment(10f, dayBefore), Payment(10f, dayOn))
+//        })
         balanceManager = BalanceManager(mockedPaymentsDao, mockedBudgetsDao, date, timeZone, distributionFactor = 1.0)
 
 
-        val pressure = balanceManager.currentBudgetPressure
-//        19 december 2020 at (11 h 30 m 0)
-//        19 december 2020 at "11:30:00.000"
+        // Helper function for creating payments on a day of the month
+        fun createPaymentCatOnDayOfMonth(cost: Float, dayOfMonth: Int): PaymentCategory {
+            val dayDate = DateHelper.today(date, timeZone).apply { set(Calendar.DAY_OF_MONTH, dayOfMonth) } // Dec 15th, 2018
+            return PaymentCategory().also { it.transaction = Payment(cost, dayDate) }
+        }
+        balanceManager.cachedBudget = Budget(310f, 2018, 11)
+
+        val payments0 = listOf(
+                createPaymentCatOnDayOfMonth(10f, 1),
+                createPaymentCatOnDayOfMonth(10f, 2),
+                createPaymentCatOnDayOfMonth(10f, 3),
+                createPaymentCatOnDayOfMonth(10f, 4),
+                createPaymentCatOnDayOfMonth(10f, 5)
+        )
+
+        val pressure0 = balanceManager.processBudgetPressure(payments0)
+
+        assertThat(pressure0).isEqualTo(0.5f)
+
+        val payments1 = listOf(
+                createPaymentCatOnDayOfMonth(20f, 1),
+                createPaymentCatOnDayOfMonth(20f, 2),
+                createPaymentCatOnDayOfMonth(20f, 3),
+                createPaymentCatOnDayOfMonth(20f, 4),
+                createPaymentCatOnDayOfMonth(22f, 5)
+        )
+
+        val pressure1 = balanceManager.processBudgetPressure(payments1)
+
+        assertThat(pressure1).isEqualTo(0.4f)
+
+//        val payments2 = listOf(
+//                createPaymentCatOnDayOfMonth(10f, 1),
+//                createPaymentCatOnDayOfMonth(15f, 2)
+//        )
+//
+//        val pressure2 = balanceManager.processBudgetPressure(payments1)
+//
+//        assertThat(pressure1).isEqualTo(0.4f)
 
     }
 
@@ -175,6 +212,7 @@ class BalanceManagerTests {
     infix fun Int.h(minute: Int): DayTime {
         return DayTime(this, minute)
     }
+
     infix fun DayTime.m(second: Int): DayTime {
         this.second = second
         return this

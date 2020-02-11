@@ -206,6 +206,29 @@ fun <T, J> observeBoth(a: LiveData<T>, b: LiveData<J>, owner: LifecycleOwner, ob
     })
 }
 
+fun <T, J, Z> observeThree(a: LiveData<T>, b: LiveData<J>, c: LiveData<Z>, owner: LifecycleOwner, observer: (T, J, Z) -> Unit) {
+    var cResA: T? = null
+    var cResB: J? = null
+    var cResC: Z? = null
+    fun postResult() {
+        if (cResA != null && cResB != null && cResC != null) {
+            observer(cResA!!, cResB!!, cResC!!)
+        }
+    }
+    a.observe(owner, androidx.lifecycle.Observer { resA ->
+        cResA = resA
+        postResult()
+    })
+    b.observe(owner, androidx.lifecycle.Observer { resB ->
+        cResB = resB
+        postResult()
+    })
+    c.observe(owner, androidx.lifecycle.Observer { resC ->
+        cResC = resC
+        postResult()
+    })
+}
+
 inline fun <reified T> Any?.asNum(): T? {
     val num = (this as? Number)
     return when(T::class) {
