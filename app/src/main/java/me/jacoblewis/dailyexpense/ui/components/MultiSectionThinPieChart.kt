@@ -104,7 +104,7 @@ class MultiSectionThinPieChart : AnimationElementBlockView {
         val lp = (layoutParams as ViewGroup.MarginLayoutParams)
         val horzMargin = lp.marginStart + lp.marginEnd
         val vertMargin = lp.topMargin + lp.bottomMargin
-        super.onMeasure(widthMeasureSpec - horzMargin, widthMeasureSpec - vertMargin)
+        super.onMeasure(widthMeasureSpec, widthMeasureSpec)
     }
 //
 //    fun animateThis(totAmount: Int, time: Int) {

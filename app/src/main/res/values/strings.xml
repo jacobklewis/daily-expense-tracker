@@ -4,6 +4,7 @@
     <string name="title_open_nav">Open Nav</string>
     <string name="title_close_nav">Close Nav</string>
 
+    <string name="title_pressure">Daily Budget Pressure</string>
     <string name="title_create_category">Create Category</string>
     <string name="title_edit_category">Edit Category</string>
     <string name="label_save">Save</string>

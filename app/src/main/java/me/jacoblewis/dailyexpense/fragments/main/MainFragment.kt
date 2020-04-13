@@ -70,10 +70,11 @@ class MainFragment : RootFragment(R.layout.fragment_main_content), ItemDelegate<
 
         categoryViewModel.updateCategoryDate(DateHelper.firstDayOfMonth(Date(), TimeZone.getDefault()))
 
-        observeBoth(paymentViewModel.payments, categoryViewModel.categories, this) { payments, cats ->
+        observeThree(paymentViewModel.payments, categoryViewModel.categories, paymentViewModel.dailyPressure, this) { payments, cats, pressure ->
             val items: MutableList<IdItem<*>> = mutableListOf()
             // Add our items here
             items.add(Stats(payments.second))
+            items.add(Stats(payments.second, displayType = StatsType.PressureMeter, pressure = pressure))
             items.add(Stats(payments.second, cats, StatsType.PieChart))
             overviewAdapter.submitList(items)
         }

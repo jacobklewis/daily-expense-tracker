@@ -16,10 +16,13 @@ import java.util.*
 
 class BalanceManager(val paymentsDao: PaymentsDao, private val budgetsDao: BudgetsDao, val date: Date? = null, private val timeZone: TimeZone = TimeZone.getDefault(), private val distributionFactor: Double = Math.E) {
 
-    private var cachedBudget: Budget? = null
+    internal var cachedBudget: Budget? = null
 
     private val firstDayOfMonth: Calendar
         get() = DateHelper.firstDayOfMonth(date ?: Date(), timeZone)
+
+    private val today: Calendar
+        get() = DateHelper.today(date ?: Date(), timeZone)
 
     fun fetchDailyBalance(): LiveData<Float> = Transformations.map(paymentsDao.getAllPaymentsSince(firstDayOfMonth)) { currentPayments ->
         return@map processDailyBalance(currentPayments)
@@ -33,16 +36,21 @@ class BalanceManager(val paymentsDao: PaymentsDao, private val budgetsDao: Budge
 
     private fun processDailyBalance(currentPayments: List<PaymentCategory>): Float {
         val today: Calendar = DateHelper.today(date ?: Date(), timeZone)
-        // Calculate Remaining budget
-        val remainingBudget = BudgetBalancer.calculateRemainingBudget(currentBudget, currentPayments.mapNotNull { it.transaction }.filter { it.creationDate.get(Calendar.DAY_OF_MONTH) != today.get(Calendar.DAY_OF_MONTH) })
-        // Calculate Average Remaining daily budget
-        val monthlyDailyBudget = BudgetBalancer.calculateRemainingMonthlyDailyBudget(currentBudget, remainingBudget, DateHelper.daysInMonth(date
-                ?: Date(), timeZone), DateHelper.daysLeftInMonth(date
-                ?: Date(), timeZone), distributionFactor)
+        val monthlyDailyBudget = calcTodaysBudget(currentPayments, today)
+
         // Get today's Payments
         val todaysPayments = currentPayments.mapNotNull { it.transaction }.filter { it.creationDate.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH) }
         // Factor in Today's Payments
         return BudgetBalancer.calculateRemainingDailyBudget(monthlyDailyBudget, todaysPayments)
+    }
+
+    private fun calcTodaysBudget(currentPayments: List<PaymentCategory>, today: Calendar): Float {
+        // Calculate Remaining budget
+        val remainingBudget = BudgetBalancer.calculateRemainingBudget(currentBudget, currentPayments.mapNotNull { it.transaction }.filter { it.creationDate.get(Calendar.DAY_OF_MONTH) != today.get(Calendar.DAY_OF_MONTH) })
+        // Calculate Average Remaining daily budget
+        return BudgetBalancer.calculateRemainingMonthlyDailyBudget(currentBudget, remainingBudget, DateHelper.daysInMonth(date
+                ?: Date(), timeZone), DateHelper.daysLeftInMonth(date
+                ?: Date(), timeZone), distributionFactor)
     }
 
     var currentBudget: Float
@@ -65,6 +73,23 @@ class BalanceManager(val paymentsDao: PaymentsDao, private val budgetsDao: Budge
                 budgetsDao.updateBudget(updatedBudget)
             }
         }
+
+    /**
+     * @return pressure from current usage [0..1]
+     */
+    fun fetchBudgetPressure(): LiveData<Float> = Transformations.map(paymentsDao.getAllPaymentsBetween(firstDayOfMonth, today)) { currentPayments ->
+        return@map processBudgetPressure(currentPayments)
+    }
+
+    internal fun processBudgetPressure(currentPayments: List<PaymentCategory>): Float {
+        val daysInMonth = DateHelper.daysInMonth(today.time, timeZone)
+        val standardDailyBudget = currentBudget / daysInMonth
+        println(standardDailyBudget)
+        val currentDailyBudget = calcTodaysBudget(currentPayments, today)
+        println(currentDailyBudget)
+
+        return currentDailyBudget / (standardDailyBudget * 2)
+    }
 
     /**
      * Get this month's budget from the Room DB

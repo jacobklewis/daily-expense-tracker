@@ -27,6 +27,7 @@ import me.jacoblewis.dailyexpense.dependency.modules.AppModule
 import me.jacoblewis.dailyexpense.dependency.modules.DBModule
 import me.jacoblewis.dailyexpense.services.CloseService
 import me.jacoblewis.dailyexpense.workers.MorningBalanceWorker
+import java.lang.Exception
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.CoroutineContext
 
@@ -53,7 +54,11 @@ class MyApp : Application(), LifecycleObserver, CoroutineScope {
         graph = appComponent
         graph.inject(this)
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
-        startService(Intent(this, CloseService::class.java))
+        try {
+            startService(Intent(this, CloseService::class.java))
+        } catch (ignore: Exception) {
+            /* ignore */
+        }
         createNotificationChannel()
         createMorningBalanceWorker()
     }

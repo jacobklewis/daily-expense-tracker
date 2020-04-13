@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppThemeMain" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -18,6 +18,15 @@
 
     <declare-styleable name="ThinPieChart">
         <attr name="title" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="PressureChart">
+        <attr name="startColor" format="color" />
+        <attr name="middleColor" format="color" />
+        <attr name="endColor" format="color" />
+        <attr name="pressure" format="float" />
+        <attr name="aspect" format="float" />
+        <attr name="segments" format="integer" />
     </declare-styleable>
 
 </resources>

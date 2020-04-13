@@ -18,7 +18,6 @@ import me.jacoblewis.dailyexpense.data.models.firebase.FBBudget
 import me.jacoblewis.dailyexpense.data.models.firebase.FBCategory
 import me.jacoblewis.dailyexpense.data.models.firebase.FBPayment
 import javax.inject.Inject
-import kotlin.coroutines.coroutineContext
 
 class SyncManager
 @Inject constructor(val context: Context, val db: BalancesDB) {

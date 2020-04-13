@@ -7,6 +7,7 @@ import java.util.*
 data class Stats(val budget: Float,
                  val categories: List<Category> = listOf(),
                  val displayType: StatsType = StatsType.Overview,
+                 val pressure: Float = 0.5f,
                  val unique: Boolean = false) : IdItem<String> {
     override fun getIdentifier(): String = if (unique) UUID.randomUUID().toString() else "STAT"
     override fun getHash(): Int = hashCode()
