@@ -79,6 +79,9 @@ class PressureChart : AnimationElementBlockView {
         mPaint[1].color = Color.parseColor("#99000000")
         mPaint[1].style = Paint.Style.STROKE
 
+        if (pressure > 1f) {
+            pressure = 1f
+        }
         val offsetLeft = pressure * mBoundsF.width() - dp2px(10)
         val offsetRight = (1 - pressure) * mBoundsF.width() - dp2px(10)
         canvas.drawRect(mBoundsF.left + offsetLeft,
