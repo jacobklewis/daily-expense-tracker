@@ -9,7 +9,9 @@ import java.util.*
 
 interface NavigationHandler : ActivityController {
     val fragmentFrame: Int
-    fun linkToolBarToDrawer(toolbar: Toolbar)
+    fun linkToolBarToDrawer(toolbar: Toolbar) {
+
+    }
 
     companion object {
         val rootFragmentStack: Stack<RootFragment> by lazy { Stack<RootFragment>() }
