@@ -10,6 +10,11 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+    <style name="AppThemeSplash" parent="AppThemeMain">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@drawable/splash_background</item>
+    </style>
 
     <style name="MainPriceStyle" parent="@style/TextAppearance.AppCompat.Display3">
         <item name="android:textSize">70sp</item>
