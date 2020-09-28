@@ -3,17 +3,18 @@ package me.jacoblewis.dailyexpense.mainActivity
 import android.os.Bundle
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.LifecycleOwner
-import butterknife.ButterKnife
+import androidx.navigation.ui.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelChildren
 import me.jacoblewis.dailyexpense.R
-import me.jacoblewis.dailyexpense.dependency.utils.MyApp
-import me.jacoblewis.dailyexpense.mainActivity.interfaces.*
+import me.jacoblewis.dailyexpense.mainActivity.interfaces.ExceptionController
+import me.jacoblewis.dailyexpense.mainActivity.interfaces.NavigationController
+import me.jacoblewis.dailyexpense.mainActivity.interfaces.PermissionController
+import me.jacoblewis.dailyexpense.mainActivity.interfaces.UpdateController
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavUIUpdate
 import kotlin.coroutines.CoroutineContext
@@ -24,7 +25,6 @@ class MainActivity : AppCompatActivity(),
         PermissionController,
         UpdateController,
         CoroutineScope {
-    override val fragmentFrame: Int = R.id.frame_root
     override val currentActivity: AppCompatActivity = this
     override val listeners: MutableMap<LifecycleOwner, (NavUIUpdate) -> Unit> = mutableMapOf()
     var actionBarToggle: ActionBarDrawerToggle? = null
@@ -36,8 +36,6 @@ class MainActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         job = Job()
         setContentView(R.layout.activity_main)
-        ButterKnife.bind(this)
-        MyApp.graph.inject(this)
         setupNav(savedInstanceState)
         setupDrawer()
     }

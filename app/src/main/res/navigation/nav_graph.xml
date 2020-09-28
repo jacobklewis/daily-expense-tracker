@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="me.jacoblewis.dailyexpense.fragments.main.MainFragment"
+        android:label="MainFragment"
+        tools:layout="@layout/fragment_main_content" >
+        <action
+            android:id="@+id/action_mainFragment_to_enterPaymentFragment"
+            app:destination="@id/enterPaymentFragment"
+            app:enterAnim="@anim/slide_up"
+            app:launchSingleTop="false"
+            app:popExitAnim="@anim/slide_down" />
+    </fragment>
+    <fragment
+        android:id="@+id/paymentsFragment"
+        android:name="me.jacoblewis.dailyexpense.fragments.payments.PaymentsFragment"
+        android:label="PaymentsFragment"
+        tools:layout="@layout/fragment_payments_content" >
+        <action
+            android:id="@+id/action_paymentsFragment_to_enterPaymentFragment"
+            app:destination="@id/enterPaymentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/categoryOverviewFragment"
+        android:name="me.jacoblewis.dailyexpense.fragments.categories.CategoryOverviewFragment"
+        android:label="CategoryOverviewFragment"
+        tools:layout="@layout/fragment_category_content" >
+        <action
+            android:id="@+id/action_categoryOverviewFragment_to_categoryEditFragment"
+            app:destination="@id/categoryEditFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="me.jacoblewis.dailyexpense.fragments.settings.SettingsFragment"
+        android:label="SettingsFragment"
+        tools:layout="@layout/fragment_settings_content" />
+    <fragment
+        android:id="@+id/enterPaymentFragment"
+        tools:layout="@layout/fragment_enter_payment"
+        android:name="me.jacoblewis.dailyexpense.fragments.enterPayment.EnterPaymentFragment"
+        android:label="EnterPaymentFragment" >
+        <action
+            android:id="@+id/action_enterPaymentFragment_to_chooseCategoryFragment"
+            app:destination="@id/chooseCategoryFragment"
+            app:popUpTo="@id/enterPaymentFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/categoryEditFragment"
+        tools:layout="@layout/fragment_category_content"
+        android:name="me.jacoblewis.dailyexpense.fragments.categories.CategoryEditFragment"
+        android:label="CategoryEditFragment" >
+        <action
+            android:id="@+id/action_categoryEditFragment_to_enterCategoryDialogFragment"
+            app:destination="@id/enterCategoryDialogFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chooseCategoryFragment"
+        tools:layout="@layout/viewholder_category_choose"
+        android:name="me.jacoblewis.dailyexpense.fragments.categories.ChooseCategoryFragment"
+        android:label="ChooseCategoryFragment" >
+        <action
+            android:id="@+id/action_chooseCategoryFragment_to_categoryEditFragment"
+            app:destination="@id/categoryEditFragment" />
+        <action
+            android:id="@+id/action_chooseCategoryFragment_to_paymentsFragment"
+            app:destination="@id/paymentsFragment" />
+        <argument
+            android:name="payment"
+            app:argType="me.jacoblewis.dailyexpense.data.models.Payment" />
+    </fragment>
+    <dialog
+        android:id="@+id/enterCategoryDialogFragment"
+        tools:layout="@layout/fragment_enter_category"
+        android:name="me.jacoblewis.dailyexpense.fragments.enterCategory.EnterCategoryDialogFragment"
+        android:label="EnterCategoryDialogFragment" />
+</navigation>

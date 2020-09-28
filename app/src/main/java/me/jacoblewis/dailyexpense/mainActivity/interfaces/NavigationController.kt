@@ -1,17 +1,16 @@
 package me.jacoblewis.dailyexpense.mainActivity.interfaces
 
 import android.os.Bundle
-import me.jacoblewis.dailyexpense.commons.ARG_PAYMENT
+import androidx.navigation.NavController
+import androidx.navigation.NavDirections
+import androidx.navigation.findNavController
+import androidx.navigation.navOptions
+import me.jacoblewis.dailyexpense.R
 import me.jacoblewis.dailyexpense.data.models.Category
 import me.jacoblewis.dailyexpense.extensions.applyModel
 import me.jacoblewis.dailyexpense.fragments.categories.CategoryEditFragment
-import me.jacoblewis.dailyexpense.fragments.categories.CategoryOverviewFragment
-import me.jacoblewis.dailyexpense.fragments.categories.ChooseCategoryFragment
 import me.jacoblewis.dailyexpense.fragments.enterCategory.EnterCategoryDialogFragment
-import me.jacoblewis.dailyexpense.fragments.enterPayment.EnterPaymentFragment
-import me.jacoblewis.dailyexpense.fragments.main.MainFragment
-import me.jacoblewis.dailyexpense.fragments.payments.PaymentsFragment
-import me.jacoblewis.dailyexpense.fragments.settings.SettingsFragment
+import me.jacoblewis.dailyexpense.fragments.enterPayment.EnterPaymentFragmentDirections
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
 
 interface NavigationController : NavigationHandler {
@@ -22,7 +21,7 @@ interface NavigationController : NavigationHandler {
             is NavScreen.Settings -> openSettings()
             is NavScreen.EnterCategory -> enterCategory()
             is NavScreen.EditCategory -> editCategory(navScreen.category)
-            is NavScreen.EnterPayment -> enterPayment(navScreen)
+            is NavScreen.EnterPayment -> enterPayment()
             is NavScreen.Categories -> openCategoriesOverview()
             is NavScreen.Payments -> openPaymentsOverview()
             is NavScreen.EditCategories -> openEditCategories()
@@ -31,23 +30,29 @@ interface NavigationController : NavigationHandler {
     }
 
     private fun openMain() {
-        navTo(MainFragment(), addToBackStack = false, navUpTo = true)
+        navController.navigate(navDirections(R.id.mainFragment), navOptions {
+            popUpTo(R.id.mainFragment) { inclusive = false }
+        })
     }
 
     private fun openCategoriesOverview() {
-        navTo(CategoryOverviewFragment(), addToBackStack = false, navUpTo = true)
+        navController.navigate(navDirections(R.id.categoryOverviewFragment), navOptions {
+            popUpTo(R.id.mainFragment) { inclusive = false }
+        })
     }
 
     private fun openPaymentsOverview() {
-        navTo(PaymentsFragment(), addToBackStack = false, navUpTo = true)
+        navController.navigate(R.id.paymentsFragment)
     }
 
     private fun openEditCategories() {
         navTo(CategoryEditFragment())
     }
 
-    private fun enterPayment(enterPayment: NavScreen.EnterPayment) {
-        navTo(EnterPaymentFragment.createWithRevealAnimation(enterPayment.revealAnimationSetting))
+    private fun enterPayment() {
+        navController.navigate(navDirections(R.id.enterPaymentFragment), navOptions {
+            this.popUpTo = R.id.paymentsFragment
+        })
     }
 
 
@@ -63,9 +68,8 @@ interface NavigationController : NavigationHandler {
     }
 
     private fun chooseCategory(chooseCategory: NavScreen.ChooseCategory) {
-        val chooseFrag = ChooseCategoryFragment()
-        chooseFrag.arguments = Bundle().also { it.putParcelable(ARG_PAYMENT, chooseCategory.payment) }
-        navTo(chooseFrag)
+        val directions = EnterPaymentFragmentDirections.actionEnterPaymentFragmentToChooseCategoryFragment(chooseCategory.payment)
+        navController.navigate(directions)
     }
 
 //    private fun openFeedback() {
@@ -76,6 +80,15 @@ interface NavigationController : NavigationHandler {
 //    }
 
     private fun openSettings() {
-        navTo(SettingsFragment(), addToBackStack = false, navUpTo = true)
+        navController.navigate(R.id.settingsFragment)
+    }
+
+    private val navController: NavController
+        get() = currentActivity.findNavController(R.id.nav_host_fragment)
+
+    private fun navDirections(forId: Int): NavDirections = object : NavDirections {
+        override fun getArguments(): Bundle = Bundle.EMPTY
+
+        override fun getActionId(): Int = forId
     }
 }

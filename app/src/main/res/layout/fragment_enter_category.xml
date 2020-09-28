@@ -24,7 +24,7 @@
     </FrameLayout>
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/textCategory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter a Category Name" />

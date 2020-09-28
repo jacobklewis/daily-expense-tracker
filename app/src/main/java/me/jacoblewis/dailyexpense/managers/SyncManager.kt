@@ -17,10 +17,8 @@ import me.jacoblewis.dailyexpense.data.mappers.PaymentMapper
 import me.jacoblewis.dailyexpense.data.models.firebase.FBBudget
 import me.jacoblewis.dailyexpense.data.models.firebase.FBCategory
 import me.jacoblewis.dailyexpense.data.models.firebase.FBPayment
-import javax.inject.Inject
 
-class SyncManager
-@Inject constructor(val context: Context, val db: BalancesDB) {
+class SyncManager(val context: Context, val db: BalancesDB) {
     val TAG = SyncManager::class.java.name
 
     open class SyncException(val issue: String) : Exception("Restore Exception")

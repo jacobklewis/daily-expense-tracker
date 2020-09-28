@@ -11,19 +11,15 @@ import androidx.work.WorkerParameters
 import me.jacoblewis.dailyexpense.R
 import me.jacoblewis.dailyexpense.commons.MORNING_CHANNEL_ID
 import me.jacoblewis.dailyexpense.commons.asCurrency
-import me.jacoblewis.dailyexpense.dependency.utils.MyApp
 import me.jacoblewis.dailyexpense.mainActivity.MainActivity
 import me.jacoblewis.dailyexpense.managers.BalanceManager
-import javax.inject.Inject
+import org.koin.java.KoinJavaComponent.inject
 
 class MorningBalanceWorker(private val appContext: Context, workerParams: WorkerParameters) : Worker(appContext, workerParams) {
-    @Inject
-    lateinit var balanceManager: BalanceManager
+    val balanceManager: BalanceManager by inject(BalanceManager::class.java)
 
     override fun doWork(): Result {
         Log.i("Worker", "Worker Started")
-
-        MyApp.graph.inject(this)
         // Fetch Current Balance
         val currentDailyBalance = balanceManager.fetchDailyBalanceNow()
 
@@ -35,6 +31,7 @@ class MorningBalanceWorker(private val appContext: Context, workerParams: Worker
 
         val builder = NotificationCompat.Builder(appContext, MORNING_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_cash)
+                .setContentTitle("Today's Allowance: ${currentDailyBalance.asCurrency}")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setStyle(NotificationCompat.BigTextStyle()
                         .setSummaryText("You're Doing Well!")

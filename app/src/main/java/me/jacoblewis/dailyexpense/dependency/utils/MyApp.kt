@@ -12,22 +12,31 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.work.Constraints
-import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.example.network.Network
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelChildren
 import me.jacoblewis.dailyexpense.R
+import me.jacoblewis.dailyexpense.adapters.GeneralItemAdapter
 import me.jacoblewis.dailyexpense.commons.MORNING_CHANNEL_ID
-import me.jacoblewis.dailyexpense.dependency.AppComponent
-import me.jacoblewis.dailyexpense.dependency.DaggerAppComponent
-import me.jacoblewis.dailyexpense.dependency.modules.AppModule
-import me.jacoblewis.dailyexpense.dependency.modules.DBModule
+import me.jacoblewis.dailyexpense.commons.PREFS_SETTINGS
+import me.jacoblewis.dailyexpense.data.BalancesDB
+import me.jacoblewis.dailyexpense.managers.BalanceManager
+import me.jacoblewis.dailyexpense.managers.ExportManager
+import me.jacoblewis.dailyexpense.managers.SyncManager
 import me.jacoblewis.dailyexpense.services.CloseService
+import me.jacoblewis.dailyexpense.viewModels.CategoryViewModel
+import me.jacoblewis.dailyexpense.viewModels.EnterPaymentViewModel
+import me.jacoblewis.dailyexpense.viewModels.PaymentViewModel
 import me.jacoblewis.dailyexpense.workers.MorningBalanceWorker
-import java.lang.Exception
+import me.jacoblewis.jklcore.Tools
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.viewmodel.dsl.viewModel
+import org.koin.core.context.startKoin
+import org.koin.dsl.module
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.CoroutineContext
 
@@ -36,12 +45,6 @@ import kotlin.coroutines.CoroutineContext
  */
 class MyApp : Application(), LifecycleObserver, CoroutineScope {
 
-    private val appComponent: AppComponent by lazy {
-        DaggerAppComponent.builder()
-                .appModule(AppModule(this))
-                .dBModule(DBModule(this))
-                .build()
-    }
 
     lateinit var job: Job
     override val coroutineContext: CoroutineContext
@@ -51,8 +54,10 @@ class MyApp : Application(), LifecycleObserver, CoroutineScope {
         super.onCreate()
         job = Job()
         appScope = this
-        graph = appComponent
-        graph.inject(this)
+        startKoin {
+            androidContext(applicationContext)
+            modules(myModule)
+        }
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
         try {
             startService(Intent(this, CloseService::class.java))
@@ -61,11 +66,31 @@ class MyApp : Application(), LifecycleObserver, CoroutineScope {
         }
         createNotificationChannel()
         createMorningBalanceWorker()
+
     }
 
     companion object {
-        lateinit var graph: AppComponent
         var appScope: CoroutineScope? = null
+        val myModule = module {
+            // ViewModels
+            viewModel { PaymentViewModel(get(), get()) }
+            viewModel { CategoryViewModel(get(), get(), get()) }
+            viewModel { EnterPaymentViewModel() }
+            // Main App
+            single { Tools.getInstance(get()) }
+            single { androidContext().getSharedPreferences(PREFS_SETTINGS, Context.MODE_PRIVATE) }
+            single { androidContext() as CoroutineScope }
+            // DB
+            single { BalancesDB.getInstance(get()) }
+            single { get<BalancesDB>().paymentsDao() }
+            single { get<BalancesDB>().categoriesDao() }
+            single { get<BalancesDB>().budgetsDao() }
+            // Others
+            factory { BalanceManager(get(), get()) }
+            factory { GeneralItemAdapter(get(), get(), get()) }
+            factory { ExportManager(get(), get(), get()) }
+            factory { SyncManager(get(), get()) }
+        }
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)

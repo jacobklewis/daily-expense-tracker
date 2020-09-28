@@ -18,10 +18,8 @@ import androidx.annotation.LayoutRes
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
-import butterknife.ButterKnife
 import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.jacoblewis.dailyexpense.R
@@ -118,7 +116,6 @@ infix fun View.revealSettingsTo(view: View) = RevealAnimationSetting(
 
 inline fun androidx.fragment.app.Fragment.oCV(@LayoutRes layoutId: Int, container: ViewGroup?, config: (View) -> Unit): View? {
     val rootView = layoutInflater.inflate(layoutId, container, false)
-    ButterKnife.bind(this, rootView)
     config(rootView)
     return rootView
 }
@@ -231,7 +228,7 @@ fun <T, J, Z> observeThree(a: LiveData<T>, b: LiveData<J>, c: LiveData<Z>, owner
 
 inline fun <reified T> Any?.asNum(): T? {
     val num = (this as? Number)
-    return when(T::class) {
+    return when (T::class) {
         Float::class -> num?.toFloat()
         Double::class -> num?.toDouble()
         Int::class -> num?.toInt()

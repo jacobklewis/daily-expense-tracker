@@ -19,11 +19,8 @@ import me.jacoblewis.dailyexpense.data.models.MonthDisplay
 import me.jacoblewis.dailyexpense.data.models.Payment
 import me.jacoblewis.dailyexpense.managers.BalanceManager
 import java.util.*
-import javax.inject.Inject
 
-class CategoryViewModel
-@Inject
-constructor(val categoriesDao: CategoriesDao, val paymentsDao: PaymentsDao, balanceManager: BalanceManager) : ViewModel() {
+class CategoryViewModel(val categoriesDao: CategoriesDao, val paymentsDao: PaymentsDao, balanceManager: BalanceManager) : ViewModel() {
 
     private val dateRange: MutableLiveData<DateRange> = MutableLiveData()
     val categories: LiveData<List<Category>> = Transformations.switchMap(dateRange) { dRange ->

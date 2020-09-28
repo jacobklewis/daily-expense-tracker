@@ -5,12 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.CoroutineScope
 import me.jacoblewis.dailyexpense.commons.RootFragmentOptions
 import me.jacoblewis.dailyexpense.commons.oCV
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.NavigationController
-import javax.inject.Inject
 
 abstract class RootFragment(private val layoutId: Int) : androidx.fragment.app.Fragment(), RootScreenElement {
     override val screenTag: String
@@ -18,9 +16,6 @@ abstract class RootFragment(private val layoutId: Int) : androidx.fragment.app.F
 
     abstract val options: RootFragmentOptions
     abstract fun onViewBound(view: View)
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     lateinit var navigationController: NavigationController
     lateinit var coroutineScope: CoroutineScope

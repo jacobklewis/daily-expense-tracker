@@ -8,11 +8,9 @@ import android.widget.AdapterView
 import android.widget.SimpleAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatSpinner
-import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.OnClick
+import kotlinx.android.synthetic.main.content_appbar_recyclerview.view.*
+import kotlinx.android.synthetic.main.fragment_main_content.view.*
+import kotlinx.android.synthetic.main.fragment_main_content.view.toolbar
 import me.jacoblewis.dailyexpense.R
 import me.jacoblewis.dailyexpense.adapters.GeneralItemAdapter
 import me.jacoblewis.dailyexpense.adapters.ItemDelegate
@@ -21,32 +19,20 @@ import me.jacoblewis.dailyexpense.commons.RootFragmentOptions
 import me.jacoblewis.dailyexpense.commons.StatsType
 import me.jacoblewis.dailyexpense.commons.observeBoth
 import me.jacoblewis.dailyexpense.data.models.Stats
-import me.jacoblewis.dailyexpense.dependency.utils.MyApp
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.RootFragment
 import me.jacoblewis.dailyexpense.viewModels.CategoryViewModel
 import me.jacoblewis.jklcore.components.recyclerview.IdItem
+import org.koin.android.ext.android.inject
+import org.koin.android.viewmodel.ext.android.viewModel
 import java.util.*
-import javax.inject.Inject
 
 class CategoryOverviewFragment : RootFragment(R.layout.fragment_category_content), ItemDelegate<Any> {
     override val options: RootFragmentOptions = RootFragmentOptions(CategoryEditFragment::class.java, drawerNavId = R.id.menu_item_categories)
 
-    init {
-        MyApp.graph.inject(this)
-    }
+    val categoryAdapter: GeneralItemAdapter by inject()
 
-    @Inject
-    lateinit var categoryAdapter: GeneralItemAdapter
-
-    @BindView(R.id.toolbar)
-    lateinit var toolbar: Toolbar
-    @BindView(R.id.recycler_view)
-    lateinit var recyclerView: RecyclerView
-
-    private val viewModel: CategoryViewModel by lazy {
-        ViewModelProviders.of(activity!!, viewModelFactory).get(CategoryViewModel::class.java)
-    }
+    val viewModel: CategoryViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,15 +40,15 @@ class CategoryOverviewFragment : RootFragment(R.layout.fragment_category_content
     }
 
     override fun onViewBound(view: View) {
-        toolbar.title = "Categories"
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+        view.toolbar.title = "Categories"
+        (activity as AppCompatActivity).setSupportActionBar(view.toolbar)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         categoryAdapter.callback = this
-        recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
-        recyclerView.adapter = categoryAdapter
+        view.recycler_view.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
+        view.recycler_view.adapter = categoryAdapter
 
-        navigationController.linkToolBarToDrawer(toolbar)
+        navigationController.linkToolBarToDrawer(view.toolbar)
 
         viewModel.updateCategoryDate(DateHelper.firstDayOfMonth(Date(), TimeZone.getDefault()))
 
@@ -71,6 +57,10 @@ class CategoryOverviewFragment : RootFragment(R.layout.fragment_category_content
             items.add(Stats(remainingBudget, cats, StatsType.PieChart))
             items.addAll(cats)
             categoryAdapter.submitList(items)
+        }
+
+        view.fab_add_new.setOnClickListener {
+            navigationController.navigateTo(NavScreen.EditCategories)
         }
     }
 
@@ -82,7 +72,7 @@ class CategoryOverviewFragment : RootFragment(R.layout.fragment_category_content
         val data = viewModel.getPreviousMonths(3)
         val mapped = data.map { mapOf(Pair("title", it.display)) }
 
-        val simpleAdapter = SimpleAdapter(toolbar.context, mapped, android.R.layout.simple_dropdown_item_1line, arrayOf("title"), intArrayOf(android.R.id.text1))
+        val simpleAdapter = SimpleAdapter(context, mapped, android.R.layout.simple_dropdown_item_1line, arrayOf("title"), intArrayOf(android.R.id.text1))
         monthSpinner.adapter = simpleAdapter
         monthSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -100,12 +90,6 @@ class CategoryOverviewFragment : RootFragment(R.layout.fragment_category_content
 
     override fun onItemClicked(item: Any) {
 
-    }
-
-
-    @OnClick(R.id.fab_add_new)
-    fun addNewCategory(v: View) {
-        navigationController.navigateTo(NavScreen.EditCategories)
     }
 
     /**
