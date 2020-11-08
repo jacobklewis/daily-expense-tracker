@@ -22,6 +22,7 @@ class GeneralItemAdapter(context: Context?, val db: BalancesDB, balanceManager: 
         return when (viewType) {
             // Stats
             BudgetOverviewViewHolder.LAYOUT_TYPE -> BudgetOverviewViewHolder(parent)
+            NextDayBudgetViewHolder.LAYOUT_TYPE -> NextDayBudgetViewHolder(parent)
             StatPieViewHolder.LAYOUT_TYPE -> StatPieViewHolder(parent)
             StatPressureViewHolder.LAYOUT_TYPE -> StatPressureViewHolder(parent)
             // Categories
@@ -41,6 +42,7 @@ class GeneralItemAdapter(context: Context?, val db: BalancesDB, balanceManager: 
             // Stats
             is Stats -> when (item.displayType) {
                 is StatsType.Overview -> BudgetOverviewViewHolder.LAYOUT_TYPE
+                is StatsType.NextDay -> NextDayBudgetViewHolder.LAYOUT_TYPE
                 is StatsType.PieChart -> StatPieViewHolder.LAYOUT_TYPE
                 is StatsType.PressureMeter -> StatPressureViewHolder.LAYOUT_TYPE
             }

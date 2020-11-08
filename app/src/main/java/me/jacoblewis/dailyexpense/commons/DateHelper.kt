@@ -47,6 +47,16 @@ object DateHelper {
         return calendar
     }
 
+    fun daysAhead(date: Date, timezone: TimeZone, numOfDays: Int): Calendar {
+        val calendar = GregorianCalendar(timezone)
+        calendar.time = date
+        calendar.add(Calendar.HOUR, numOfDays * 24)
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        return calendar
+    }
+
     val dayOfMonth: Int
         get() = today(Date(), TimeZone.getDefault()).get(Calendar.DAY_OF_MONTH)
 

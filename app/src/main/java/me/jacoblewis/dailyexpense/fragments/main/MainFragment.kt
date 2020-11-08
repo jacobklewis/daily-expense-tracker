@@ -50,14 +50,22 @@ class MainFragment : RootFragment(R.layout.fragment_main_content), ItemDelegate<
 
         categoryViewModel.updateCategoryDate(DateHelper.firstDayOfMonth(Date(), TimeZone.getDefault()))
 
-        observeThree(paymentViewModel.payments, categoryViewModel.categories, paymentViewModel.dailyPressure, this) { payments, cats, pressure ->
+
+
+        MainFragmentStateModel.mergeSources(paymentViewModel, categoryViewModel).observe(this, { model ->
             val items: MutableList<IdItem<*>> = mutableListOf()
             // Add our items here
-            items.add(Stats(payments.second))
-            items.add(Stats(payments.second, displayType = StatsType.PressureMeter, pressure = pressure))
-            items.add(Stats(payments.second, cats, StatsType.PieChart))
+            if (model.dailyPressure != null && model.nextDayBalance != null && model.remainingBudget != null && model.categories != null) {
+                items.add(Stats(0f, displayType = StatsType.PressureMeter, pressure = model.dailyPressure))
+                model.nextDayBalance.forEach { nextDay ->
+                    items.add(Stats(nextDay.budget, displayType = StatsType.NextDay, date = nextDay.date))
+                }
+                items.add(Stats(model.remainingBudget))
+                items.add(Stats(0f, model.categories, StatsType.PieChart))
+            }
+
             overviewAdapter.submitList(items)
-        }
+        })
 
         paymentViewModel.dailyBalance.observe(this, Observer {
             updateTitle()
@@ -91,8 +99,10 @@ class MainFragment : RootFragment(R.layout.fragment_main_content), ItemDelegate<
 
     override fun onItemClicked(item: Any) {
         if (item is PaymentCategory) {
-            Snackbar.make(requireView(), "${item.transaction?.cost
-                    ?: "N/A"}", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(requireView(), "${
+                item.transaction?.cost
+                        ?: "N/A"
+            }", Snackbar.LENGTH_SHORT).show()
         }
     }
 

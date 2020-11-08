@@ -14,10 +14,10 @@ import kotlinx.android.synthetic.main.fragment_main_content.view.toolbar
 import me.jacoblewis.dailyexpense.R
 import me.jacoblewis.dailyexpense.adapters.GeneralItemAdapter
 import me.jacoblewis.dailyexpense.adapters.ItemDelegate
+import me.jacoblewis.dailyexpense.commons.CombinedLiveData
 import me.jacoblewis.dailyexpense.commons.DateHelper
 import me.jacoblewis.dailyexpense.commons.RootFragmentOptions
 import me.jacoblewis.dailyexpense.commons.StatsType
-import me.jacoblewis.dailyexpense.commons.observeBoth
 import me.jacoblewis.dailyexpense.data.models.Stats
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.RootFragment
@@ -52,12 +52,17 @@ class CategoryOverviewFragment : RootFragment(R.layout.fragment_category_content
 
         viewModel.updateCategoryDate(DateHelper.firstDayOfMonth(Date(), TimeZone.getDefault()))
 
-        observeBoth(viewModel.categories, viewModel.remainingBudget, this) { cats, remainingBudget ->
+        CombinedLiveData(viewModel.categories, viewModel.remainingBudget) { data1, data2 ->
+            data1 to data2
+        }.observe(this, {
+            val (cats, remainingBudget) = it
             val items: MutableList<IdItem<*>> = mutableListOf()
-            items.add(Stats(remainingBudget, cats, StatsType.PieChart))
-            items.addAll(cats)
+            if (remainingBudget != null && cats != null) {
+                items.add(Stats(remainingBudget, cats, StatsType.PieChart))
+                items.addAll(cats)
+            }
             categoryAdapter.submitList(items)
-        }
+        })
 
         view.fab_add_new.setOnClickListener {
             navigationController.navigateTo(NavScreen.EditCategories)

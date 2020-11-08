@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import me.jacoblewis.dailyexpense.commons.BudgetBalancer
 import me.jacoblewis.dailyexpense.commons.DateHelper
 import me.jacoblewis.dailyexpense.data.daos.PaymentsDao
+import me.jacoblewis.dailyexpense.data.models.NextDay
 import me.jacoblewis.dailyexpense.data.models.Payment
 import me.jacoblewis.dailyexpense.data.models.PaymentCategory
 import me.jacoblewis.dailyexpense.managers.BalanceManager
@@ -21,6 +22,10 @@ class PaymentViewModel(val paymentsDao: PaymentsDao, val balanceManager: Balance
     val payments: LiveData<Pair<List<PaymentCategory>, Float>> = Transformations.map(paymentsDao.getAllPaymentsSince(DateHelper.firstDayOfMonth(Date(), TimeZone.getDefault())))
     {
         Pair(it, BudgetBalancer.calculateRemainingBudget(balanceManager.currentBudget, it.mapNotNull { p -> p.transaction }))
+    }
+
+    val nextDayBalance: LiveData<List<NextDay>> = Transformations.switchMap(currentDayOfMonth) {
+        balanceManager.fetchNextDayBalance()
     }
 
     val dailyBalance: LiveData<Float> = Transformations.switchMap(currentDayOfMonth) {

@@ -12,6 +12,7 @@
     <string name="label_cancel">Cancel</string>
     <string name="label_lock">Lock</string>
     <string name="label_overall_budget">overall remaining monthly budget</string>
+    <string name="label_next_day_budget">next day budget</string>
     <string name="label_x_linked_payments">%d linked payments</string>
 
     <!-- Notifications -->
