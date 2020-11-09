@@ -77,7 +77,7 @@ class CategoryOverviewFragment : RootFragment(R.layout.fragment_category_content
         val data = viewModel.getPreviousMonths(3)
         val mapped = data.map { mapOf(Pair("title", it.display)) }
 
-        val simpleAdapter = SimpleAdapter(context, mapped, android.R.layout.simple_dropdown_item_1line, arrayOf("title"), intArrayOf(android.R.id.text1))
+        val simpleAdapter = SimpleAdapter(context, mapped, R.layout.simple_dropdown_item_custom, arrayOf("title"), intArrayOf(android.R.id.text1))
         monthSpinner.adapter = simpleAdapter
         monthSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {

@@ -31,7 +31,7 @@ interface NavigationController : NavigationHandler {
 
     private fun openMain() {
         navController.navigate(navDirections(R.id.mainFragment), navOptions {
-            popUpTo(R.id.mainFragment) { inclusive = false }
+            popUpTo(R.id.mainFragment) { inclusive = true }
         })
     }
 
@@ -42,7 +42,9 @@ interface NavigationController : NavigationHandler {
     }
 
     private fun openPaymentsOverview() {
-        navController.navigate(R.id.paymentsFragment)
+        navController.navigate(navDirections(R.id.paymentsFragment), navOptions {
+            popUpTo(R.id.mainFragment) { inclusive = false }
+        })
     }
 
     private fun openEditCategories() {

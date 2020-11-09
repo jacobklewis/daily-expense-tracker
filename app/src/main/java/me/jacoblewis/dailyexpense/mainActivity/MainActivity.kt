@@ -1,10 +1,9 @@
 package me.jacoblewis.dailyexpense.mainActivity
 
 import android.os.Bundle
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
-import androidx.navigation.ui.setupWithNavController
+import androidx.navigation.findNavController
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,7 +26,6 @@ class MainActivity : AppCompatActivity(),
         CoroutineScope {
     override val currentActivity: AppCompatActivity = this
     override val listeners: MutableMap<LifecycleOwner, (NavUIUpdate) -> Unit> = mutableMapOf()
-    var actionBarToggle: ActionBarDrawerToggle? = null
     lateinit var job: Job
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
@@ -38,6 +36,14 @@ class MainActivity : AppCompatActivity(),
         setContentView(R.layout.activity_main)
         setupNav(savedInstanceState)
         setupDrawer()
+        findNavController(R.id.nav_host_fragment).addOnDestinationChangedListener { controller, dest, args ->
+            when (dest.id) {
+                R.id.mainFragment -> bottomNavigationView.menu.findItem(R.id.menu_item_overview).isChecked = true
+                R.id.paymentsFragment -> bottomNavigationView.menu.findItem(R.id.menu_item_payments).isChecked = true
+                R.id.categoryOverviewFragment -> bottomNavigationView.menu.findItem(R.id.menu_item_categories).isChecked = true
+                R.id.settingsFragment -> bottomNavigationView.menu.findItem(R.id.menu_item_settings).isChecked = true
+            }
+        }
     }
 
     override fun onDestroy() {
