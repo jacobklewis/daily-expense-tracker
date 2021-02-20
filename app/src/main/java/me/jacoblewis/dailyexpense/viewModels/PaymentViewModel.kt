@@ -15,11 +15,8 @@ import me.jacoblewis.dailyexpense.data.models.Payment
 import me.jacoblewis.dailyexpense.data.models.PaymentCategory
 import me.jacoblewis.dailyexpense.managers.BalanceManager
 import java.util.*
-import javax.inject.Inject
 
-class PaymentViewModel
-@Inject
-constructor(val paymentsDao: PaymentsDao, val balanceManager: BalanceManager) : ViewModel() {
+class PaymentViewModel(val paymentsDao: PaymentsDao, val balanceManager: BalanceManager) : ViewModel() {
     private val currentDayOfMonth: MutableLiveData<Int> = MutableLiveData()
     val payments: LiveData<Pair<List<PaymentCategory>, Float>> = Transformations.map(paymentsDao.getAllPaymentsSince(DateHelper.firstDayOfMonth(Date(), TimeZone.getDefault())))
     {

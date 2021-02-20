@@ -14,10 +14,8 @@ import me.jacoblewis.dailyexpense.data.models.Stats
 import me.jacoblewis.dailyexpense.managers.BalanceManager
 import me.jacoblewis.jklcore.components.recyclerview.IdItem
 import me.jacoblewis.jklcore.components.recyclerview.RBRecyclerViewHolder
-import javax.inject.Inject
 
-class GeneralItemAdapter
-@Inject constructor(context: Context?, val db: BalancesDB, balanceManager: BalanceManager) : ListAdapter<IdItem<*>, RBRecyclerViewHolder<IdItem<*>, ItemDelegate<Any>?>>(GeneralDiffUtil()) {
+class GeneralItemAdapter(context: Context?, val db: BalancesDB, balanceManager: BalanceManager) : ListAdapter<IdItem<*>, RBRecyclerViewHolder<IdItem<*>, ItemDelegate<Any>?>>(GeneralDiffUtil()) {
     var callback: ItemDelegate<Any>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RBRecyclerViewHolder<IdItem<*>, ItemDelegate<Any>?> {

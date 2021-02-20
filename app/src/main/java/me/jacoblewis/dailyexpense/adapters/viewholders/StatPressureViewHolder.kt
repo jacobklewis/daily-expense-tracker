@@ -2,26 +2,17 @@ package me.jacoblewis.dailyexpense.adapters.viewholders
 
 import android.view.View
 import android.view.ViewGroup
-import butterknife.BindView
-import butterknife.ButterKnife
+import kotlinx.android.synthetic.main.viewholder_pressure.view.*
 import me.jacoblewis.dailyexpense.R
 import me.jacoblewis.dailyexpense.adapters.ItemDelegate
 import me.jacoblewis.dailyexpense.data.models.Stats
-import me.jacoblewis.dailyexpense.ui.components.MultiSectionThinPieChart
-import me.jacoblewis.dailyexpense.ui.components.PressureChart
 import me.jacoblewis.jklcore.components.recyclerview.RBRecyclerViewHolder
 
 class StatPressureViewHolder(viewGroup: ViewGroup) : RBRecyclerViewHolder<Stats, ItemDelegate<Any>>(viewGroup, LAYOUT_TYPE) {
-    @BindView(R.id.chart_pressure)
-    lateinit var pressureChart: PressureChart
-
-    init {
-        ButterKnife.bind(this, itemView)
-    }
 
     override fun setUpView(itemView: View, item: Stats, position: Int, delegate: ItemDelegate<Any>) {
-        pressureChart.pressure = item.pressure
-        pressureChart.invalidate()
+        itemView.chart_pressure.pressure = item.pressure
+        itemView.chart_pressure.invalidate()
     }
 
     companion object {

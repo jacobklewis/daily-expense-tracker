@@ -5,48 +5,31 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.OnClick
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.content_appbar_recyclerview.view.*
+import kotlinx.android.synthetic.main.fragment_main_content.view.*
+import kotlinx.android.synthetic.main.fragment_main_content.view.toolbar
 import me.jacoblewis.dailyexpense.R
 import me.jacoblewis.dailyexpense.adapters.GeneralItemAdapter
 import me.jacoblewis.dailyexpense.adapters.ItemDelegate
 import me.jacoblewis.dailyexpense.commons.DateHelper
 import me.jacoblewis.dailyexpense.commons.RootFragmentOptions
 import me.jacoblewis.dailyexpense.data.models.Category
-import me.jacoblewis.dailyexpense.dependency.utils.MyApp
 import me.jacoblewis.dailyexpense.extensions.addSwipeListener
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.RootFragment
 import me.jacoblewis.dailyexpense.viewModels.CategoryViewModel
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class CategoryEditFragment : RootFragment(R.layout.fragment_category_content), ItemDelegate<Any> {
     override val options: RootFragmentOptions = RootFragmentOptions(CategoryEditFragment::class.java, drawerNavId = R.id.menu_item_categories)
 
-    init {
-        MyApp.graph.inject(this)
-    }
+    val categoryAdapter: GeneralItemAdapter by inject()
 
-    @Inject
-    lateinit var categoryAdapter: GeneralItemAdapter
-
-    @BindView(R.id.toolbar)
-    lateinit var toolbar: Toolbar
-    @BindView(R.id.recycler_view)
-    lateinit var recyclerView: RecyclerView
-    @BindView(R.id.fab_add_new)
-    lateinit var fab: FloatingActionButton
-
-    private val viewModel: CategoryViewModel by lazy {
-        ViewModelProviders.of(activity!!, viewModelFactory).get(CategoryViewModel::class.java)
-    }
+    val viewModel: CategoryViewModel by viewModel()
 
     private val removeCategoryListener: (Int) -> Unit = { pos ->
         categoryAdapter.notifyItemChanged(pos)
@@ -67,19 +50,22 @@ class CategoryEditFragment : RootFragment(R.layout.fragment_category_content), I
     }
 
     override fun onViewBound(view: View) {
-        toolbar.title = "Edit Category Budgets"
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+        view.toolbar.title = "Edit Category Budgets"
+        (activity as AppCompatActivity).setSupportActionBar(view.toolbar)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        fab.setImageIcon(Icon.createWithResource(context, R.drawable.ic_baseline_add_24px))
+        view.fab_add_new.setImageIcon(Icon.createWithResource(context, R.drawable.ic_baseline_add_24px))
 
         categoryAdapter.callback = this
         categoryAdapter.editable = true
-        recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
-        recyclerView.adapter = categoryAdapter
+        view.recycler_view.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
+        view.recycler_view.adapter = categoryAdapter
 
-        recyclerView.addSwipeListener(ItemTouchHelper.LEFT, R.drawable.ic_remove, staticTop = false, onSwipedListener = removeCategoryListener)
+        view.recycler_view.addSwipeListener(ItemTouchHelper.LEFT, R.drawable.ic_remove, staticTop = false, onSwipedListener = removeCategoryListener)
 
         viewModel.updateCategoryDate(DateHelper.beginningOfTime)
+        view.fab_add_new.setOnClickListener {
+            navigationController.navigateTo(NavScreen.EnterCategory)
+        }
     }
 
     override fun onStart() {
@@ -103,11 +89,6 @@ class CategoryEditFragment : RootFragment(R.layout.fragment_category_content), I
         navigationController.navigateTo(NavScreen.EditCategory(item as Category))
     }
 
-
-    @OnClick(R.id.fab_add_new)
-    fun addNewCategory(v: View) {
-        navigationController.navigateTo(NavScreen.EnterCategory)
-    }
 
     /**
      * Navigate Back

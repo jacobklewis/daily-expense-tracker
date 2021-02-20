@@ -13,10 +13,8 @@ import me.jacoblewis.dailyexpense.data.models.PaymentCategory
 import me.jacoblewis.dailyexpense.data.models.export.ExportCategory
 import me.jacoblewis.dailyexpense.data.models.export.ExportMonth
 import java.util.*
-import javax.inject.Inject
 
-class ExportManager
-@Inject constructor(val context: Context, val paymentsDao: PaymentsDao, val appScope: CoroutineScope) {
+class ExportManager(val context: Context, val paymentsDao: PaymentsDao, val appScope: CoroutineScope) {
 
     @UiThread
     fun exportNow() {

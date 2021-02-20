@@ -18,35 +18,27 @@ import me.jacoblewis.dailyexpense.BuildConfig
 import me.jacoblewis.dailyexpense.R
 import me.jacoblewis.dailyexpense.commons.PREFS_SETTINGS
 import me.jacoblewis.dailyexpense.commons.asCurrency
-import me.jacoblewis.dailyexpense.dependency.utils.MyApp
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.NavigationController
 import me.jacoblewis.dailyexpense.mainActivity.interfaces.nav.NavScreen
 import me.jacoblewis.dailyexpense.managers.BalanceManager
 import me.jacoblewis.dailyexpense.managers.ExportManager
 import me.jacoblewis.dailyexpense.managers.SyncManager
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
 class SettingsUIFragment : PreferenceFragmentCompat() {
     val TAG = SettingsUIFragment::class.java.name
 
-    @Inject
-    lateinit var syncManager: SyncManager
+    val syncManager: SyncManager by inject()
 
-    @Inject
-    lateinit var exportManager: ExportManager
+    val exportManager: ExportManager by inject()
 
-    @Inject
-    lateinit var balanceManager: BalanceManager
+    val balanceManager: BalanceManager by inject()
 
     private lateinit var navigationController: NavigationController
     private lateinit var mGoogleSignInClient: GoogleSignInClient
     private lateinit var auth: FirebaseAuth
     private var syncPref: Preference? = null
     private var restorePref: Preference? = null
-
-    init {
-        MyApp.graph.inject(this)
-    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -60,7 +52,7 @@ class SettingsUIFragment : PreferenceFragmentCompat() {
                 .requestEmail()
                 .build()
 
-        mGoogleSignInClient = GoogleSignIn.getClient(context!!, gso)
+        mGoogleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
         auth = FirebaseAuth.getInstance()
     }
 
@@ -151,7 +143,7 @@ class SettingsUIFragment : PreferenceFragmentCompat() {
 
     fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
-        auth.signInWithCredential(credential).addOnCompleteListener(activity!!) { task ->
+        auth.signInWithCredential(credential).addOnCompleteListener(requireActivity()) { task ->
             if (task.isSuccessful) {
                 val currentUser = auth.currentUser
                 Toast.makeText(context, "${currentUser?.email} is signed in!", Toast.LENGTH_LONG).show()
